@@ -37,3 +37,5 @@ The application contains X tables:
    ```bash
    git clone <repository-url>
    cd <project-directory>
+   npm install
+   npm start
