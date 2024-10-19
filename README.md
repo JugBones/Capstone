@@ -37,5 +37,13 @@ The application contains X tables:
    ```bash
    git clone <repository-url>
    cd <project-directory>
+
+2. **Installing dependencies & Initialize the project**:
+   ```bash
    npm install
    npm start
+
+2. **For Production**:
+   ```bash
+   npm install -g serve
+   serve -s build 
