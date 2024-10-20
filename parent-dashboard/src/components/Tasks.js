@@ -1,5 +1,4 @@
 import React from 'react';
-import '../styling/Subjects.css'
 import { List, ListItem, ListItemText, Button } from '@mui/material';
 
 const tasks = [

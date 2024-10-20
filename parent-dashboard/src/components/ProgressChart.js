@@ -1,5 +1,4 @@
 import React from 'react';
-import '../styling/ProgressChart.css'
 import { RadialBarChart, RadialBar, Legend } from 'recharts';
 
 const data = [

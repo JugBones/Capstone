@@ -1,5 +1,4 @@
 import React from 'react';
-import '../styling/PollingAccuracy.css'
 import { PieChart, Pie, Cell } from 'recharts';
 
 const data = [

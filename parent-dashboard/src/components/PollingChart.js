@@ -1,5 +1,4 @@
 import React from 'react';
-import '../styling/PollingAccuracy.css'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 
 const data = [
