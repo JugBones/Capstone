@@ -1,4 +1,6 @@
 import React from 'react';
+import Sidebar from '../components/Sidebar';
+import Header from '../components/Header';
 import ProgressChart from '../components/ProgressChart';
 import PollingChart from '../components/PollingChart';
 import PollingAccuracy from '../components/PollingAccuracy';
@@ -10,6 +12,10 @@ import '../styling/Overview.css';
 
 const Overview = () => {
   return (
+
+    <div className="App">
+      <Header />
+      <Sidebar />
     <div className="overview-container">
       <Grid2 container spacing={3}>
         <Grid2 item xs={12} sm={6} md={6}>
@@ -32,6 +38,7 @@ const Overview = () => {
         </Grid2>
       </Grid2>
     </div>
+  </div>
   );
 };
 
