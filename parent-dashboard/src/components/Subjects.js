@@ -1,4 +1,5 @@
 import React from 'react';
+import '../styling/Subjects.css'
 import { Card, CardContent, Typography } from '@mui/material';
 
 const subjects = [

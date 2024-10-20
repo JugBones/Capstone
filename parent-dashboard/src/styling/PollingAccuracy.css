@@ -1,0 +1,24 @@
+/* PollingAccuracy.css */
+.PieChart {
+    margin: auto;
+  }
+  
+  @media (max-width: 768px) {
+    .PieChart {
+      width: 150px;
+      height: 150px;
+    }
+  }
+  
+  /* PollingChart.css */
+  .BarChart {
+    margin: auto;
+  }
+  
+  @media (max-width: 768px) {
+    .BarChart {
+      width: 150px;
+      height: 150px;
+    }
+  }
+  
