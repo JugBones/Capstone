@@ -15,7 +15,7 @@ const Sidebar = ({ open, toggleSidebar }) => {
         </IconButton>
       </div>
       <List>
-        <ListItem button component={Link} to="/">
+        <ListItem button component={Link} to="/overview">
           <ListItemIcon><HomeIcon /></ListItemIcon>
           <ListItemText primary="Overview" />
         </ListItem>

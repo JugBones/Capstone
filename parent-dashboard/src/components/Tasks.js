@@ -10,6 +10,7 @@ const tasks = [
 const Tasks = () => {
   return (
     <List>
+      <h3> Tugas </h3>
       {tasks.map((task, index) => (
         <ListItem key={index}>
           <ListItemText primary={task.name} secondary={task.date} />

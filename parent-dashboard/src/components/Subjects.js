@@ -10,6 +10,7 @@ const subjects = [
 const Subjects = () => {
   return (
     <div>
+      <h3> Mata Pelajaran Pilihan </h3>
       {subjects.map((subject, index) => (
         <Card key={index} style={{ marginBottom: '10px' }}>
           <CardContent>
