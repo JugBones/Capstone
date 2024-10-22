@@ -1,5 +1,5 @@
-import React from 'react';
-import { AppBar, Toolbar, InputBase, IconButton, Avatar } from '@mui/material';
+import React, { useState } from 'react';
+import { AppBar, Toolbar, InputBase, IconButton, Avatar, Menu, MenuItem } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import MenuIcon from '@mui/icons-material/Menu';
 import { signOut } from 'firebase/auth';
@@ -8,6 +8,17 @@ import { auth } from '../firebase';
 
 const Header = ({ toggleSidebar }) => {
   const navigate = useNavigate();
+  const [anchorEl, setAnchorEl] = useState(null); // State to control the menu open/close
+
+  // Handle Avatar button click to open menu
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  // Handle menu close
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
 
   // Handle user logout
   const handleLogout = async () => {
@@ -17,6 +28,7 @@ const Header = ({ toggleSidebar }) => {
     } catch (error) {
       console.error('Error signing out:', error);
     }
+    handleMenuClose(); // Close the menu after logging out
   };
 
   return (
@@ -36,10 +48,21 @@ const Header = ({ toggleSidebar }) => {
           />
         </div>
         
-        {/* User Avatar with Logout functionality */}
-        <IconButton onClick={handleLogout}>
+        {/* User Avatar with Logout option */}
+        <IconButton onClick={handleMenuOpen}>
           <Avatar src="/avatar.jpg" />
         </IconButton>
+
+        {/* Menu for Avatar with Logout option */}
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleMenuClose}
+          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+          transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        >
+          <MenuItem onClick={handleLogout}>Logout</MenuItem>
+        </Menu>
       </Toolbar>
     </AppBar>
   );
