@@ -27,7 +27,39 @@
 .MuiGrid-item:hover {
   transform: translateY(-5px);
 }
+.overview-container {
+  padding: 80px 20px 20px 20px;
+  flex-grow: 1;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+}
 
+.MuiGrid-item {
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  margin-bottom: 20px; /* Added margin to prevent overlap */
+  transition: transform 0.3s ease-in-out;
+}
+
+.MuiGrid-item:hover {
+  transform: translateY(-5px);
+}
+
+@media (max-width: 768px) {
+  .MuiGrid-item {
+    padding: 12px;
+    margin: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .MuiGrid-item {
+    padding: 8px;
+    margin: 5px;
+  }
+}
 @media (max-width: 768px) {
   .MuiGrid-item {
     padding: 12px;

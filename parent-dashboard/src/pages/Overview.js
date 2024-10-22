@@ -7,6 +7,7 @@ import PollingAccuracy from '../components/PollingAccuracy';
 import Tasks from '../components/Tasks';
 import Appreciation from '../components/Appreciation';
 import Subjects from '../components/Subjects';
+import ParticipationRadarChart from '../components/ParticipationRadarChart';
 import { Grid, Box } from '@mui/material'; 
 import '../styling/Overview.css'; 
 
@@ -43,6 +44,11 @@ const Overview = () => {
           </Grid>
           <Grid item xs={12} md={6}>
             <Tasks />
+          </Grid>
+
+          {/* Participation Radar Chart */}
+          <Grid item xs={12}>
+            <ParticipationRadarChart /> {/* Added the radar chart component */}
           </Grid>
 
           {/* Appreciation Messages */}
