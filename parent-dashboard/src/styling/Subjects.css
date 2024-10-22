@@ -4,13 +4,6 @@
   
   .Subjects .MuiCard-root {
     margin-bottom: 10px;
+    position: relative;
   }
   
-  /* Tasks.css */
-  .Tasks {
-    margin-bottom: 20px;
-  }
-  
-  .Tasks .MuiListItem-root {
-    margin-bottom: 10px;
-  }

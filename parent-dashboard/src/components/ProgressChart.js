@@ -44,7 +44,7 @@ const ProgressChart = () => {
 
   return (
     <div className="progress-chart-container">
-      <h3> Progress Anak </h3>
+      <h3> Progres Student </h3>
       <RadialBarChart
         width={300}
         height={300}
