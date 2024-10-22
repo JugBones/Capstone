@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactApexChart from 'react-apexcharts';
+import '../styling/ParticipationRadarChart.css'; // Make sure the CSS is linked
 
 class ParticipationRadarChart extends React.Component {
   constructor(props) {
@@ -8,21 +9,18 @@ class ParticipationRadarChart extends React.Component {
     this.state = {
       series: [{
         name: 'Student Participation',
-        data: [80, 60, 70, 90],  // Replace these values with actual participation data
+        data: [80, 60, 70, 90],
       }],
       options: {
         chart: {
           height: 350,
           type: 'radar',
         },
-        title: {
-          text: 'Student Participation Radar Chart'
-        },
         yaxis: {
           stepSize: 20,
         },
         xaxis: {
-          categories: ['Video', 'Audio', 'Chat', 'Understanding'], // Corresponding to your metrics
+          categories: ['Video', 'Audio', 'Chat', 'Understanding'],
         },
         stroke: {
           width: 2,
@@ -39,16 +37,15 @@ class ParticipationRadarChart extends React.Component {
 
   render() {
     return (
-      <div>
-        <div id="chart">
-          <ReactApexChart
-            options={this.state.options}
-            series={this.state.series}
-            type="radar"
-            height={350}
-          />
-        </div>
-        <div id="html-dist"></div>
+      <div className="participation-chart-container">
+        <h3>Student Participation Radar Chart</h3>
+        <ReactApexChart
+          options={this.state.options}
+          series={this.state.series}
+          type="radar"
+          height={350}
+        />
+        <button className="view-details-btn">View Details</button>
       </div>
     );
   }

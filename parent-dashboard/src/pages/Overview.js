@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import ProgressChart from '../components/ProgressChart';
-import PollingChart from '../components/PollingChart';
-import PollingAccuracy from '../components/PollingAccuracy';
 import Tasks from '../components/Tasks';
 import Appreciation from '../components/Appreciation';
 import Subjects from '../components/Subjects';
@@ -34,8 +32,7 @@ const Overview = () => {
 
           {/* Polling Accuracy and Polling Chart on the right */}
           <Grid item xs={12} md={4}>
-            <PollingAccuracy />
-            <PollingChart />
+            <ParticipationRadarChart />
           </Grid>
 
           {/* Subjects and Tasks at the bottom */}
@@ -46,10 +43,6 @@ const Overview = () => {
             <Tasks />
           </Grid>
 
-          {/* Participation Radar Chart */}
-          <Grid item xs={12}>
-            <ParticipationRadarChart /> {/* Added the radar chart component */}
-          </Grid>
 
           {/* Appreciation Messages */}
           <Grid item xs={12}>
