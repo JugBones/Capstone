@@ -1,0 +1,55 @@
+/* Sidebar.css */
+
+/* Sidebar container */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px; /* Hidden by default */
+    width: 250px;
+    height: 100%;
+    background-color: #0057FF; /* CoLearn Blue background */
+    transition: left 0.3s ease;
+    z-index: 1000; /* Keep it above other content */
+    color: white; /* Sidebar text color white */
+  }
+  
+  .sidebar.open {
+    left: 0; /* Sidebar slides in */
+  }
+  
+  .sidebar-header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+  }
+  
+  /* Sidebar list items */
+  .sidebar-item {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px; /* Match the text size */
+    padding: 10px 20px;
+    color: white;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    border-radius: 8px;
+  }
+  
+  .sidebar-item:hover {
+    background-color: #ffdb5c; /* Add CoLearn Yellow hover effect */
+    transform: translateX(5px); /* Slight shift on hover */
+    cursor: pointer;
+  }
+  
+  .sidebar-icon {
+    color: white; /* Make the icons white */
+  }
+  
+  /* Sidebar text */
+  .sidebar-text {
+    color: white; /* Ensure text color stays white */
+  }
+  
+  /* Close button in sidebar */
+  .MuiIconButton-root:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* Subtle hover effect for close button */
+  }
+  

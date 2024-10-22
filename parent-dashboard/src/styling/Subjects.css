@@ -1,9 +1,15 @@
 .Subjects {
-    margin-bottom: 20px;
-  }
-  
-  .Subjects .MuiCard-root {
-    margin-bottom: 10px;
-    position: relative;
-  }
-  
+  margin-bottom: 20px;
+}
+
+.Subjects .MuiCard-root {
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.Subjects h3 {
+  text-align: left;
+  padding-left: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}

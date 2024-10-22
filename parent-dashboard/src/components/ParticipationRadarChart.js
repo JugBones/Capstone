@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactApexChart from 'react-apexcharts';
-import '../styling/ParticipationRadarChart.css'; // Make sure the CSS is linked
+import '../styling/ParticipationRadarChart.css'; 
 
 class ParticipationRadarChart extends React.Component {
   constructor(props) {
