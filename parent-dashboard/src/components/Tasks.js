@@ -1,15 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styling/Subjects.css';
 import { List, ListItem, ListItemText, Button, Dialog, DialogTitle, DialogContent, DialogActions, Typography } from '@mui/material';
-
-const tasks = [
-  { name: 'Aljabar', date: 'Senin, Nov 11', description: 'Pelajaran mengenai persamaan aljabar dan variabel.' },
-  { name: 'Gerak Parabola', date: 'Rabu, Nov 15', description: 'Memahami pergerakan parabola dalam fisika.' },
-];
+import axios from 'axios'; 
 
 const Tasks = () => {
-  const [open, setOpen] = useState(false); // State to manage modal open/close
-  const [selectedTask, setSelectedTask] = useState(null); // State to hold the currently selected task
+  const [tasks, setTasks] = useState([]); 
+  const [open, setOpen] = useState(false); 
+  const [selectedTask, setSelectedTask] = useState(null); 
+
+  // Fetch tasks from the API
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/tasks'); // Update this with your backend URL
+        setTasks(response.data); 
+      } catch (error) {
+        console.error('Error fetching tasks:', error);
+      }
+    };
+
+    fetchTasks();
+  }, []);
 
   // Function to open the modal and show the selected task details
   const handleOpen = (task) => {
