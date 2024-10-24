@@ -4,13 +4,13 @@
 .sidebar {
     position: fixed;
     top: 0;
-    left: -250px; /* Hidden by default */
+    left: -250px; 
     width: 250px;
     height: 100%;
-    background-color: #0057FF; /* CoLearn Blue background */
+    background-color: #0057FF; 
     transition: left 0.3s ease;
-    z-index: 1000; /* Keep it above other content */
-    color: white; /* Sidebar text color white */
+    z-index: 1000; 
+    color: #0057FF; 
   }
   
   .sidebar.open {
@@ -28,28 +28,28 @@
     font-family: 'Roboto', sans-serif;
     font-size: 16px; /* Match the text size */
     padding: 10px 20px;
-    color: white;
+    color: #0057FF;
     transition: background-color 0.3s ease, transform 0.3s ease;
     border-radius: 8px;
   }
   
   .sidebar-item:hover {
-    background-color: #ffdb5c; /* Add CoLearn Yellow hover effect */
-    transform: translateX(5px); /* Slight shift on hover */
+    background-color: #ffdb5c; 
+    transform: translateX(5px); 
     cursor: pointer;
   }
   
   .sidebar-icon {
-    color: white; /* Make the icons white */
+    color: #0057FF; 
   }
   
   /* Sidebar text */
   .sidebar-text {
-    color: white; /* Ensure text color stays white */
+    color: #0057FF; 
   }
   
   /* Close button in sidebar */
   .MuiIconButton-root:hover {
-    background-color: rgba(255, 255, 255, 0.2); /* Subtle hover effect for close button */
+    background-color: #ffdb5c; 
   }
   
