@@ -2,3 +2,4 @@ backend/__pycache__
 .DS_Store
 backend/BEenv
 backend/BEColearn
+.env

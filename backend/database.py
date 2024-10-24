@@ -1,9 +1,14 @@
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from dotenv import load_dotenv
 
-# MySQL connection URL
-SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:BelajarDatabase_123@localhost:3306/colearn_db"
+# Load environment variables from .env file
+load_dotenv()
+
+# Get the database URL from the environment variable
+SQLALCHEMY_DATABASE_URL = os.getenv('DATABASE_URL')
 
 # Create the engine and session
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
