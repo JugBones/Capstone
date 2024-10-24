@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styling/ProgressChart.css';
 import { RadialBarChart, RadialBar, Legend } from 'recharts';
 
@@ -12,8 +12,19 @@ const data = [
 
 // Modal component to display chart details
 const DetailsModal = ({ data, onClose }) => {
+  // Lock scroll and pointer events on the body when modal is open
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'; // Prevent scroll
+    document.body.classList.add('modal-open');
+
+    return () => {
+      document.body.style.overflow = 'auto'; // Re-enable scroll when modal closes
+      document.body.classList.remove('modal-open');
+    };
+  }, []);
+
   return (
-    <div className="modal">
+    <div className="modal-overlay">
       <div className="modal-content">
         <h3>Detail Progress Anak</h3>
         <ul>

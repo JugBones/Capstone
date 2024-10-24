@@ -1,25 +1,23 @@
 .progress-chart-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: center; /* This centers the chart horizontally */
   text-align: center;
   position: relative;
   padding: 20px;
 }
 
 .progress-chart-container h3 {
-  text-align: left;
-  width: 100%;
-  padding-left: 20px;
-  margin-bottom: 20px;
-  color: #333;
-  font-weight: bold;
+  text-align: left; /* Align the title to the left */
+  width: 100%; /* This makes the title span the entire width */
+  padding-left: 20px; /* Adds a little padding to push it away from the edge */
+  margin-bottom: 20px; /* Add space between the title and the chart */
 }
 
 .view-details-btn {
-  background-color: #0057FF; /* CoLearn Blue */
+  background-color: #007bff;
   color: white;
-  padding: 10px 16px;
+  padding: 8px 16px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -27,19 +25,21 @@
 }
 
 .view-details-btn:hover {
-  background-color: #0041D0; /* Hover effect */
+  background-color: #0056b3;
 }
 
-.modal {
+.modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5); /* Dim background */
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000; /* Ensure it's on top */
+  pointer-events: all; /* Make sure it's interactive */
 }
 
 .modal-content {
@@ -48,6 +48,7 @@
   border-radius: 8px;
   width: 300px;
   text-align: center;
+  z-index: 1001; /* On top of overlay */
 }
 
 .modal-content h3 {
@@ -64,14 +65,37 @@
 }
 
 .modal-content button {
-  background-color: #0057FF;
+  background-color: #007bff;
   color: white;
-  padding: 10px 16px;
+  padding: 8px 16px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 
 .modal-content button:hover {
-  background-color: #0041D0;
+  background-color: #0056b3;
+}
+
+/* Prevent interaction with the body when modal is open */
+body.modal-open {
+  pointer-events: none;
+  overflow: hidden; /* Disable scroll */
+}
+
+body.modal-open .modal-overlay {
+  pointer-events: all; /* Only allow interaction with modal */
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999; /* Ensure the modal stays above everything */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
