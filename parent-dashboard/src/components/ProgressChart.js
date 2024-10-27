@@ -1,18 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import '../styling/ProgressChart.css';
 import { RadialBarChart, RadialBar, Legend } from 'recharts';
-
-// Data for the chart
-const data = [
-  { name: 'Legend1', value: 39, fill: '#82ca9d' },
-  { name: 'Legend2', value: 38, fill: '#8884d8' },
-  { name: 'Legend3', value: 27, fill: '#83a6ed' },
-  { name: 'Legend4', value: 22, fill: '#ffdb5c' },
-];
+import axios from 'axios';
 
 // Modal component to display chart details
 const DetailsModal = ({ data, onClose }) => {
-  // Lock scroll and pointer events on the body when modal is open
   useEffect(() => {
     document.body.style.overflow = 'hidden'; // Prevent scroll
     document.body.classList.add('modal-open');
@@ -42,6 +34,28 @@ const DetailsModal = ({ data, onClose }) => {
 
 const ProgressChart = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [data, setData] = useState([]);
+  const [selectedSubject, setSelectedSubject] = useState('math'); // Default subject
+
+  // Fetch data based on the selected subject
+  const fetchData = async (subject) => {
+    try {
+      const response = await axios.get(`http://127.0.0.1:8000/${subject}_progress`);
+      // Transform data to fit the chart format
+      const formattedData = [
+        { name: 'Attendance Rate', value: response.data.attendance_rate, fill: '#82ca9d' },
+        { name: 'Stickiness Rate', value: response.data.stickiness_rate, fill: '#8884d8' },
+        { name: 'Polling Understanding', value: response.data.polling_understanding, fill: '#83a6ed' },
+      ];
+      setData(formattedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData(selectedSubject);
+  }, [selectedSubject]);
 
   // Function to handle opening the modal
   const handleViewDetails = () => {
@@ -53,9 +67,19 @@ const ProgressChart = () => {
     setIsModalOpen(false);
   };
 
+  // Handle subject selection change
+  const handleSubjectChange = (subject) => {
+    setSelectedSubject(subject);
+  };
+
   return (
     <div className="progress-chart-container">
-      <h3> Progres Student </h3>
+      <h3>Progres Student</h3>
+      <div className="subject-selection">
+        <button onClick={() => handleSubjectChange('math')}>Matematika</button>
+        <button onClick={() => handleSubjectChange('physics')}>Fisika</button>
+      </div>
+
       <RadialBarChart
         width={300}
         height={300}

@@ -35,3 +35,17 @@ def read_tasks(db: Session = Depends(get_db)):  # The db dependency is injected 
     if not tasks:
         raise HTTPException(status_code=404, detail="No tasks found")
     return tasks
+
+@app.get("/math_progress", response_model=list[schemas.MathProgress])
+def read_math_progress(db: Session = Depends(get_db)):
+    data = crud.get_math_progress(db)
+    if not data:
+        raise HTTPException(status_code=404, detail="No math progress data found")
+    return data
+
+@app.get("/physics_progress", response_model=list[schemas.PhysicsProgress])
+def read_physics_progress(db: Session = Depends(get_db)):
+    data = crud.get_physics_progress(db)
+    if not data:
+        raise HTTPException(status_code=404, detail="No physics progress data found")
+    return data

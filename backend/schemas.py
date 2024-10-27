@@ -6,8 +6,26 @@ class TaskBase(BaseModel):
     date: str
     description: str
 
-# Schema for Task when reading data (with id)
-class Task(TaskBase):
+class Task(TaskBase): # Schema for Task when reading data (with id)
+    id: int
+
+    class Config:
+        from_attributes = True
+
+
+# schema for progress
+class ProgressBase(BaseModel):
+    attendance_rate: float
+    stickiness_rate: float
+    polling_understanding: float
+
+class MathProgress(ProgressBase):
+    id: int
+
+    class Config:
+        from_attributes = True
+
+class PhysicsProgress(ProgressBase):
     id: int
 
     class Config:
