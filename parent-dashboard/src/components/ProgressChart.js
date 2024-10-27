@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import '../styling/ProgressChart.css';
 import { RadialBarChart, RadialBar, Legend } from 'recharts';
-import axios from 'axios';
 
-// Modal component to display chart details
 const DetailsModal = ({ data, onClose }) => {
   useEffect(() => {
-    document.body.style.overflow = 'hidden'; // Prevent scroll
+    document.body.style.overflow = 'hidden';
     document.body.classList.add('modal-open');
-
     return () => {
-      document.body.style.overflow = 'auto'; // Re-enable scroll when modal closes
+      document.body.style.overflow = 'auto';
       document.body.classList.remove('modal-open');
     };
   }, []);
@@ -33,51 +30,48 @@ const DetailsModal = ({ data, onClose }) => {
 };
 
 const ProgressChart = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [data, setData] = useState([]);
-  const [selectedSubject, setSelectedSubject] = useState('math'); // Default subject
-
-  // Fetch data based on the selected subject
-  const fetchData = async (subject) => {
-    try {
-      const response = await axios.get(`http://127.0.0.1:8000/${subject}_progress`);
-      // Transform data to fit the chart format
-      const formattedData = [
-        { name: 'Attendance Rate', value: response.data.attendance_rate, fill: '#82ca9d' },
-        { name: 'Stickiness Rate', value: response.data.stickiness_rate, fill: '#8884d8' },
-        { name: 'Polling Understanding', value: response.data.polling_understanding, fill: '#83a6ed' },
-      ];
-      setData(formattedData);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  const [subject, setSubject] = useState("math");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    fetchData(selectedSubject);
-  }, [selectedSubject]);
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/${subject}_progress`);
+        if (response.ok) {
+          const data = await response.json();
+          const formattedData = [
+            { name: 'Attendance Rate', value: data[0].attendance_rate, fill: '#82ca9d' },
+            { name: 'Stickiness Rate', value: data[0].stickiness_rate, fill: '#8884d8' },
+            { name: 'Polling Understanding', value: data[0].polling_understanding, fill: '#ffc658' }
+          ];
+          setData(formattedData);
+        } else {
+          console.error("Failed to fetch data");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, [subject]);
 
-  // Function to handle opening the modal
   const handleViewDetails = () => {
     setIsModalOpen(true);
   };
 
-  // Function to close the modal
   const handleCloseModal = () => {
     setIsModalOpen(false);
-  };
-
-  // Handle subject selection change
-  const handleSubjectChange = (subject) => {
-    setSelectedSubject(subject);
   };
 
   return (
     <div className="progress-chart-container">
       <h3>Progres Student</h3>
-      <div className="subject-selection">
-        <button onClick={() => handleSubjectChange('math')}>Matematika</button>
-        <button onClick={() => handleSubjectChange('physics')}>Fisika</button>
+      <div style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
+        <select onChange={(e) => setSubject(e.target.value)} value={subject}>
+          <option value="math">Matematika</option>
+          <option value="physics">Fisika</option>
+        </select>      
       </div>
 
       <RadialBarChart
@@ -98,7 +92,6 @@ const ProgressChart = () => {
         View Details
       </button>
 
-      {/* Modal that shows chart details */}
       {isModalOpen && <DetailsModal data={data} onClose={handleCloseModal} />}
     </div>
   );
