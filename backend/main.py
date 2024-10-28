@@ -60,3 +60,11 @@ def read_participation_data(db: Session = Depends(get_db)):
     if not data:
         raise HTTPException(status_code=404, detail="No participation data found")
     return data
+
+
+@app.get("/subjects", response_model=list[schemas.Subject]) # Endpoint to get subjects and their next schedules
+def read_subjects(db: Session = Depends(get_db)):
+    subjects = crud.get_subjects_with_schedule(db)
+    if not subjects:
+        raise HTTPException(status_code=404, detail="No subjects found")
+    return subjects

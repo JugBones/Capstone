@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, Float, Date
+from sqlalchemy import Column, Integer, String, Float, Date, ForeignKey
+from sqlalchemy.orm import relationship
 from database import Base
 
 
@@ -36,3 +37,20 @@ class Participation(Base):
     zoom_video = Column(Float, nullable=False)
     zoom_audio = Column(Float, nullable=False)
     zoom_chat = Column(Float, nullable=False)
+
+
+class Subject(Base):
+    __tablename__ = "subjects"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(255), nullable=False)
+    schedules = relationship("Schedule", back_populates="subject")
+
+
+class Schedule(Base):
+    __tablename__ = "schedules"
+
+    id = Column(Integer, primary_key=True, index=True)
+    date = Column(Date, nullable=False)
+    subject_id = Column(Integer, ForeignKey("subjects.id"))
+    subject = relationship("Subject", back_populates="schedules")

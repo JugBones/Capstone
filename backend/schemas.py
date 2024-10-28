@@ -16,7 +16,7 @@ class Task(TaskBase):  # Schema for Task when reading data (with id)
         from_attributes = True
 
 
-# schema for progress
+# Schema for Progress
 class ProgressBase(BaseModel):
     attendance_rate: float
     stickiness_rate: float
@@ -48,3 +48,25 @@ class Participation(ParticipationBase):
 
     class Config:
         from_attributes = True
+
+
+
+# Schema for Schedule and subject
+class ScheduleBase(BaseModel):
+    date: date
+
+class Schedule(ScheduleBase):
+    id: int
+
+    class Config:
+        from_atrributes = True
+
+class SubjectBase(BaseModel):
+    name: str
+
+class Subject(SubjectBase):
+    id: int
+    schedules: list[Schedule] = []
+
+    class Config:
+        from_atrributes = True
