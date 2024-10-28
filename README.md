@@ -1,7 +1,7 @@
 # Capstone Project - PWA Parent Reporting Dashboard
 
 - Team Member: Christopher Alexander Tjiandra & Joshua Alexander Silalahi 
-- Student ID: 22081418 & 
+- Student ID: 22081418 & 22081358
 - Shared Repository: https://github.com/JugBones/Capstone.git 
 
 ## Overview
@@ -9,9 +9,10 @@ This project is a PWA built using **React**, **Lorem**, **Lorem**, and **Lorem**
 
 ## Technologies Used
 - React: For the front-end user interface.
-- XXX
-- XXX
-- XXX
+- Python: For the backend handling.
+- MySQL: Database storage (SQL)
+- Firebase: Authentication (NoSQL)
+- FastAPI: API connection
 
 ## Database Schema
 The application contains X tables:
@@ -59,12 +60,12 @@ python -m venv BEenv
 ### 2. Activate venv
 Mac:
 ```
-source BEenv/bin/activate
+source BEColearn/bin/activate
 ```
 
 Windows:
 ```
-BEenv/Scripts/activate
+BEColearn/Scripts/activate
 ```
 
 ### 3. Download Requirements
