@@ -1,17 +1,27 @@
 from sqlalchemy.orm import Session
+
 # from datetime import date
 import models
+
 # import schemas
+
 
 # Get all tasks from the database
 def get_tasks(db: Session):
     return db.query(models.Task).all()
 
+
 def get_math_progress(db: Session):
     return db.query(models.MathProgress).all()
 
+
 def get_physics_progress(db: Session):
     return db.query(models.PhysicsProgress).all()
+
+
+def get_participation_data(db: Session):
+    return db.query(models.Participation).all()
+
 
 # Create a new task in the database
 # def create_task(db: Session, task: schemas.TaskBase):

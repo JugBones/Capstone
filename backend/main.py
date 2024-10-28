@@ -19,6 +19,7 @@ app.add_middleware(
 # Create the tables in the database
 models.Base.metadata.create_all(bind=engine)
 
+
 # Dependency to get the DB session
 def get_db():
     db = SessionLocal()
@@ -26,6 +27,7 @@ def get_db():
         yield db
     finally:
         db.close()
+
 
 # Get all tasks
 @app.get("/tasks", response_model=list[schemas.Task])
@@ -35,6 +37,7 @@ def read_tasks(db: Session = Depends(get_db)):  # The db dependency is injected 
         raise HTTPException(status_code=404, detail="No tasks found")
     return tasks
 
+
 @app.get("/math_progress", response_model=list[schemas.MathProgress])
 def read_math_progress(db: Session = Depends(get_db)):
     data = crud.get_math_progress(db)
@@ -42,9 +45,18 @@ def read_math_progress(db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="No math progress data found")
     return data
 
+
 @app.get("/physics_progress", response_model=list[schemas.PhysicsProgress])
 def read_physics_progress(db: Session = Depends(get_db)):
     data = crud.get_physics_progress(db)
     if not data:
         raise HTTPException(status_code=404, detail="No physics progress data found")
+    return data
+
+
+@app.get("/participation", response_model=list[schemas.Participation])
+def read_participation_data(db: Session = Depends(get_db)):
+    data = crud.get_participation_data(db)
+    if not data:
+        raise HTTPException(status_code=404, detail="No participation data found")
     return data

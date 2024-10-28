@@ -6,59 +6,102 @@ class ParticipationRadarChart extends React.Component {
   constructor(props) {
     super(props);
 
-this.state = {
-  series: [{
-    name: 'value',
-    data: [80, 60, 70, 90],
-  }],
-  options: {
-    chart: {
-      height: 350,
-      type: 'radar',
-      toolbar: {
-        show: false,
-      },
-    },
-    yaxis: {
-      stepSize: 20,
-    },
-    xaxis: {
-      categories: ['Video', 'Audio', 'Chat', 'Understanding'],
-    },
-    stroke: {
-      width: 2,
-    },
-    fill: {
-      opacity: 0.2,
-    },
-    markers: {
-      size: 4,
-    },
-    plotOptions: {
-      radar: {
-        polygons: {
-          strokeColor: '#e9e9e9',
-          fill: {
-            colors: ['#f8f8f8', '#fff'],
+    this.state = {
+      series: [{
+        name: 'Interactions',
+        data: [0, 0, 0], // Initial dummy data, will be updated after fetching
+      }],
+      showModal: false, // To toggle modal visibility
+      options: {
+        chart: {
+          height: 350,
+          type: 'radar',
+          toolbar: {
+            show: false,
+          },
+        },
+        yaxis: {
+          stepSize: 20,
+        },
+        xaxis: {
+          categories: ['Video', 'Audio', 'Chat'], // Removed "Understanding"
+        },
+        stroke: {
+          width: 2,
+        },
+        fill: {
+          opacity: 0.2,
+        },
+        markers: {
+          size: 4,
+        },
+        plotOptions: {
+          radar: {
+            polygons: {
+              strokeColor: '#e9e9e9',
+              fill: {
+                colors: ['#f8f8f8', '#fff'],
+              },
+            },
+          },
+        },
+        grid: {
+          padding: {
+            top: 10,
+            right: 20,
+            bottom: 10,
+            left: 30,
           },
         },
       },
-    },
-    // Adjust the grid and margins
-    grid: {
-      padding: {
-        top: 10,
-        right: 20, // Add more space on the right
-        bottom: 10,
-        left: 30,  // Add more space on the left
-      },
-    },
-  },
-};
+    };
+  }
 
+  componentDidMount() {
+    // Fetch data from the backend
+    this.fetchParticipationData();
+  }
+
+  fetchParticipationData = async () => {
+    try {
+      const response = await fetch('http://localhost:8000/participation'); // Your backend endpoint
+      const data = await response.json();
+      
+      if (data.length > 0) {
+        const participationData = data[0];
+        const chartData = [
+          participationData.zoom_video || 0, 
+          participationData.zoom_audio || 0, 
+          participationData.zoom_chat || 0
+        ];
+
+        // Update the state with the fetched data
+        this.setState({
+          series: [{
+            name: 'Interactions',
+            data: chartData,
+          }],
+        });
+      } else {
+        console.error("No participation data available");
+      }
+    } catch (error) {
+      console.error("Error fetching participation data:", error);
+    }
+  }
+
+  handleViewDetails = () => {
+    this.setState({ showModal: true });
+  }
+
+  closeModal = () => {
+    this.setState({ showModal: false });
   }
 
   render() {
+    const { showModal, series } = this.state;
+    const details = series[0].data;
+
     return (
       <div className="participation-chart-container">
         <h3>Partisipasi Student</h3>
@@ -68,7 +111,21 @@ this.state = {
           type="radar"
           height={350}
         />
-        <button className="view-details-btn">View Details</button>
+        <button className="view-details-btn" onClick={this.handleViewDetails}>
+          View Details
+        </button>
+
+        {showModal && (
+          <div className="modal">
+            <div className="modal-content">
+              <span className="close" onClick={this.closeModal}>&times;</span>
+              <h4>Participation Details</h4>
+              <p>Zoom Video: {details[0]}</p>
+              <p>Zoom Audio: {details[1]}</p>
+              <p>Zoom Chat: {details[2]}</p>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
