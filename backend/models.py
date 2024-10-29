@@ -19,6 +19,7 @@ class MathProgress(Base):
     attendance_rate = Column(Float, nullable=False)
     stickiness_rate = Column(Float, nullable=False)
     polling_understanding = Column(Float, nullable=False)
+    firebase_uid = Column(String(255), nullable=False)
 
 
 class PhysicsProgress(Base):
@@ -28,12 +29,14 @@ class PhysicsProgress(Base):
     attendance_rate = Column(Float, nullable=False)
     stickiness_rate = Column(Float, nullable=False)
     polling_understanding = Column(Float, nullable=False)
+    firebase_uid = Column(String(255), nullable=False)
 
 
 class Participation(Base):
     __tablename__ = "participation"
 
     id = Column(Integer, primary_key=True, index=True)
+    firebase_uid = Column(String, nullable=False)  # Add this field
     zoom_video = Column(Float, nullable=False)
     zoom_audio = Column(Float, nullable=False)
     zoom_chat = Column(Float, nullable=False)

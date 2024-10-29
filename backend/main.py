@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from datetime import date, timedelta
@@ -38,31 +38,37 @@ def read_tasks(db: Session = Depends(get_db)):  # The db dependency is injected 
     return tasks
 
 
+# Fetch Math progress data based on Firebase UID
 @app.get("/math_progress", response_model=list[schemas.MathProgress])
-def read_math_progress(db: Session = Depends(get_db)):
-    data = crud.get_math_progress(db)
+def read_math_progress(firebase_uid: str = Query(...), db: Session = Depends(get_db)):
+    data = crud.get_math_progress_by_uid(db, firebase_uid)
     if not data:
         raise HTTPException(status_code=404, detail="No math progress data found")
     return data
 
 
+# Fetch Physics progress data based on Firebase UID
 @app.get("/physics_progress", response_model=list[schemas.PhysicsProgress])
-def read_physics_progress(db: Session = Depends(get_db)):
-    data = crud.get_physics_progress(db)
+def read_physics_progress(
+    firebase_uid: str = Query(...), db: Session = Depends(get_db)
+):
+    data = crud.get_physics_progress_by_uid(db, firebase_uid)
     if not data:
         raise HTTPException(status_code=404, detail="No physics progress data found")
     return data
 
 
-@app.get("/participation", response_model=list[schemas.Participation])
-def read_participation_data(db: Session = Depends(get_db)):
-    data = crud.get_participation_data(db)
+@app.get("/participation/{firebase_uid}", response_model=schemas.Participation)
+def read_participation_data(firebase_uid: str, db: Session = Depends(get_db)):
+    data = crud.get_participation_by_uid(db, firebase_uid)
     if not data:
         raise HTTPException(status_code=404, detail="No participation data found")
     return data
 
 
-@app.get("/subjects", response_model=list[schemas.Subject]) # Endpoint to get subjects and their next schedules
+@app.get(
+    "/subjects", response_model=list[schemas.Subject]
+)  # Endpoint to get subjects and their next schedules
 def read_subjects(db: Session = Depends(get_db)):
     subjects = crud.get_subjects_with_schedule(db)
     if not subjects:

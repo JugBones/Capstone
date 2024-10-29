@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../styling/ProgressChart.css';
 import { RadialBarChart, RadialBar, Legend } from 'recharts';
+import { auth } from '../firebase'; // Import Firebase auth to access the current user
 
 const DetailsModal = ({ data, onClose }) => {
   useEffect(() => {
@@ -37,17 +38,26 @@ const ProgressChart = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/${subject}_progress`);
-        if (response.ok) {
-          const data = await response.json();
-          const formattedData = [
-            { name: 'Attendance Rate', value: data[0].attendance_rate, fill: '#82ca9d' },
-            { name: 'Stickiness Rate', value: data[0].stickiness_rate, fill: '#8884d8' },
-            { name: 'Polling Understanding', value: data[0].polling_understanding, fill: '#ffc658' }
-          ];
-          setData(formattedData);
+        // Get the currently signed-in user's Firebase UID
+        const user = auth.currentUser;
+
+        if (user) {
+          const firebaseUid = user.uid;
+          const response = await fetch(`http://127.0.0.1:8000/${subject}_progress?firebase_uid=${firebaseUid}`);
+          
+          if (response.ok) {
+            const data = await response.json();
+            const formattedData = [
+              { name: 'Attendance Rate', value: data[0].attendance_rate, fill: '#82ca9d' },
+              { name: 'Stickiness Rate', value: data[0].stickiness_rate, fill: '#8884d8' },
+              { name: 'Polling Understanding', value: data[0].polling_understanding, fill: '#ffc658' }
+            ];
+            setData(formattedData);
+          } else {
+            console.error("Failed to fetch data");
+          }
         } else {
-          console.error("Failed to fetch data");
+          console.error("User not signed in");
         }
       } catch (error) {
         console.error("Error fetching data:", error);

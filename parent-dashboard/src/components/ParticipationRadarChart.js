@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactApexChart from 'react-apexcharts';
+import { auth } from '../firebase';  // Import the Firebase auth instance
 import '../styling/ParticipationRadarChart.css'; 
 
 class ParticipationRadarChart extends React.Component {
@@ -58,21 +59,25 @@ class ParticipationRadarChart extends React.Component {
   }
 
   componentDidMount() {
-    // Fetch data from the backend
-    this.fetchParticipationData();
+    // Fetch data after user logs in
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        const uid = user.uid;  // Get Firebase user ID
+        this.fetchParticipationData(uid);
+      }
+    });
   }
 
-  fetchParticipationData = async () => {
+  fetchParticipationData = async (uid) => {
     try {
-      const response = await fetch('http://localhost:8000/participation'); // Your backend endpoint
+      const response = await fetch(`http://localhost:8000/participation/${uid}`); // Your backend endpoint with uid
       const data = await response.json();
       
-      if (data.length > 0) {
-        const participationData = data[0];
+      if (data) {
         const chartData = [
-          participationData.zoom_video || 0, 
-          participationData.zoom_audio || 0, 
-          participationData.zoom_chat || 0
+          data.zoom_video || 0, 
+          data.zoom_audio || 0, 
+          data.zoom_chat || 0
         ];
 
         // Update the state with the fetched data
