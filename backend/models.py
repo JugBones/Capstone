@@ -56,4 +56,5 @@ class Schedule(Base):
     id = Column(Integer, primary_key=True, index=True)
     date = Column(Date, nullable=False)
     subject_id = Column(Integer, ForeignKey("subjects.id"))
+    firebase_uid = Column(String(255), nullable=False)
     subject = relationship("Subject", back_populates="schedules")

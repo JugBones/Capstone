@@ -3,6 +3,7 @@ import '../styling/Subjects.css';
 import { Card, CardContent, Typography, IconButton, Menu, MenuItem, Dialog, DialogTitle, DialogContent, List, ListItem, ListItemText, Button } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import axios from 'axios';
+import { auth } from '../firebase';  
 
 const Subjects = () => {
   const [subjects, setSubjects] = useState([]);
@@ -10,29 +11,36 @@ const Subjects = () => {
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
 
-  // Fetch subjects and schedules from backend
   useEffect(() => {
     const fetchSubjects = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/subjects');
-        const fetchedSubjects = response.data.map((subject) => {
-          const upcomingDate = subject.schedules
-            .map(schedule => new Date(schedule.date))
-            .filter(date => date > new Date())
-            .sort((a, b) => a - b)[0];
-
-          return {
-            name: subject.name,
-            nextClassDate: upcomingDate ? upcomingDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'No upcoming classes',
-            allDates: subject.schedules.map(schedule => new Date(schedule.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }))
-          };
-        });
-        setSubjects(fetchedSubjects);
+        const user = auth.currentUser; // Use auth to get the current user
+        if (user) {
+          const response = await axios.get('http://localhost:8000/subjects', {
+            params: { firebase_uid: user.uid }
+          });
+  
+          const fetchedSubjects = response.data.map((subject) => {
+            const upcomingDate = subject.schedules
+              .map(schedule => new Date(schedule.date))
+              .filter(date => date > new Date())
+              .sort((a, b) => a - b)[0];
+  
+            return {
+              name: subject.name,
+              nextClassDate: upcomingDate ? upcomingDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'No upcoming classes',
+              allDates: subject.schedules.map(schedule => new Date(schedule.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }))
+            };
+          });
+          setSubjects(fetchedSubjects);
+        } else {
+          console.error('User is not authenticated');
+        }
       } catch (error) {
         console.error('Error fetching subjects:', error);
       }
     };
-
+  
     fetchSubjects();
   }, []);
 

@@ -66,11 +66,9 @@ def read_participation_data(firebase_uid: str, db: Session = Depends(get_db)):
     return data
 
 
-@app.get(
-    "/subjects", response_model=list[schemas.Subject]
-)  # Endpoint to get subjects and their next schedules
-def read_subjects(db: Session = Depends(get_db)):
-    subjects = crud.get_subjects_with_schedule(db)
+@app.get("/subjects", response_model=list[schemas.Subject])
+def read_subjects(firebase_uid: str, db: Session = Depends(get_db)):
+    subjects = crud.get_subjects_with_schedule_by_uid(db, firebase_uid)
     if not subjects:
         raise HTTPException(status_code=404, detail="No subjects found")
     return subjects

@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, contains_eager
 
 # from datetime import date
 import models
@@ -35,14 +35,12 @@ def get_participation_by_uid(db: Session, firebase_uid: str):
     )
 
 
-def get_subjects_with_schedule(db: Session):
-    return db.query(models.Subject).all()
-
-
-# Create a new task in the database
-# def create_task(db: Session, task: schemas.TaskBase):
-#     db_task = models.Task(name=task.name, date=task.date, description=task.description)
-#     db.add(db_task)
-#     db.commit()
-#     db.refresh(db_task)
-#     return db_task
+def get_subjects_with_schedule_by_uid(db: Session, firebase_uid: str):
+    subjects = (
+        db.query(models.Subject)
+        .join(models.Subject.schedules)  # Join with schedules
+        .filter(models.Schedule.firebase_uid == firebase_uid)  # Filter schedules by firebase_uid
+        .options(contains_eager(models.Subject.schedules))  # Load schedules with subjects
+        .all()
+    )
+    return subjects
