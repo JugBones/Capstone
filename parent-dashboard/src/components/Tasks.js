@@ -2,24 +2,38 @@ import React, { useState, useEffect } from 'react';
 import '../styling/Subjects.css';
 import { List, ListItem, ListItemText, Button, Dialog, DialogTitle, DialogContent, DialogActions, Typography } from '@mui/material';
 import axios from 'axios'; 
+import { auth } from '../firebase';  // Import Firebase auth
 
 const Tasks = () => {
   const [tasks, setTasks] = useState([]); 
   const [open, setOpen] = useState(false); 
   const [selectedTask, setSelectedTask] = useState(null); 
 
-  // Fetch tasks from the API
-  useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const response = await axios.get('http://127.0.0.1:8000/tasks'); // Update this with your backend URL
+  const fetchTasks = async () => {
+    try {
+      const user = auth.currentUser;  // Get the current user
+      if (user) {
+        const response = await axios.get('http://127.0.0.1:8000/tasks', {
+          params: { firebase_uid: user.uid }
+        });
         setTasks(response.data); 
-      } catch (error) {
-        console.error('Error fetching tasks:', error);
+      } else {
+        console.error('User is not authenticated');
       }
-    };
+    } catch (error) {
+      console.error('Error fetching tasks:', error);
+    }
+  };
 
+  useEffect(() => {
     fetchTasks();
+
+    // Set an interval to refresh tasks periodically
+    const intervalId = setInterval(() => {
+      fetchTasks();
+    }, 5 * 60 * 1000);  // Refresh every 5 minutes
+
+    return () => clearInterval(intervalId);  // Clean up on component unmount
   }, []);
 
   // Function to open the modal and show the selected task details
@@ -38,14 +52,14 @@ const Tasks = () => {
     <div>
       <List>
         <h3> Tugas </h3>
-        {tasks.map((task, index) => (
+        {tasks.length > 0 ? tasks.map((task, index) => (
           <ListItem key={index}>
             <ListItemText primary={task.name} secondary={task.date} />
             <Button variant="outlined" color="primary" onClick={() => handleOpen(task)}>
               Detail
             </Button>
           </ListItem>
-        ))}
+        )) : <Typography>No upcoming tasks</Typography>}
       </List>
 
       {/* Modal to show task details */}

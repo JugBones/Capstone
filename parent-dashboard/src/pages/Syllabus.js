@@ -3,7 +3,7 @@ import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import { Box } from '@mui/material';
 
-const Settings = () => {
+const Syllabus = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
@@ -14,11 +14,11 @@ const Settings = () => {
     <Box className="App">
       <Header toggleSidebar={toggleSidebar} />
       <Sidebar open={sidebarOpen} toggleSidebar={toggleSidebar} />
-      <Box className="settings-container">
-        <h1>Settings Page</h1>
+      <Box className="syllabus-container">
+        <h1>Syllabus Page</h1>
       </Box>
     </Box>
   );
 };
 
-export default Settings;
+export default Syllabus;

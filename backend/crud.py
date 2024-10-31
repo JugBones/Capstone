@@ -1,12 +1,15 @@
 from sqlalchemy.orm import Session, contains_eager
-
-# from datetime import date
+from datetime import datetime
 import models
 
 
-# Get all tasks from the database
-def get_tasks(db: Session):
-    return db.query(models.Task).all()
+# Get all tasks from the database and auto update for the tasks
+def get_upcoming_tasks(db: Session, firebase_uid: str):
+    today = datetime.now().strftime('%Y-%m-%d')  # Current date in 'YYYY-MM-DD' format
+    return db.query(models.Task).filter(
+        models.Task.firebase_uid == firebase_uid,
+        models.Task.date >= today
+    ).all()
 
 
 # Fetch Math progress based on Firebase UID

@@ -10,6 +10,7 @@ class Task(Base):
     name = Column(String(255), nullable=False)
     date = Column(String(255), nullable=False)
     description = Column(String(500), nullable=False)
+    firebase_uid = Column(String(255), nullable=False)
 
 
 class MathProgress(Base):

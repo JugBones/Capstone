@@ -31,10 +31,10 @@ def get_db():
 
 # Get all tasks
 @app.get("/tasks", response_model=list[schemas.Task])
-def read_tasks(db: Session = Depends(get_db)):  # The db dependency is injected here
-    tasks = crud.get_tasks(db)
+def read_tasks(firebase_uid: str = Query(...), db: Session = Depends(get_db)):
+    tasks = crud.get_upcoming_tasks(db, firebase_uid)
     if not tasks:
-        raise HTTPException(status_code=404, detail="No tasks found")
+        raise HTTPException(status_code=404, detail="No upcoming tasks found")
     return tasks
 
 

@@ -7,7 +7,7 @@ class TaskBase(BaseModel):
     name: str
     date: str
     description: str
-
+    firebase_uid: str  
 
 class Task(TaskBase):  # Schema for Task when reading data (with id)
     id: int
