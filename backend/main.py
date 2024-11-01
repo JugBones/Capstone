@@ -83,3 +83,11 @@ def read_syllabus(
     )
     print("Syllabus fetched for frontend:", syllabus)  # Debugging line
     return syllabus
+
+
+@app.get("/appreciations", response_model=list[schemas.Appreciation])
+def read_appreciations(firebase_uid: str = Query(...), db: Session = Depends(get_db)):
+    appreciations = crud.get_appreciations_by_uid(db, firebase_uid)
+    if not appreciations:
+        raise HTTPException(status_code=404, detail="No appreciation messages found")
+    return appreciations

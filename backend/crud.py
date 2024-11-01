@@ -64,3 +64,11 @@ def get_syllabus(db: Session, class_level: str, curriculum: str, year_semester: 
         )
         .all()
     )
+
+
+def get_appreciations_by_uid(db: Session, firebase_uid: str):
+    return (
+        db.query(models.Appreciation)
+        .filter(models.Appreciation.firebase_uid == firebase_uid)
+        .all()
+    )

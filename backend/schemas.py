@@ -85,4 +85,17 @@ class Syllabus(BaseModel):
     year_semester: str
 
     class Config:
-        orm_mode = True
+        from_atrributes = True
+
+
+class AppreciationBase(BaseModel):
+    student_name: str
+    teacher_name: str
+    message: str
+    firebase_uid: str
+
+class Appreciation(AppreciationBase):
+    id: int
+
+    class Config:
+        from_attributes = True

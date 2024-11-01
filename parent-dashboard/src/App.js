@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import Overview from './pages/Overview';
-import Settings from './pages/Settings';
 import Syllabus from './pages/Syllabus';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -55,7 +54,6 @@ const MainContent = () => {
     <div className="main-content">
       <Routes>
         <Route path="/overview" element={<Overview />} />
-        <Route path="/settings" element={<Settings />} />
         <Route path="/syllabus" element={<Syllabus />} />
       </Routes>
     </div>

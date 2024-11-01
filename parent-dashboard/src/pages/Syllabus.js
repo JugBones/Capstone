@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import { Box, Select, MenuItem, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
@@ -16,14 +16,14 @@ const Syllabus = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
-  const fetchSyllabus = async () => {
+  const fetchSyllabus = useCallback(async () => {
     try {
       const response = await axios.get('http://localhost:8000/syllabus', {
         params: {
           class_level: classLevel,
           curriculum,
-          year_semester: yearSemester
-        }
+          year_semester: yearSemester,
+        },
       });
       console.log("Syllabus data received:", response.data);
       setSyllabusData(response.data && Array.isArray(response.data) ? response.data : []);
@@ -31,11 +31,11 @@ const Syllabus = () => {
       console.error('Error fetching syllabus data:', error);
       setSyllabusData([]);
     }
-  };
+  }, [classLevel, curriculum, yearSemester]);
 
   useEffect(() => {
     fetchSyllabus();
-  }, [classLevel, curriculum, yearSemester]);
+  }, [fetchSyllabus]);
 
   const groupBySubject = () => {
     const subjects = {};

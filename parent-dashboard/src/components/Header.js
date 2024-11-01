@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { AppBar, Toolbar, InputBase, IconButton, Avatar, Menu, MenuItem, Modal, Box } from '@mui/material';
+import { AppBar, Toolbar, InputBase, IconButton, Avatar, Menu, MenuItem, Modal, Box, Typography } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import MenuIcon from '@mui/icons-material/Menu';
 import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase';
 import colearnLogoWhite from '../assets/colearn-white.png'; // Import the white version of the CoLearn logo
 
 const Header = ({ toggleSidebar }) => {
   const navigate = useNavigate();
+  const [user] = useAuthState(auth); // Firebase hook to get current user
   const [anchorEl, setAnchorEl] = useState(null); // State to control the menu open/close
   const [searchOpen, setSearchOpen] = useState(false); // State to control search modal visibility
 
@@ -53,6 +55,13 @@ const Header = ({ toggleSidebar }) => {
           </IconButton>
           <img src={colearnLogoWhite} alt="CoLearn Logo" style={{ height: '40px', marginLeft: '10px' }} /> {/* Logo beside Hamburger */}
         </div>
+
+        {/* Center: Greeting */}
+        {user && (
+          <Typography variant="h6" style={{ color: 'white' }}>
+            Hello, {user.email ? user.email.split('@')[0] : user.displayName}
+          </Typography>
+        )}
 
         {/* Right: Search + Avatar */}
         <div style={{ display: 'flex', alignItems: 'center' }}>

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, Date, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, Date, ForeignKey, Text
 from sqlalchemy.orm import relationship
 from database import Base
 
@@ -75,10 +75,6 @@ class Curriculum(Base):
     name = Column(String(50), nullable=False)  # e.g., "Kurikulum Merdeka"
 
 
-from sqlalchemy import Column, Integer, String
-from database import Base
-
-
 class Syllabus(Base):
     __tablename__ = "syllabus"
 
@@ -94,3 +90,13 @@ class Syllabus(Base):
     year_semester = Column(
         String(50), nullable=False
     )  # e.g., "2024 - 2025 - Semester 1"
+
+
+class Appreciation(Base):
+    __tablename__ = "appreciations"
+
+    id = Column(Integer, primary_key=True, index=True)
+    student_name = Column(String(255), nullable=False)
+    teacher_name = Column(String(255), nullable=False)
+    message = Column(Text, nullable=False)
+    firebase_uid = Column(String(255), nullable=False)
