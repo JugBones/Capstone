@@ -72,3 +72,14 @@ def read_subjects(firebase_uid: str, db: Session = Depends(get_db)):
     if not subjects:
         raise HTTPException(status_code=404, detail="No subjects found")
     return subjects
+
+
+@app.get("/syllabus", response_model=list[schemas.Syllabus])
+def read_syllabus(
+    class_level: str, curriculum: str, year_semester: str, db: Session = Depends(get_db)
+):
+    syllabus = crud.get_syllabus(
+        db, class_level=class_level, curriculum=curriculum, year_semester=year_semester
+    )
+    print("Syllabus fetched for frontend:", syllabus)  # Debugging line
+    return syllabus

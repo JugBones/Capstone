@@ -7,7 +7,8 @@ class TaskBase(BaseModel):
     name: str
     date: str
     description: str
-    firebase_uid: str  
+    firebase_uid: str
+
 
 class Task(TaskBase):  # Schema for Task when reading data (with id)
     id: int
@@ -50,10 +51,10 @@ class Participation(ParticipationBase):
         from_attributes = True
 
 
-
 # Schema for Schedule and subject
 class ScheduleBase(BaseModel):
     date: date
+
 
 class Schedule(ScheduleBase):
     id: int
@@ -61,8 +62,10 @@ class Schedule(ScheduleBase):
     class Config:
         from_atrributes = True
 
+
 class SubjectBase(BaseModel):
     name: str
+
 
 class Subject(SubjectBase):
     id: int
@@ -70,3 +73,16 @@ class Subject(SubjectBase):
 
     class Config:
         from_atrributes = True
+
+
+class Syllabus(BaseModel):
+    subject: str
+    period_start: date
+    period_end: date
+    topic: str
+    class_level: str
+    curriculum: str
+    year_semester: str
+
+    class Config:
+        orm_mode = True

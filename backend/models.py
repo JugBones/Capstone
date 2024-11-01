@@ -59,3 +59,38 @@ class Schedule(Base):
     subject_id = Column(Integer, ForeignKey("subjects.id"))
     firebase_uid = Column(String(255), nullable=False)
     subject = relationship("Subject", back_populates="schedules")
+
+
+class ClassLevel(Base):
+    __tablename__ = "class_levels"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(50), nullable=False)  # e.g., "SMP - Kelas 7"
+
+
+class Curriculum(Base):
+    __tablename__ = "curriculums"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(50), nullable=False)  # e.g., "Kurikulum Merdeka"
+
+
+from sqlalchemy import Column, Integer, String
+from database import Base
+
+
+class Syllabus(Base):
+    __tablename__ = "syllabus"
+
+    id = Column(Integer, primary_key=True, index=True)
+    subject = Column(String(255), nullable=False)  # e.g., "Matematika" or "Fisika"
+    period_start = Column(Date, nullable=False)  # Start date for the period
+    period_end = Column(Date, nullable=False)  # End date for the period
+    topic = Column(
+        String(255), nullable=False
+    )  # e.g., "Pengenalan Bilangan dan Operasi Dasar"
+    class_level = Column(String(50), nullable=False)  # e.g., "SD - Kelas 4"
+    curriculum = Column(String(50), nullable=False)  # e.g., "Kurikulum Merdeka"
+    year_semester = Column(
+        String(50), nullable=False
+    )  # e.g., "2024 - 2025 - Semester 1"
