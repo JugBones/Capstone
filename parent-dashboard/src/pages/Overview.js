@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import ProgressChart from '../components/ProgressChart';
-import Tasks from '../components/Tasks';
+import Recommendation from '../components/Recommendation';
 import Appreciation from '../components/Appreciation';
-import Subjects from '../components/Subjects';
-import ParticipationRadarChart from '../components/ParticipationRadarChart';
+import Achievement from '../components/Achievement';
+import Participation from '../components/Participation';
 import { Grid, Box } from '@mui/material'; 
 import '../styling/Overview.css'; 
 
@@ -30,17 +30,19 @@ const Overview = () => {
             <ProgressChart />
           </Grid>
 
-          {/* Polling Accuracy and Polling Chart on the right */}
+          {/* Participation section */}
           <Grid item xs={12} md={4}>
-            <ParticipationRadarChart />
+            <Participation />
           </Grid>
 
-          {/* Subjects and Tasks at the bottom */}
+          {/* Achievement section */}
           <Grid item xs={12} md={6}>
-            <Subjects />
+            <Achievement />
           </Grid>
+
+          {/* Recommendation section */}
           <Grid item xs={12} md={6}>
-            <Tasks />
+            <Recommendation />
           </Grid>
 
 

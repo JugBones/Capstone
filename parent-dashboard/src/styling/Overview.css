@@ -21,6 +21,8 @@
   padding: 16px;
   margin-bottom: 20px; /* Added margin to prevent overlap */
   transition: transform 0.3s ease-in-out;
+  min-height: 200px;
+  overflow: hidden;
 }
 
 .MuiGrid-item:hover {

@@ -1,75 +1,71 @@
-import React, { useEffect, useState } from 'react';
-import { Avatar, Grid, Typography, Button, Dialog, DialogTitle, DialogContent } from '@mui/material';
-import axios from 'axios';
-import { auth } from '../firebase';  // Import Firebase authentication
+import React, { useState } from 'react';
+import '../styling/Appreciation.css';
+import { Avatar } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+
+// Mock data for appreciations
+const mockAppreciations = [
+  {
+    teacherName: 'Ms. Maria',
+    message: 'Adi kelas kmrn aktif bertanya dan berpartisipasi dalam diskusi. Dia menunjukkan peningkatan yang luar biasa dalam memahami materi pelajaran.',
+    date: '2024-07-08',
+    avatar: 'https://via.placeholder.com/50', // Placeholder image for teacher avatar
+  },
+  {
+    teacherName: 'Ms. Maria',
+    message: 'Adi menunjukkan peningkatan dalam memahami konsep dasar. Dia juga membantu teman-teman lain selama kelas berlangsung.',
+    date: '2024-07-07',
+    avatar: 'https://via.placeholder.com/50', // Placeholder image for teacher avatar
+  },
+];
 
 const Appreciation = () => {
-    const [appreciations, setAppreciations] = useState([]);
-    const [selectedMessage, setSelectedMessage] = useState(null);
-    const [open, setOpen] = useState(false);
+  const [expandedIndex, setExpandedIndex] = useState(null);
 
-    useEffect(() => {
-        const fetchAppreciations = async () => {
-            try {
-                const user = auth.currentUser; // Get the current authenticated user
-                if (user) {
-                    const firebaseUid = user.uid;
-                    const url = `http://localhost:8000/appreciations?firebase_uid=${firebaseUid}`;
-                    console.log("Request URL:", url);
-                    const response = await axios.get(url);
-                    console.log("Response:", response);
-                    setAppreciations(response.data);
-                } else {
-                    console.error("User is not authenticated");
-                }
-            } catch (error) {
-                console.error('Error fetching appreciations:', error);
-            }
-        };
+  const toggleExpand = (index) => {
+    setExpandedIndex(index === expandedIndex ? null : index); // Toggle the accordion
+  };
 
-        // Set an auth state observer to check when the user logs in
-        const unsubscribe = auth.onAuthStateChanged((user) => {
-            if (user) {
-                fetchAppreciations();
-            } else {
-                console.error("No authenticated user found");
-            }
-        });
-
-        // Clean up the auth observer
-        return () => unsubscribe();
-    }, []);
-
-    const handleClickOpen = (message) => {
-        setSelectedMessage(message);
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-        setSelectedMessage(null);
-    };
-
-    return (
-        <Grid container spacing={2}>
-            {appreciations.map((item, index) => (
-                <Grid item key={index} xs={6}>
-                    <Avatar alt={item.teacher_name} src={`/tutors/tutor-${index}.jpg`} />
-                    <Typography variant="body1">{item.teacher_name}</Typography>
-                    <Typography variant="body2">{item.message.slice(0, 50)}...</Typography>
-                    <Button variant="outlined" onClick={() => handleClickOpen(item.message)}>
-                        View Details
-                    </Button>
-                </Grid>
-            ))}
-            <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Message</DialogTitle>
-                <DialogContent>
-                    <Typography variant="body2">{selectedMessage}</Typography>
-                </DialogContent>
-            </Dialog>
-        </Grid>
-    );
+  return (
+    <div className="appreciation-container">
+      <h3 className="appreciation-title">Apresiasi</h3>
+      <p className="appreciation-description">
+        Berikut adalah pesan dari tutor yang membantu pembelajaran anak anda.
+      </p>
+      <div className="appreciation-list">
+        {mockAppreciations.map((item, index) => (
+          <div
+            key={index}
+            className={`appreciation-card ${
+              expandedIndex === index ? 'expanded' : ''
+            }`}
+            onClick={() => toggleExpand(index)}
+          >
+            <Avatar
+              alt={item.teacherName}
+              src={item.avatar}
+              className="appreciation-avatar"
+            />
+            <div className="appreciation-details">
+              <h4 className="appreciation-teacher">{item.teacherName}</h4>
+              <p className="appreciation-message">
+                {expandedIndex === index
+                  ? item.message // Show full message if expanded
+                  : `${item.message.slice(0, 20)}...`} {/* Truncate message if collapsed */}
+              </p>
+              <p className="appreciation-date">{item.date}</p>
+            </div>
+            {expandedIndex === index ? (
+              <ExpandLessIcon className="expand-icon" />
+            ) : (
+              <ExpandMoreIcon className="expand-icon" />
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default Appreciation;
