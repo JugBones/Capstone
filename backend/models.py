@@ -1,102 +1,107 @@
-from sqlalchemy import Column, Integer, String, Float, Date, ForeignKey, Text
+from sqlalchemy import Column, Integer, String, Date, Text, ForeignKey
 from sqlalchemy.orm import relationship
 from database import Base
 
 
-class Task(Base):
-    __tablename__ = "tasks"
-
-    id = Column(Integer, primary_key=True, index=True)
+class User(Base):
+    __tablename__ = "User"
+    id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(255), nullable=False)
-    date = Column(String(255), nullable=False)
-    description = Column(String(500), nullable=False)
-    firebase_uid = Column(String(255), nullable=False)
+    firebase_uid = Column(String(255), nullable=False, unique=True)
+    class_id = Column(Integer, ForeignKey("Class.id"))
+    achievements = relationship("Achievement", back_populates="user")
+    progress = relationship("Progress", back_populates="user")
+    appreciations = relationship("Appreciation", back_populates="user")
+    participations = relationship("Participation", back_populates="user")
 
 
-class MathProgress(Base):
-    __tablename__ = "math_progress"
-
-    id = Column(Integer, primary_key=True, index=True)
-    attendance_rate = Column(Float, nullable=False)
-    stickiness_rate = Column(Float, nullable=False)
-    polling_understanding = Column(Float, nullable=False)
-    firebase_uid = Column(String(255), nullable=False)
+class Class(Base):
+    __tablename__ = "Class"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(255), nullable=False)
+    level = Column(String(255), nullable=False)
+    subtopics = relationship("Subtopic", back_populates="class_")
 
 
-class PhysicsProgress(Base):
-    __tablename__ = "physics_progress"
+class Subtopic(Base):
+    __tablename__ = "Subtopic"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    course_id = Column(Integer, ForeignKey("Course.id"), nullable=False)
+    class_id = Column(Integer, ForeignKey("Class.id"), nullable=False)
+    name = Column(String(255), nullable=False)
+    class_ = relationship("Class", back_populates="subtopics")
+    participations = relationship("Participation", back_populates="subtopic")
 
-    id = Column(Integer, primary_key=True, index=True)
-    attendance_rate = Column(Float, nullable=False)
-    stickiness_rate = Column(Float, nullable=False)
-    polling_understanding = Column(Float, nullable=False)
-    firebase_uid = Column(String(255), nullable=False)
+
+class Course(Base):
+    __tablename__ = "Course"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(255), nullable=False)
+    progress = relationship("Progress", back_populates="course")
+    recommendations = relationship("Recommendation", back_populates="course")
+
+
+class Progress(Base):
+    __tablename__ = "Progress"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey("User.id"), nullable=False)
+    course_id = Column(Integer, ForeignKey("Course.id"), nullable=False)
+    level = Column(String(255))
+    attendance = Column(Integer)
+    activity = Column(Integer)
+    understanding = Column(Integer)
+    task_completion = Column(Integer)
+    user = relationship("User", back_populates="progress")
+    course = relationship("Course", back_populates="progress")
+
+
+class Recommendation(Base):
+    __tablename__ = "Recommendation"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    course_id = Column(Integer, ForeignKey("Course.id"), nullable=False)
+    title = Column(String(255), nullable=False)
+    description = Column(Text, nullable=False)
+    url = Column(String(255))
+    course = relationship("Course", back_populates="recommendations")
 
 
 class Participation(Base):
-    __tablename__ = "participation"
-
-    id = Column(Integer, primary_key=True, index=True)
-    firebase_uid = Column(String, nullable=False)  # Add this field
-    zoom_video = Column(Float, nullable=False)
-    zoom_audio = Column(Float, nullable=False)
-    zoom_chat = Column(Float, nullable=False)
-
-
-class Subject(Base):
-    __tablename__ = "subjects"
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(255), nullable=False)
-    schedules = relationship("Schedule", back_populates="subject")
+    __tablename__ = "Participation"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey("User.id"), nullable=False)
+    subtopic_id = Column(Integer, ForeignKey("Subtopic.id"), nullable=False)
+    total_interactions = Column(Integer)
+    user = relationship("User", back_populates="participations")
+    subtopic = relationship("Subtopic", back_populates="participations")
 
 
-class Schedule(Base):
-    __tablename__ = "schedules"
-
-    id = Column(Integer, primary_key=True, index=True)
-    date = Column(Date, nullable=False)
-    subject_id = Column(Integer, ForeignKey("subjects.id"))
-    firebase_uid = Column(String(255), nullable=False)
-    subject = relationship("Subject", back_populates="schedules")
-
-
-class ClassLevel(Base):
-    __tablename__ = "class_levels"
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(50), nullable=False)  # e.g., "SMP - Kelas 7"
-
-
-class Curriculum(Base):
-    __tablename__ = "curriculums"
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(50), nullable=False)  # e.g., "Kurikulum Merdeka"
-
-
-class Syllabus(Base):
-    __tablename__ = "syllabus"
-
-    id = Column(Integer, primary_key=True, index=True)
-    subject = Column(String(255), nullable=False)  # e.g., "Matematika" or "Fisika"
-    period_start = Column(Date, nullable=False)  # Start date for the period
-    period_end = Column(Date, nullable=False)  # End date for the period
-    topic = Column(
-        String(255), nullable=False
-    )  # e.g., "Pengenalan Bilangan dan Operasi Dasar"
-    class_level = Column(String(50), nullable=False)  # e.g., "SD - Kelas 4"
-    curriculum = Column(String(50), nullable=False)  # e.g., "Kurikulum Merdeka"
-    year_semester = Column(
-        String(50), nullable=False
-    )  # e.g., "2024 - 2025 - Semester 1"
+class Achievement(Base):
+    __tablename__ = "Achievement"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey("User.id"), nullable=False)
+    course_id = Column(Integer, ForeignKey("Course.id"), nullable=False)
+    badge_name = Column(String(255), nullable=False)
+    date_earned = Column(Date, nullable=False)
+    user = relationship("User", back_populates="achievements")
 
 
 class Appreciation(Base):
-    __tablename__ = "appreciations"
-
-    id = Column(Integer, primary_key=True, index=True)
-    student_name = Column(String(255), nullable=False)
+    __tablename__ = "Appreciation"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey("User.id"), nullable=False)
     teacher_name = Column(String(255), nullable=False)
     message = Column(Text, nullable=False)
-    firebase_uid = Column(String(255), nullable=False)
+    date = Column(Date, nullable=False)
+    user = relationship("User", back_populates="appreciations")
+
+
+class Syllabus(Base):
+    __tablename__ = "Syllabus"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    subject = Column(String(255), nullable=False)
+    period_start = Column(Date, nullable=False)
+    period_end = Column(Date, nullable=False)
+    topic = Column(String(255), nullable=False)
+    class_level = Column(String(50), nullable=False)
+    curriculum = Column(String(50), nullable=False)
+    year_semester = Column(String(50), nullable=False)

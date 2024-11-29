@@ -2,36 +2,80 @@ from pydantic import BaseModel
 from datetime import date
 
 
-# Schema for Task
-class TaskBase(BaseModel):
+class UserBase(BaseModel):
     name: str
-    date: str
-    description: str
     firebase_uid: str
+    class_id: int
 
 
-class Task(TaskBase):  # Schema for Task when reading data (with id)
+class User(UserBase):
     id: int
 
     class Config:
         from_attributes = True
 
 
-# Schema for Progress
+class ClassBase(BaseModel):
+    name: str
+    level: str
+
+
+class Class(ClassBase):
+    id: int
+
+    class Config:
+        from_attributes = True
+
+
+class SubtopicBase(BaseModel):
+    course_id: int
+    class_id: int
+    name: str
+
+
+class Subtopic(SubtopicBase):
+    id: int
+
+    class Config:
+        from_attributes = True
+
+
+class CourseBase(BaseModel):
+    name: str
+
+
+class Course(CourseBase):
+    id: int
+
+    class Config:
+        from_attributes = True
+
+
 class ProgressBase(BaseModel):
-    attendance_rate: float
-    stickiness_rate: float
-    polling_understanding: float
+    user_id: int
+    course_id: int
+    level: str
+    attendance: int
+    activity: int
+    understanding: int
+    task_completion: int
 
 
-class MathProgress(ProgressBase):
+class Progress(ProgressBase):
     id: int
 
     class Config:
         from_attributes = True
 
 
-class PhysicsProgress(ProgressBase):
+class RecommendationBase(BaseModel):
+    course_id: int
+    title: str
+    description: str
+    url: str
+
+
+class Recommendation(RecommendationBase):
     id: int
 
     class Config:
@@ -39,9 +83,9 @@ class PhysicsProgress(ProgressBase):
 
 
 class ParticipationBase(BaseModel):
-    zoom_video: float
-    zoom_audio: float
-    zoom_chat: float
+    user_id: int
+    subtopic_id: int
+    total_interactions: int
 
 
 class Participation(ParticipationBase):
@@ -51,31 +95,35 @@ class Participation(ParticipationBase):
         from_attributes = True
 
 
-# Schema for Schedule and subject
-class ScheduleBase(BaseModel):
+class AchievementBase(BaseModel):
+    user_id: int
+    course_id: int
+    badge_name: str
+    date_earned: date
+
+
+class Achievement(AchievementBase):
+    id: int
+
+    class Config:
+        from_attributes = True
+
+
+class AppreciationBase(BaseModel):
+    user_id: int
+    teacher_name: str
+    message: str
     date: date
 
 
-class Schedule(ScheduleBase):
+class Appreciation(AppreciationBase):
     id: int
 
     class Config:
-        from_atrributes = True
+        from_attributes = True
 
 
-class SubjectBase(BaseModel):
-    name: str
-
-
-class Subject(SubjectBase):
-    id: int
-    schedules: list[Schedule] = []
-
-    class Config:
-        from_atrributes = True
-
-
-class Syllabus(BaseModel):
+class SyllabusBase(BaseModel):
     subject: str
     period_start: date
     period_end: date
@@ -84,17 +132,8 @@ class Syllabus(BaseModel):
     curriculum: str
     year_semester: str
 
-    class Config:
-        from_atrributes = True
 
-
-class AppreciationBase(BaseModel):
-    student_name: str
-    teacher_name: str
-    message: str
-    firebase_uid: str
-
-class Appreciation(AppreciationBase):
+class Syllabus(SyllabusBase):
     id: int
 
     class Config:
