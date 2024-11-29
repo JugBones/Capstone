@@ -1,23 +1,4 @@
-/* Header.css */
-
-/* Navbar Styling */
-.MuiAppBar-root {
-    background-color: #121E4E; /* CoLearn blue */
-    color: white;
-  }
-  
-  .MuiToolbar-root {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-  }
-  
-  .MuiIconButton-root:hover {
-    background-color: rgba(255, 255, 255, 0.2); /* Add hover effect for buttons */
-  }
-  
-  /* CoLearn Logo Styling */
+    /* CoLearn Logo Styling */
   img[alt="CoLearn Logo"] {
     height: 40px;
     margin-left: 10px;

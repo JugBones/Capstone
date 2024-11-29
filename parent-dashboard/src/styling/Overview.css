@@ -29,28 +29,23 @@
   transform: translateY(-5px);
 }
 
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: -250px; /* Hidden by default */
-  width: 250px;
-  height: 100%;
-  background-color: #ffffff;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-  transition: left 0.3s ease;
-  z-index: 1000; /* Make sure it's above other content */
-}
-
-.sidebar.open {
-  left: 0; /* Sidebar slides in */
-}
-
-.sidebar-header {
+.greeting-section {
   display: flex;
-  justify-content: flex-end;
-  padding: 10px;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-.sidebar .MuiList-root {
-  padding: 0;
+.MuiAvatar-root {
+  height: 60px;
+  width: 60px;
+  margin-right: 15px;
+}
+
+.MuiTabs-root {
+  margin-top: 10px;
+}
+
+.MuiTab-root {
+  font-weight: bold;
+  text-transform: capitalize;
 }
