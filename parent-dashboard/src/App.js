@@ -7,6 +7,7 @@ import LandingPage from './pages/LandingPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import { useEffect } from 'react';
 import './styling/App.css';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -55,6 +56,7 @@ const MainContent = () => {
       <Routes>
         <Route path="/overview" element={<Overview />} />
         <Route path="/syllabus" element={<Syllabus />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </div>
   );
