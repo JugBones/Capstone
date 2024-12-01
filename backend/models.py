@@ -70,7 +70,10 @@ class Participation(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey("User.id"), nullable=False)
     subtopic_id = Column(Integer, ForeignKey("Subtopic.id"), nullable=False)
-    total_interactions = Column(Integer)
+    audio = Column(Integer)
+    zoom = Column(Integer)
+    chat = Column(Integer)
+    poll = Column(String(255), nullable=False)
     user = relationship("User", back_populates="participations")
     subtopic = relationship("Subtopic", back_populates="participations")
 

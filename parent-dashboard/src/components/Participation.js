@@ -1,62 +1,91 @@
-import React, { useState } from 'react';
-import '../styling/Participation.css';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import "../styling/Participation.css";
 
-const Participation = () => {
-  const [selectedSubject, setSelectedSubject] = useState('Pengenalan Bilangan');
+const Participation = ({ user, selectedCourse }) => {
+  const [subtopics, setSubtopics] = useState([]);
+  const [selectedSubtopic, setSelectedSubtopic] = useState(null);
+  const [participationData, setParticipationData] = useState({});
+  const [error, setError] = useState(null);
 
-  // Mock data for participation
-  const participationData = {
-    audio: 7,
-    chat: 10,
-    video: 15,
-    polling: '2 dari 2',
-  };
+  useEffect(() => {
+    // Fetch subtopics for the course
+    const fetchSubtopics = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/subtopics/${selectedCourse}`
+        );
+        setSubtopics(response.data);
+        setSelectedSubtopic(response.data[0]?.id || null); // Default to the first subtopic
+      } catch (err) {
+        console.error(err);
+        setSubtopics([]);
+        setError("Failed to fetch subtopics.");
+      }
+    };
+    fetchSubtopics();
+  }, [selectedCourse]);
 
-  const subjects = ['Pengenalan Bilangan', 'Geometri', 'Statistika']; // Dropdown options
+  useEffect(() => {
+    // Fetch participation data for the selected subtopic
+    const fetchParticipationData = async () => {
+      if (user && selectedSubtopic) {
+        try {
+          const response = await axios.get(
+            `http://localhost:8000/participation/${user.uid}/${selectedSubtopic}`
+          );
+          setParticipationData(response.data);
+          setError(null);
+        } catch (err) {
+          console.error(err);
+          setParticipationData({});
+          setError("No participation data found for this subtopic.");
+        }
+      }
+    };
+    fetchParticipationData();
+  }, [user, selectedSubtopic]);
 
   return (
-    <>
-      <h3 className="title">
-        🙋‍♂️ Partisipasi dalam Kelas
-      </h3>
+    <div>
+      <h3 className="title">🙋‍♂️ Participation in Class</h3>
 
-      {/* Dropdown for subjects */}
+      {/* Dropdown for subtopics */}
       <select
-        className="subject-dropdown"
-        value={selectedSubject}
-        onChange={(e) => setSelectedSubject(e.target.value)}
+        value={selectedSubtopic || ""}
+        onChange={(e) => setSelectedSubtopic(e.target.value)}
+        className="subtopic-dropdown"
       >
-        {subjects.map((subject, index) => (
-          <option key={index} value={subject}>
-            {subject}
+        {subtopics.map((subtopic) => (
+          <option key={subtopic.id} value={subtopic.id}>
+            {subtopic.name}
           </option>
         ))}
       </select>
 
-      {/* Participation cards */}
-      <div className="participation-cards">
-        <div className="card">
-          <p className="card-title">Total</p>
-          <h4>{participationData.audio} kali</h4>
-          <p>Interaksi lewat audio</p>
+      {error ? (
+        <p>{error}</p>
+      ) : (
+        <div className="participation-cards">
+          <div className="card">
+            <h4>Total</h4>
+            <p>Audio: {participationData.audio || 0} times</p>
+          </div>
+          <div className="card">
+            <h4>Total</h4>
+            <p>Video: {participationData.video || 0} times</p>
+          </div>
+          <div className="card">
+            <h4>Total</h4>
+            <p>Chat: {participationData.chat || 0} times</p>
+          </div>
+          <div className="card">
+            <h4>Total</h4>
+            <p>Polls: {participationData.poll || 0} responses</p>
+          </div>
         </div>
-        <div className="card">
-          <p className="card-title">Total</p>
-          <h4>{participationData.chat} kali</h4>
-          <p>Diskusi via chat</p>
-        </div>
-        <div className="card">
-          <p className="card-title">Total</p>
-          <h4>{participationData.video} kali</h4>
-          <p>Interaksi lewat video</p>
-        </div>
-        <div className="card">
-          <p className="card-title">Total</p>
-          <h4>{participationData.polling}</h4>
-          <p>Polling dijawab</p>
-        </div>
-      </div>
-    </>
+      )}
+    </div>
   );
 };
 

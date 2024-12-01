@@ -42,3 +42,53 @@ def get_user(firebase_uid: str, db: Session = Depends(get_db)):
 def get_user_progress(user_id: int, db: Session = Depends(get_db)):
     progress = crud.get_progress_by_user(db, user_id)
     return progress
+
+
+@app.get("/classes/{class_id}", response_model=schemas.Class)
+def get_class(class_id: int, db: Session = Depends(get_db)):
+    class_data = crud.get_class(db, class_id)
+    if not class_data:
+        raise HTTPException(status_code=404, detail="Class not found")
+    return class_data
+
+
+@app.get("/subtopics/{course_name}")
+def get_subtopics(course_name: str, db: Session = Depends(get_db)):
+    subtopics = (
+        db.query(models.Subtopic)
+        .join(models.Course, models.Subtopic.course_id == models.Course.id)
+        .filter(models.Course.name == course_name)
+        .all()
+    )
+    if not subtopics:
+        raise HTTPException(status_code=404, detail="No subtopics found for this course.")
+    return [{"id": subtopic.id, "name": subtopic.name} for subtopic in subtopics]
+
+
+@app.get("/participation/{firebase_uid}/{subtopic_id}")
+def get_participation_by_subtopic(firebase_uid: str, subtopic_id: int, db: Session = Depends(get_db)):
+    user_id = crud.get_user_id_by_firebase_uid(db, firebase_uid)
+    if not user_id:
+        raise HTTPException(status_code=404, detail="User not found.")
+
+    participation = (
+        db.query(models.Participation)
+        .filter(models.Participation.user_id == user_id, models.Participation.subtopic_id == subtopic_id)
+        .first()
+    )
+
+    if not participation:
+        raise HTTPException(status_code=404, detail="No participation data found for this subtopic.")
+
+    return {
+        "audio": participation.audio,
+        "video": participation.zoom,
+        "chat": participation.chat,
+        "poll": participation.poll,
+    }
+
+
+@app.get("/courses", response_model=list[schemas.Course])
+def get_courses(db: Session = Depends(get_db)):
+    courses = crud.get_all_courses(db)
+    return courses

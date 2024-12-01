@@ -10,7 +10,7 @@ h3.title {
 }
 
 /* Subject dropdown */
-.subject-dropdown {
+.subtopic-dropdown {
   width: 100%;
   max-width: 300px;
   padding: 10px;
@@ -20,8 +20,9 @@ h3.title {
   background-color: #f9f9f9;
   color: #333;
   cursor: pointer;
-  margin-bottom: 20px;
+  margin-bottom: 30px; /* Increased spacing */
 }
+
 
 /* Participation cards container */
 .participation-cards {

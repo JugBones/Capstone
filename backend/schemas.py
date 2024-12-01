@@ -85,8 +85,10 @@ class Recommendation(RecommendationBase):
 class ParticipationBase(BaseModel):
     user_id: int
     subtopic_id: int
-    total_interactions: int
-
+    audio: int
+    zoom: int
+    chat: int
+    poll: str  # Assuming this is a string field in the database
 
 class Participation(ParticipationBase):
     id: int

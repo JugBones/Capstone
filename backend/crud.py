@@ -7,6 +7,12 @@ def get_user(db: Session, firebase_uid: str):
         db.query(models.User).filter(models.User.firebase_uid == firebase_uid).first()
     )
 
+def get_user_id_by_firebase_uid(db: Session, firebase_uid: str):
+    user = db.query(models.User).filter(models.User.firebase_uid == firebase_uid).first()
+    if user:
+        return user.id
+    return None
+
 
 def get_class(db: Session, class_id: int):
     return db.query(models.Class).filter(models.Class.id == class_id).first()
@@ -14,6 +20,10 @@ def get_class(db: Session, class_id: int):
 
 def get_course(db: Session, course_id: int):
     return db.query(models.Course).filter(models.Course.id == course_id).first()
+
+
+def get_all_courses(db: Session):
+    return db.query(models.Course).all()
 
 
 def get_progress_by_user(db: Session, user_id: int):
@@ -28,12 +38,21 @@ def get_recommendations(db: Session, course_id: int):
     )
 
 
-def get_participations(db: Session, user_id: int):
-    return (
-        db.query(models.Participation)
-        .filter(models.Participation.user_id == user_id)
-        .all()
-    )
+# def get_participations(db: Session, user_id: int):
+#     return (
+#         db.query(models.Participation)
+#         .filter(models.Participation.user_id == user_id)
+#         .all()
+#     )
+
+# def get_participation_by_course(db: Session, user_id: str, course_name: str):
+#     return (
+#         db.query(models.Participation)
+#         .join(models.Subtopic, models.Participation.subtopic_id == models.Subtopic.id)
+#         .join(models.Course, models.Subtopic.course_id == models.Course.id)
+#         .filter(models.Participation.user_id == user_id, models.Course.name == course_name)
+#         .all()
+#     )
 
 
 def get_achievements(db: Session, user_id: int):
