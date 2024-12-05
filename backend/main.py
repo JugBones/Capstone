@@ -38,10 +38,30 @@ def get_user(firebase_uid: str, db: Session = Depends(get_db)):
     return user
 
 
-@app.get("/progress/{user_id}", response_model=list[schemas.Progress])
-def get_user_progress(user_id: int, db: Session = Depends(get_db)):
-    progress = crud.get_progress_by_user(db, user_id)
-    return progress
+@app.get("/progress/{firebase_uid}")
+def get_progress_by_user(firebase_uid: str, db: Session = Depends(get_db)):
+    user_id = crud.get_user_id_by_firebase_uid(db, firebase_uid)
+    if not user_id:
+        raise HTTPException(status_code=404, detail="User not found.")
+
+    progress_entries = (
+        db.query(models.Progress)
+        .filter(models.Progress.user_id == user_id)
+        .all()
+    )
+
+    if not progress_entries:
+        raise HTTPException(status_code=404, detail="No progress data found for this user.")
+
+    return [
+        {
+            "attendance": entry.attendance,
+            "activity": entry.activity,
+            "understanding": entry.understanding,
+            "task_completion": entry.task_completion,
+        }
+        for entry in progress_entries
+    ]
 
 
 @app.get("/classes/{class_id}", response_model=schemas.Class)

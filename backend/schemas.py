@@ -88,7 +88,7 @@ class ParticipationBase(BaseModel):
     audio: int
     zoom: int
     chat: int
-    poll: str  # Assuming this is a string field in the database
+    poll: str  
 
 class Participation(ParticipationBase):
     id: int
