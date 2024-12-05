@@ -45,16 +45,17 @@ def get_progress_by_user(firebase_uid: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="User not found.")
 
     progress_entries = (
-        db.query(models.Progress)
-        .filter(models.Progress.user_id == user_id)
-        .all()
+        db.query(models.Progress).filter(models.Progress.user_id == user_id).all()
     )
 
     if not progress_entries:
-        raise HTTPException(status_code=404, detail="No progress data found for this user.")
+        raise HTTPException(
+            status_code=404, detail="No progress data found for this user."
+        )
 
     return [
         {
+            "level": entry.level,
             "attendance": entry.attendance,
             "activity": entry.activity,
             "understanding": entry.understanding,
@@ -81,24 +82,33 @@ def get_subtopics(course_name: str, db: Session = Depends(get_db)):
         .all()
     )
     if not subtopics:
-        raise HTTPException(status_code=404, detail="No subtopics found for this course.")
+        raise HTTPException(
+            status_code=404, detail="No subtopics found for this course."
+        )
     return [{"id": subtopic.id, "name": subtopic.name} for subtopic in subtopics]
 
 
 @app.get("/participation/{firebase_uid}/{subtopic_id}")
-def get_participation_by_subtopic(firebase_uid: str, subtopic_id: int, db: Session = Depends(get_db)):
+def get_participation_by_subtopic(
+    firebase_uid: str, subtopic_id: int, db: Session = Depends(get_db)
+):
     user_id = crud.get_user_id_by_firebase_uid(db, firebase_uid)
     if not user_id:
         raise HTTPException(status_code=404, detail="User not found.")
 
     participation = (
         db.query(models.Participation)
-        .filter(models.Participation.user_id == user_id, models.Participation.subtopic_id == subtopic_id)
+        .filter(
+            models.Participation.user_id == user_id,
+            models.Participation.subtopic_id == subtopic_id,
+        )
         .first()
     )
 
     if not participation:
-        raise HTTPException(status_code=404, detail="No participation data found for this subtopic.")
+        raise HTTPException(
+            status_code=404, detail="No participation data found for this subtopic."
+        )
 
     return {
         "audio": participation.audio,
