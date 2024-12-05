@@ -7,6 +7,8 @@ import crud, models, schemas
 from database import SessionLocal, engine
 import crud, schemas
 from database import SessionLocal
+from schemas import UpdateProgressLevelRequest
+
 
 app = FastAPI()
 
@@ -39,13 +41,18 @@ def get_user(firebase_uid: str, db: Session = Depends(get_db)):
 
 
 @app.get("/progress/{firebase_uid}")
-def get_progress_by_user(firebase_uid: str, db: Session = Depends(get_db)):
+def get_progress_by_user(
+    firebase_uid: str, course_name: str, db: Session = Depends(get_db)
+):
     user_id = crud.get_user_id_by_firebase_uid(db, firebase_uid)
     if not user_id:
         raise HTTPException(status_code=404, detail="User not found.")
 
     progress_entries = (
-        db.query(models.Progress).filter(models.Progress.user_id == user_id).all()
+        db.query(models.Progress)
+        .join(models.Course, models.Progress.course_id == models.Course.id)
+        .filter(models.Progress.user_id == user_id, models.Course.name == course_name)
+        .all()
     )
 
     if not progress_entries:
@@ -63,6 +70,44 @@ def get_progress_by_user(firebase_uid: str, db: Session = Depends(get_db)):
         }
         for entry in progress_entries
     ]
+
+
+@app.put("/progress/{firebase_uid}")
+def update_progress_level(
+    firebase_uid: str,
+    request: UpdateProgressLevelRequest,
+    db: Session = Depends(get_db),
+):
+    user_id = crud.get_user_id_by_firebase_uid(db, firebase_uid)
+    if not user_id:
+        raise HTTPException(status_code=404, detail="User not found.")
+
+    # Find the progress entry for the specified course
+    course = (
+        db.query(models.Course)
+        .filter(models.Course.name == request.course_name)
+        .first()
+    )
+    if not course:
+        raise HTTPException(status_code=404, detail="Course not found.")
+
+    progress_entry = (
+        db.query(models.Progress)
+        .filter(
+            models.Progress.user_id == user_id, models.Progress.course_id == course.id
+        )
+        .first()
+    )
+
+    if not progress_entry:
+        raise HTTPException(
+            status_code=404, detail="Progress data not found for this user and course."
+        )
+
+    # Update the progress level
+    progress_entry.level = request.level
+    db.commit()
+    return {"message": "Progress level updated successfully"}
 
 
 @app.get("/classes/{class_id}", response_model=schemas.Class)

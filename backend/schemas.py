@@ -68,6 +68,16 @@ class Progress(ProgressBase):
         from_attributes = True
 
 
+class UpdateProgressLevel(BaseModel):
+    user_id: int
+    level: str
+
+
+class UpdateProgressLevelRequest(BaseModel):
+    course_name: str
+    level: str
+
+
 class RecommendationBase(BaseModel):
     course_id: int
     title: str
@@ -88,7 +98,8 @@ class ParticipationBase(BaseModel):
     audio: int
     zoom: int
     chat: int
-    poll: str  
+    poll: str
+
 
 class Participation(ParticipationBase):
     id: int
