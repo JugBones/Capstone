@@ -9,8 +9,16 @@ import crud, schemas
 from database import SessionLocal
 from schemas import UpdateProgressLevelRequest
 from serpapi import GoogleSearch
+from dotenv import load_dotenv
+import os
+import requests
 import serpapi
 
+# Load environment variables
+load_dotenv()
+
+# Get the API key from environment variables
+SERPAPI_API_KEY = os.getenv("SERPAPI_API_KEY")
 
 app = FastAPI()
 
@@ -231,13 +239,13 @@ def search_web_for_materials(query):
     """
     Function to search the web for educational materials using SerpAPI.
     """
-    import requests
+    if not SERPAPI_API_KEY:
+        raise RuntimeError("SerpAPI API key is not configured. Please set it in the .env file.")
 
-    api_key = "cc9d4a472b016fc938e5c8c4bf151f338632979c22a2cb9cdf1c8bfb754fa2a4y"
     params = {
         "q": query,
         "engine": "google",
-        "api_key": api_key,
+        "api_key": SERPAPI_API_KEY,
     }
 
     response = requests.get("https://serpapi.com/search", params=params)

@@ -86,7 +86,7 @@ const Overview = () => {
             <Achievement />
           </Grid>
           <Grid item xs={12} md={6}>
-            <Recommendation />
+            <Recommendation user={user} />
           </Grid>
           <Grid item xs={12}>
             <Appreciation />
