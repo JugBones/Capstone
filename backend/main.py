@@ -8,6 +8,8 @@ from database import SessionLocal, engine
 import crud, schemas
 from database import SessionLocal
 from schemas import UpdateProgressLevelRequest
+from serpapi import GoogleSearch
+import serpapi
 
 
 app = FastAPI()
@@ -167,3 +169,88 @@ def get_participation_by_subtopic(
 def get_courses(db: Session = Depends(get_db)):
     courses = crud.get_all_courses(db)
     return courses
+
+
+### RECOMMENDATIONS ###
+
+
+@app.get("/recommendations/{firebase_uid}")
+def get_recommendations(firebase_uid: str, db: Session = Depends(get_db)):
+    user_id = crud.get_user_id_by_firebase_uid(db, firebase_uid)
+    if not user_id:
+        raise HTTPException(status_code=404, detail="User not found.")
+
+    # Fetch participation data
+    participation_data = (
+        db.query(models.Participation)
+        .filter(models.Participation.user_id == user_id)
+        .all()
+    )
+
+    if not participation_data:
+        raise HTTPException(
+            status_code=404, detail="No participation data found for this user."
+        )
+
+    # Thresholds
+    audio_threshold = 5
+    chat_threshold = 6
+    poll_threshold = "Completed"
+
+    # Determine subtopics with low participation
+    lacking_subtopics = []
+    for participation in participation_data:
+        if (
+            participation.audio < audio_threshold
+            or participation.chat < chat_threshold
+            or participation.poll != poll_threshold
+        ):
+            subtopic = (
+                db.query(models.Subtopic)
+                .filter(models.Subtopic.id == participation.subtopic_id)
+                .first()
+            )
+            if subtopic:
+                lacking_subtopics.append(subtopic.name)
+
+    # Generate recommendations
+    recommendations = []
+    for subtopic in lacking_subtopics:
+        # Use SerpAPI or similar tools to search for relevant materials
+        search_results = search_web_for_materials(subtopic)
+        recommendations.extend(search_results)
+
+    return {
+        "message": "Recommendations generated successfully",
+        "lacking_subtopics": lacking_subtopics,
+        "recommendations": recommendations,
+    }
+
+
+def search_web_for_materials(query):
+    """
+    Function to search the web for educational materials using SerpAPI.
+    """
+    import requests
+
+    api_key = "cc9d4a472b016fc938e5c8c4bf151f338632979c22a2cb9cdf1c8bfb754fa2a4y"
+    params = {
+        "q": query,
+        "engine": "google",
+        "api_key": api_key,
+    }
+
+    response = requests.get("https://serpapi.com/search", params=params)
+    if response.status_code == 200:
+        search_data = response.json()
+        results = [
+            {
+                "title": result["title"],
+                "link": result["link"],
+                "snippet": result.get("snippet", ""),
+            }
+            for result in search_data.get("organic_results", [])
+        ]
+        return results
+    else:
+        return []
