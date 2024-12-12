@@ -3,6 +3,7 @@ import { BottomNavigation, BottomNavigationAction } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import BookIcon from "@mui/icons-material/Book";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import { useNavigate } from "react-router-dom";
 import "../styling/Navbar.css";
 
@@ -20,6 +21,9 @@ const Navbar = () => {
         navigate("/syllabus");
         break;
       case 2:
+        navigate("/journey"); 
+        break;
+      case 3:
         navigate("/profile");
         break;
       default:
@@ -41,6 +45,11 @@ const Navbar = () => {
       <BottomNavigationAction
         label="Syllabus"
         icon={<BookIcon />}
+        className="nav-action"
+      />
+      <BottomNavigationAction
+        label="Journey"
+        icon={<DirectionsRunIcon />}
         className="nav-action"
       />
       <BottomNavigationAction
