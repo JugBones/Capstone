@@ -1,17 +1,83 @@
-.App {
+/* General Layout */
+.app {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .overview-container {
-  padding: 80px 20px 20px 20px; /* Top padding accounts for fixed header */
+  padding: 20px;
   flex-grow: 1;
+  max-width: 1200px;
+  margin: 0 auto;
   background-color: #f9f9f9;
   min-height: 100vh;
 }
 
-.MuiGrid-container {
+/* Sticky Header for Greeting and Tabs */
+.sticky-header {
+  position: sticky;
+  top: 0;
+  background-color: #f9f9f9;
+  z-index: 10;
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px 0;
+}
+
+/* Greeting Section */
+.greeting-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.greeting-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.greeting-text h5 {
+  margin: 0;
+}
+
+.greeting-text p {
+  margin: 0;
+  font-size: 14px;
+  color: #0177FB;
+}
+
+.MuiAvatar-root {
+  height: 60px;
+  width: 60px;
+}
+
+/* Tabs Section */
+.course-tabs {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-left: auto;
+}
+
+.course-tabs .MuiTab-root {
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+/* Ensure Sticky Elements are Visible */
+.sticky-header .greeting-section {
+  flex: 1;
+}
+
+/* Grid Layout */
+.MuiGrid-container {
+  max-width: 100%;
 }
 
 .MuiGrid-item {
@@ -19,7 +85,6 @@
   background-color: #ffffff;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   padding: 16px;
-  margin-bottom: 20px; /* Added margin to prevent overlap */
   transition: transform 0.3s ease-in-out;
   min-height: 200px;
   overflow: hidden;
@@ -29,23 +94,32 @@
   transform: translateY(-5px);
 }
 
-.greeting-section {
+/* Fix for Responsive Layout */
+@media (max-width: 768px) {
+  .sticky-header {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .greeting-section {
+    flex-direction: column;
+    text-align: left;
+  }
+
+  .MuiAvatar-root {
+    margin-bottom: 10px;
+  }
+
+  .course-tabs {
+    margin-top: 10px;
+    justify-content: flex-start;
+  }
+}
+
+/* Ensure Content Stays Centered */
+.overview-container {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  margin-bottom: 20px;
-}
-
-.MuiAvatar-root {
-  height: 60px;
-  width: 60px;
-  margin-right: 15px;
-}
-
-.MuiTabs-root {
-  margin-top: 10px;
-}
-
-.MuiTab-root {
-  font-weight: bold;
-  text-transform: capitalize;
 }
