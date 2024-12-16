@@ -16,7 +16,7 @@
   min-height: 100vh;
 }
 
-/* Sticky Header for Greeting and Tabs */
+/* Sticky Header */
 .sticky-header {
   position: sticky;
   top: 0;
@@ -36,90 +36,202 @@
   gap: 10px;
 }
 
-.greeting-text {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
 .greeting-text h5 {
   margin: 0;
+  font-size: 24px; /* Web Title */
 }
 
 .greeting-text p {
   margin: 0;
-  font-size: 14px;
+  font-size: 18px; /* Web Default Text */
   color: #0177FB;
 }
 
-.MuiAvatar-root {
-  height: 60px;
-  width: 60px;
+/* Section Sizes - Web */
+.progress-section,
+.participation-section {
+  width: 497px;
+  height: 606px;
 }
 
-/* Tabs Section */
-.course-tabs {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  margin-left: auto;
+.achievement-section {
+  width: 1002px;
+  height: 571px;
 }
 
-.course-tabs .MuiTab-root {
-  font-weight: bold;
-  text-transform: capitalize;
+.recommendation-section {
+  width: 1002px;
+  height: 400px;
 }
 
-/* Ensure Sticky Elements are Visible */
-.sticky-header .greeting-section {
-  flex: 1;
+.appreciation-section {
+  width: 1002px;
+  height: 450px;
 }
 
-/* Grid Layout */
-.MuiGrid-container {
-  max-width: 100%;
-}
-
-.MuiGrid-item {
-  border-radius: 8px;
-  background-color: #ffffff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  padding: 16px;
+/* Card Styling */
+.card {
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  margin: 10px;
   transition: transform 0.3s ease-in-out;
-  min-height: 200px;
-  overflow: hidden;
 }
 
-.MuiGrid-item:hover {
+.card-title {
+  font-size: 24px; /* Web Title */
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.card-content {
+  font-size: 18px; /* Web Default Text */
+  color: #333333;
+}
+
+.card:hover {
   transform: translateY(-5px);
 }
 
-/* Fix for Responsive Layout */
+/* Participation Cards - Blue Background */
+.participation-card {
+  background-color: #0177FB; /* Blue */
+  color: #ffffff; /* White text for better contrast */
+}
+
+.participation-card .card-title,
+.participation-card .card-content {
+  color: #ffffff; /* Ensure text stays white */
+}
+
+/* Mobile View */
 @media (max-width: 768px) {
   .sticky-header {
     flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
+    align-items: center; /* Center items horizontally */
+    text-align: center;
+    padding: 10px 0;
   }
 
   .greeting-section {
     flex-direction: column;
-    text-align: left;
+    align-items: center; /* Center greeting section */
+    text-align: center;
   }
 
-  .MuiAvatar-root {
-    margin-bottom: 10px;
+  .greeting-text h5 {
+    font-size: 20px; /* Mobile Title */
   }
 
-  .course-tabs {
+  .greeting-text p {
+    font-size: 16px; /* Mobile Default Text */
+  }
+
+  /* Center Tabs */
+  .tabs-section {
+    display: flex;
+    justify-content: center; /* Center horizontally */
     margin-top: 10px;
-    justify-content: flex-start;
+    gap: 10px;
+  }
+
+  /* Section Sizes - Mobile */
+  .progress-section {
+    width: 412px;
+    height: 474px;
+  }
+
+  .participation-section {
+    width: 412px;
+    height: 411px;
+  }
+
+  /* Two-Column Layout for Cards */
+  .participation-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
+    gap: 10px;
+  }
+
+  .achievement-section {
+    width: 412px;
+    height: 292px;
+  }
+
+  .recommendation-section {
+    width: 412px;
+    height: 350px;
+  }
+
+  .appreciation-section {
+    width: 412px;
+    height: 368px;
+  }
+
+  .card {
+    padding: 16px;
+    margin: 5px 0;
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+
+  .card-title {
+    font-size: 20px; /* Mobile Title */
+  }
+
+  .card-content {
+    font-size: 16px; /* Mobile Default Text */
+  }
+
+  /* Ensure Blue Background in Participation Cards */
+  .participation-card {
+    background-color: #0177FB;
+    color: #ffffff;
+  }
+
+  .participation-card .card-title,
+  .participation-card .card-content {
+    color: #ffffff;
   }
 }
 
-/* Ensure Content Stays Centered */
-.overview-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+/* Web Specific View */
+@media (min-width: 1024px) {
+  .overview-container {
+    padding: 20px 40px;
+  }
+
+  .sticky-header {
+    padding: 20px 0;
+  }
+
+  .greeting-text h5 {
+    font-size: 24px;
+  }
+
+  .greeting-text p {
+    font-size: 18px;
+  }
+
+  /* Ensure Sections Respect Sizes */
+  .progress-section,
+  .participation-section {
+    width: 497px;
+    height: 606px;
+  }
+
+  .achievement-section {
+    width: 1002px;
+    height: 571px;
+  }
+
+  .recommendation-section {
+    width: 1002px;
+    height: 400px;
+  }
+
+  .appreciation-section {
+    width: 1002px;
+    height: 450px;
+  }
 }
