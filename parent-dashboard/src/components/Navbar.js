@@ -1,7 +1,7 @@
 import React from "react";
 import { BottomNavigation, BottomNavigationAction } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
-import BookIcon from "@mui/icons-material/Book";
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents"; // New Achievement Icon
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import { useNavigate } from "react-router-dom";
@@ -18,10 +18,10 @@ const Navbar = () => {
         navigate("/overview");
         break;
       case 1:
-        navigate("/syllabus");
+        navigate("/achievements");
         break;
       case 2:
-        navigate("/journey"); 
+        navigate("/journey");
         break;
       case 3:
         navigate("/profile");
@@ -43,8 +43,8 @@ const Navbar = () => {
         className="nav-action"
       />
       <BottomNavigationAction
-        label="Syllabus"
-        icon={<BookIcon />}
+        label="Achievements"
+        icon={<EmojiEventsIcon />}
         className="nav-action"
       />
       <BottomNavigationAction

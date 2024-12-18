@@ -1,0 +1,171 @@
+.achievement-container {
+  text-align: center;
+  padding: 20px;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+}
+
+.achievement-title {
+  font-size: 2rem;
+  color: #1e5bf6;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.badge-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); /* Maximum 6 badges per row */
+    gap: 15px;
+    padding: 10px;
+}
+  
+  @media (max-width: 1200px) {
+    .badge-grid {
+      grid-template-columns: repeat(4, 1fr); /* 4 columns for medium screens */
+    }
+}
+  
+  @media (max-width: 768px) {
+    .badge-grid {
+      grid-template-columns: repeat(2, 1fr); /* 2 columns for smaller screens */
+    }
+}
+
+.badge-card {
+  background: #ffffff;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  padding: 15px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.badge-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.badge-card.completed {
+  border-color: #1e5bf6;
+}
+
+.badge-title {
+  font-size: 1rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.badge-icon {
+  margin-bottom: 10px;
+}
+
+/* MODAL STYLING */
+.badge-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 15px; /* Reduced padding */
+  border-radius: 16px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  max-width: 530px; /* Smaller modal width */
+  box-sizing: border-box;
+  max-height: 330px; /* Prevent vertical overflow */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Ensures proper spacing */
+  background-image: radial-gradient(circle, #d1e9ff, #f0f9ff, #ffffff);
+}
+
+.badge-popup-header {
+  margin-bottom: 5px;
+}
+
+.modal-title {
+  font-size: 1.3rem;
+  color: #1e5bf6;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.modal-status {
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.progress-section {  
+  margin-top: 5px;
+}
+
+.progress-text {
+  font-size: 0.9rem;
+  margin-bottom: 5px; /* Smaller spacing */
+}
+
+.progress-bar-container {
+  background-color: #e6e6e6;
+  border-radius: 8px;
+  height: 12px; /* Smaller height */
+  width: 80%;
+  margin: 8px auto;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background-color: #1e5bf6;
+  border-radius: 8px 0 0 8px;
+  transition: width 0.4s ease-in-out;
+}
+
+.remaining-progress {
+  font-size: 0.9rem;
+  color: #ff7043;
+  margin-top: 8px;
+  line-height: 1.2;
+}
+
+.encouragement-message {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: #1e5bf6;
+  margin-top: 5px;
+}
+
+.completed-date {
+  font-size: 0.9rem;
+  color: #4CAF50;
+  margin-top: 8px;
+}
+
+
+@media (max-width: 450px) {
+    .badge-modal {
+      width: 90%; /* Even smaller width for tiny devices */
+      padding: 8px; /* Smaller padding */
+      max-height: 350px; /* Ensure it fits the screen */
+    }
+  
+    .modal-title {
+      font-size: 0.9rem; /* Smaller font size for very small screens */
+    }
+
+    .progress-bar-container {
+        max-width: 65%;
+        margin: 10px 35px; /* Minimal margin */
+    }
+
+    .progress-text {
+        padding-right: 60px;
+    }
+    
+    .remaining-progress {
+        font-size: 13px;
+        padding-right: 60px;
+    }
+
+  }

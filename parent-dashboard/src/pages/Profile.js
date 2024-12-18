@@ -20,6 +20,11 @@ const Profile = () => {
       });
   };
 
+  // Handle Materi click to redirect to the syllabus page
+  const handleMateriClick = () => {
+    navigate("/syllabus");
+  };
+
   return (
     <div className="profile-container">
       {/* Profile Header */}
@@ -54,7 +59,7 @@ const Profile = () => {
       {/* Preferences Section */}
       <div className="preferences-section">
         <h3>Pengaturan dan Preferensi</h3>
-        <div className="preference-item">
+        <div className="preference-item" onClick={handleMateriClick}>
           <span role="img" aria-label="Materi">
             🏆
           </span>
