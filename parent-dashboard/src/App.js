@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import Overview from './pages/Overview';
 import Journey from './pages/Journey';
-import Achievement from './pages/Achievements'; 
+import Achievements from './pages/Achievements'; 
 import Syllabus from './pages/Syllabus';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -49,7 +49,7 @@ const MainContent = () => {
     <div className="main-content">
       <Routes>
         <Route path="/overview" element={<Overview />} />
-        <Route path="/achievements" element={<Achievement />} /> {/* New Route */}
+        <Route path="/achievements" element={<Achievements />} /> {/* New Route */}
         <Route path="/journey" element={<Journey />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/syllabus" element={<Syllabus />} />

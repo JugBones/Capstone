@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from "react-router-dom";
 import '../styling/Achievement.css';
 
 const Achievement = () => {
@@ -21,6 +22,8 @@ const Achievement = () => {
     },
   ];
 
+  const navigate = useNavigate();
+
   // Function to get the bar color based on progress value
   const getBarColor = (progress) => {
     if (progress <= 35) return 'red';
@@ -28,6 +31,10 @@ const Achievement = () => {
     if (progress >= 50 && progress <= 60) return 'yellow';
     if (progress > 60) return 'blue';
     return 'gray';
+  };
+
+  const handleAchievementClick = () => {
+    navigate("/achievements");
   };
 
   return (
@@ -56,7 +63,7 @@ const Achievement = () => {
           </div>
         ))}
       </div>
-      <a href="https://pcuk.org/achievement-badges/" className="see-more">Lihat Selengkapnya..</a>
+      <p className="see-more" onClick={handleAchievementClick}>Lihat Selengkapnya..</p>
     </div>
   );
 };

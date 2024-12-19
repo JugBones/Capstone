@@ -10,7 +10,7 @@
 .overview-container {
   padding: 20px;
   flex-grow: 1;
-  max-width: 1200px;
+  max-width: auto;
   margin: 0 auto;
   background-color: #f9f9f9;
   min-height: 100vh;
@@ -26,7 +26,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  padding: 20px 0;
+  padding: 40px 0;
 }
 
 /* Greeting Section */
@@ -45,28 +45,6 @@
   margin: 0;
   font-size: 18px; /* Web Default Text */
   color: #0177FB;
-}
-
-/* Section Sizes - Web */
-.progress-section,
-.participation-section {
-  width: 497px;
-  height: 606px;
-}
-
-.achievement-section {
-  width: 1002px;
-  height: 571px;
-}
-
-.recommendation-section {
-  width: 1002px;
-  height: 400px;
-}
-
-.appreciation-section {
-  width: 1002px;
-  height: 450px;
 }
 
 /* Card Styling */
@@ -102,136 +80,4 @@
 .participation-card .card-title,
 .participation-card .card-content {
   color: #ffffff; /* Ensure text stays white */
-}
-
-/* Mobile View */
-@media (max-width: 768px) {
-  .sticky-header {
-    flex-direction: column;
-    align-items: center; /* Center items horizontally */
-    text-align: center;
-    padding: 10px 0;
-  }
-
-  .greeting-section {
-    flex-direction: column;
-    align-items: center; /* Center greeting section */
-    text-align: center;
-  }
-
-  .greeting-text h5 {
-    font-size: 20px; /* Mobile Title */
-  }
-
-  .greeting-text p {
-    font-size: 16px; /* Mobile Default Text */
-  }
-
-  /* Center Tabs */
-  .tabs-section {
-    display: flex;
-    justify-content: center; /* Center horizontally */
-    margin-top: 10px;
-    gap: 10px;
-  }
-
-  /* Section Sizes - Mobile */
-  .progress-section {
-    width: 412px;
-    height: 474px;
-  }
-
-  .participation-section {
-    width: 412px;
-    height: 411px;
-  }
-
-  /* Two-Column Layout for Cards */
-  .participation-cards {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Two equal columns */
-    gap: 10px;
-  }
-
-  .achievement-section {
-    width: 412px;
-    height: 292px;
-  }
-
-  .recommendation-section {
-    width: 412px;
-    height: 350px;
-  }
-
-  .appreciation-section {
-    width: 412px;
-    height: 368px;
-  }
-
-  .card {
-    padding: 16px;
-    margin: 5px 0;
-    box-shadow: none;
-    border: 1px solid #ddd;
-  }
-
-  .card-title {
-    font-size: 20px; /* Mobile Title */
-  }
-
-  .card-content {
-    font-size: 16px; /* Mobile Default Text */
-  }
-
-  /* Ensure Blue Background in Participation Cards */
-  .participation-card {
-    background-color: #0177FB;
-    color: #ffffff;
-  }
-
-  .participation-card .card-title,
-  .participation-card .card-content {
-    color: #ffffff;
-  }
-}
-
-/* Web Specific View */
-@media (min-width: 1024px) {
-  .overview-container {
-    padding: 20px 40px;
-  }
-
-  .sticky-header {
-    padding: 20px 0;
-  }
-
-  .greeting-text h5 {
-    font-size: 24px;
-  }
-
-  .greeting-text p {
-    font-size: 18px;
-  }
-
-  /* Ensure Sections Respect Sizes */
-  .progress-section,
-  .participation-section {
-    width: 497px;
-    height: 606px;
-  }
-
-  .achievement-section {
-    width: 1002px;
-    height: 571px;
-  }
-
-  .recommendation-section {
-    width: 1002px;
-    height: 400px;
-  }
-
-  .appreciation-section {
-    width: 1002px;
-    height: 450px;
-  }
 }

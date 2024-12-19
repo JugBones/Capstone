@@ -59,7 +59,7 @@ const ProgressChart = ({ user, selectedCourse }) => {
   }, [user, selectedCourse]);
 
   return (
-    <div>
+    <div className="progress-container">
       <h3 className="progress-title">🏆 Progres Student (Keseluruhan)</h3>
       <div className="progress-list">
         {progressData.length > 0 ? (
@@ -93,7 +93,7 @@ const ProgressChart = ({ user, selectedCourse }) => {
         </div>
       </div>
     </div>
-  );
+  );  
 };
 
 export default ProgressChart;

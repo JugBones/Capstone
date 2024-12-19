@@ -1,3 +1,16 @@
+/* Progress Container Styles */
+.progress-container {
+  width: auto;
+  height: auto;
+  margin: 0 auto;
+  padding: 16px;
+  background-color: #ffffff;
+  border: 1px solid #eaeaea;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Progress Title */
 .progress-title {
   font-size: 20px;
   font-weight: bold;
@@ -5,12 +18,14 @@
   margin-bottom: 20px;
 }
 
+/* Progress List */
 .progress-list {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
+/* Progress Items */
 .progress-item {
   display: flex;
   flex-direction: column;
@@ -54,6 +69,7 @@
   margin-top: 4px;
 }
 
+/* Progress Level */
 .progress-level-container {
   display: flex;
   align-items: center;
@@ -100,4 +116,26 @@
   font-size: 16px;
   font-weight: bold;
   color: #333;
+}
+
+/* Responsive Design for Small Screens */
+@media (max-width: 412px) {
+  .progress-container {
+    max-width: 380px;
+    padding: 12px;
+    box-shadow: none;
+  }
+
+  .progress-title {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+
+  .progress-list {
+    width: auto;
+  }
+
+  .progress-level-label {
+    margin-bottom: 8px;
+  }
 }

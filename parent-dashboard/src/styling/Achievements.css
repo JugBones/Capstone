@@ -1,4 +1,4 @@
-.achievement-container {
+.achievements-container {
   text-align: center;
   padding-top: 60px; /* Adjusts space for the fixed title */
   padding-bottom: 100px; /* Adjusts space for the legend */
@@ -11,7 +11,7 @@
   overflow-y: auto; /* Enables vertical scrolling */
 }
 
-.achievement-title {
+.achievements-title {
   font-size: 2rem;
   color: #1e5bf6;
   font-weight: bold;
@@ -125,16 +125,16 @@
   margin-bottom: 12px;
 }
 
-.progress-section {
+.progress-sections {
   margin-top: 10px;
 }
 
-.progress-text {
+.progress-texts {
   font-size: 1rem;
   margin-bottom: 10px;
 }
 
-.progress-bar-container {
+.progress-bar-containers {
   width: 72%; /* Ensure progress bar doesn't overflow */
   margin: 8px auto;
   overflow: hidden; /* Prevent overflow of the progress bar */
@@ -143,7 +143,7 @@
   height: 12px;
 }
 
-.progress-bar-fill {
+.progress-bar-fills {
   height: 100%;
   background-color: #1e5bf6;
   border-radius: 8px 0 0 8px;
@@ -182,11 +182,11 @@
     font-size: 1rem;
   }
 
-  .progress-bar-container {
+  .progress-bar-containers {
     width: 70%;
   }
 
-  .progress-text,
+  .progress-texts,
   .remaining-progress {
     font-size: 0.8rem;
   }
@@ -259,7 +259,7 @@
 }
 
 @media (max-width: 768px) {
-  .achievement-title {
+  .achievements-title {
     font-size: 1.8rem; /* Slightly reduce font size for mobile */
   }
 }

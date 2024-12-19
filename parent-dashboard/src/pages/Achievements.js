@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  AiFillStar,
   AiOutlineStar,
   AiOutlineCheckCircle,
   AiOutlineBulb,
@@ -64,8 +63,8 @@ const Achievements = () => {
   };
 
   return (
-    <div className="achievement-container">
-      <h1 className="achievement-title">Lencana Pencapaian</h1>
+    <div className="achievements-container">
+      <h1 className="achievements-title">Lencana Pencapaian</h1>
 
       <div className="badge-grid">
         {badges.map((badge) => (
@@ -92,11 +91,11 @@ const Achievements = () => {
                   {selectedBadge.status}
                 </strong>
               </p>
-              <div className="progress-section">
-                <p className="progress-text">Progress: {selectedBadge.progress}%</p>
-                <div className="progress-bar-container">
+              <div className="progress-sections">
+                <p className="progress-texts">Progress: {selectedBadge.progress}%</p>
+                <div className="progress-bar-containers">
                   <div
-                    className="progress-bar-fill"
+                    className="progress-bar-fills"
                     style={{ width: `${Math.min(selectedBadge.progress, 100)}%` }}
                   ></div>
                 </div>

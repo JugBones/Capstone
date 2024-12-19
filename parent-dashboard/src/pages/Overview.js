@@ -77,7 +77,7 @@ const Overview = () => {
           </Tabs>
         </Box>
 
-        <Grid container spacing={3} className="content-grid">
+        <Grid container spacing={3} mt={2}>
           <Grid item xs={12} md={8}>
             <ProgressChart user={user} selectedCourse={selectedCourse} />
           </Grid>

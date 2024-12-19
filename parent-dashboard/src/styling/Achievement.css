@@ -81,3 +81,11 @@
 .see-more:hover {
   text-decoration: underline;
 }
+
+@media (max-width: 412px) {
+
+  .achievement-list {
+    width: 390px;
+  }
+
+}
