@@ -1,35 +1,56 @@
 .achievement-container {
   text-align: center;
-  padding: 20px;
+  padding-top: 60px; /* Adjusts space for the fixed title */
+  padding-bottom: 100px; /* Adjusts space for the legend */
   background-color: #f9f9f9;
   min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
   font-family: 'Poppins', sans-serif;
+  overflow-y: auto; /* Enables vertical scrolling */
 }
 
 .achievement-title {
   font-size: 2rem;
   color: #1e5bf6;
   font-weight: bold;
-  margin-bottom: 20px;
+  margin: 0;
+  padding: 10px 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 10;
+  display: flex;
+  justify-content: center; /* Horizontally center */
+  align-items: center; /* Vertically align */
+  text-align: center;
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #e0e0e0;
+  box-sizing: border-box;
 }
 
+
+
 .badge-grid {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr); /* Maximum 6 badges per row */
-    gap: 15px;
-    padding: 10px;
+  margin-top: 80px; /* Add space to avoid overlapping with the title */
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); /* Maximum 6 badges per row */
+  gap: 15px;
+  padding: 10px;
+  padding-bottom: 100px;
 }
-  
-  @media (max-width: 1200px) {
-    .badge-grid {
-      grid-template-columns: repeat(4, 1fr); /* 4 columns for medium screens */
-    }
+
+@media (max-width: 1200px) {
+  .badge-grid {
+    grid-template-columns: repeat(4, 1fr); /* 4 columns for medium screens */
+  }
 }
-  
-  @media (max-width: 768px) {
-    .badge-grid {
-      grid-template-columns: repeat(2, 1fr); /* 2 columns for smaller screens */
-    }
+
+@media (max-width: 768px) {
+  .badge-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns for smaller screens */
+  }
 }
 
 .badge-card {
@@ -40,6 +61,7 @@
   text-align: center;
   padding: 15px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
 }
 
 .badge-card:hover {
@@ -61,58 +83,64 @@
   margin-bottom: 10px;
 }
 
-/* MODAL STYLING */
+/* Modal Styling */
 .badge-modal {
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: #fff;
-  padding: 15px; /* Reduced padding */
+  padding: 20px;
   border-radius: 16px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   text-align: center;
-  max-width: 530px; /* Smaller modal width */
+  max-width: 400px; /* Reduced width */
+  width: 90%; /* Full-screen width for smaller devices */
   box-sizing: border-box;
-  max-height: 330px; /* Prevent vertical overflow */
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between; /* Ensures proper spacing */
+  height: 400px;
+  min-height: 250px; /* Minimum height to avoid overflow */
   background-image: radial-gradient(circle, #d1e9ff, #f0f9ff, #ffffff);
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  justify-content: center; /* Center elements vertically */
+  align-items: center; /* Center elements horizontally */
+  z-index: 1000;
+  overflow: hidden; 
+  border: 2px solid #e0e0e0; 
 }
 
 .badge-popup-header {
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
 .modal-title {
   font-size: 1.3rem;
   color: #1e5bf6;
   font-weight: bold;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
 .modal-status {
   font-size: 1rem;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
-.progress-section {  
-  margin-top: 5px;
+.progress-section {
+  margin-top: 10px;
 }
 
 .progress-text {
-  font-size: 0.9rem;
-  margin-bottom: 5px; /* Smaller spacing */
+  font-size: 1rem;
+  margin-bottom: 10px;
 }
 
 .progress-bar-container {
+  width: 72%; /* Ensure progress bar doesn't overflow */
+  margin: 8px auto;
+  overflow: hidden; /* Prevent overflow of the progress bar */
   background-color: #e6e6e6;
   border-radius: 8px;
-  height: 12px; /* Smaller height */
-  width: 80%;
-  margin: 8px auto;
-  overflow: hidden;
+  height: 12px;
 }
 
 .progress-bar-fill {
@@ -125,7 +153,7 @@
 .remaining-progress {
   font-size: 0.9rem;
   color: #ff7043;
-  margin-top: 8px;
+  margin-top: 10px;
   line-height: 1.2;
 }
 
@@ -139,33 +167,113 @@
 .completed-date {
   font-size: 0.9rem;
   color: #4CAF50;
-  margin-top: 8px;
+  margin-top: 10px;
+}
+
+/* Adjustments for Smaller Screens */
+@media (max-width: 450px) {
+  .badge-modal {
+    width: 90%; /* Reduce modal width for tiny screens */
+    padding: 10px;
+    max-height: 90%; /* Prevent overflow */
+  }
+
+  .modal-title {
+    font-size: 1rem;
+  }
+
+  .progress-bar-container {
+    width: 70%;
+  }
+
+  .progress-text,
+  .remaining-progress {
+    font-size: 0.8rem;
+  }
+}
+
+.legend-container {
+  display: flex;
+  justify-content: center; /* Centers horizontally */
+  align-items: center;
+  gap: 15px; /* Adds spacing between items */
+  padding: 10px 0;
+  background-color: #ffffff;
+  position: fixed;
+  bottom: 50px; /* Keeps it just above the navbar */
+  width: 100%;
+  z-index: 10;
+  box-sizing: border-box;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Optional subtle shadow */
 }
 
 
-@media (max-width: 450px) {
-    .badge-modal {
-      width: 90%; /* Even smaller width for tiny devices */
-      padding: 8px; /* Smaller padding */
-      max-height: 350px; /* Ensure it fits the screen */
-    }
-  
-    .modal-title {
-      font-size: 0.9rem; /* Smaller font size for very small screens */
-    }
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-right: 20px; /* Add spacing between legend items */
+  font-size: 14px;
+  color: #333;
+}
 
-    .progress-bar-container {
-        max-width: 65%;
-        margin: 10px 35px; /* Minimal margin */
-    }
+.legend-color {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-right: 5px; /* Add spacing between color and text */
+}
 
-    .progress-text {
-        padding-right: 60px;
-    }
-    
-    .remaining-progress {
-        font-size: 13px;
-        padding-right: 60px;
-    }
+.legend-color.completed {
+  background-color: #ffd700; /* Yellow */
+}
 
+.legend-color.in-progress {
+  background-color: #1e5bf6; /* Blue */
+}
+
+
+.badge-card.completed {
+  border-color: #ffd700;
+}
+
+.badge-card.in-progress {
+  border-color: #1e5bf6;
+}
+
+.badge-card.completed .badge-icon {
+  color: #ffd700; /* Yellow icons for completed */
+}
+
+.badge-card.in-progress .badge-icon {
+  color: #1e5bf6; /* Blue icons for in-progress */
+}
+
+
+.navbar {
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 10;
+}
+
+@media (max-width: 768px) {
+  .achievement-title {
+    font-size: 1.8rem; /* Slightly reduce font size for mobile */
   }
+}
+
+
+@media (max-width: 768px) {
+  .legend-container {
+      flex-direction: column; /* Stack legend items vertically */
+      justify-content: center;
+      align-items: center;
+      gap: 10px; /* Add spacing between items */
+  }
+
+  .legend-item {
+      text-align: center;
+  }
+}
