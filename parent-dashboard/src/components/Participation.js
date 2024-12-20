@@ -9,14 +9,13 @@ const Participation = ({ user, selectedCourse }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetch subtopics for the course
     const fetchSubtopics = async () => {
       try {
         const response = await axios.get(
           `http://localhost:8000/subtopics/${selectedCourse}`
         );
         setSubtopics(response.data);
-        setSelectedSubtopic(response.data[0]?.id || null); // Default to the first subtopic
+        setSelectedSubtopic(response.data[0]?.id || null);
       } catch (err) {
         console.error(err);
         setSubtopics([]);
@@ -27,7 +26,6 @@ const Participation = ({ user, selectedCourse }) => {
   }, [selectedCourse]);
 
   useEffect(() => {
-    // Fetch participation data for the selected subtopic
     const fetchParticipationData = async () => {
       if (user && selectedSubtopic) {
         try {
@@ -47,10 +45,8 @@ const Participation = ({ user, selectedCourse }) => {
   }, [user, selectedSubtopic]);
 
   return (
-    <div>
+    <div className="participation-container">
       <h3 className="title">🙋‍♂️ Participation in Class</h3>
-
-      {/* Dropdown for subtopics */}
       <select
         value={selectedSubtopic || ""}
         onChange={(e) => setSelectedSubtopic(e.target.value)}
@@ -62,7 +58,6 @@ const Participation = ({ user, selectedCourse }) => {
           </option>
         ))}
       </select>
-
       {error ? (
         <p>{error}</p>
       ) : (

@@ -10,10 +10,10 @@
 .overview-container {
   padding: 20px;
   flex-grow: 1;
-  max-width: auto;
+  max-width: 1200px;
   margin: 0 auto;
   background-color: #f9f9f9;
-  min-height: 100vh;
+  min-height: 100vh;
 }
 
 /* Sticky Header */
@@ -27,6 +27,11 @@
   justify-content: space-between;
   gap: 20px;
   padding: 40px 0;
+  /* padding: 10px 15px; Adjust padding */
+  width: 100%; /* Extend to full width of parent container */
+  box-sizing: border-box; /* Include padding in width calculations */
+  overflow-x: hidden;
+  width: 100%;
 }
 
 /* Greeting Section */
@@ -80,4 +85,60 @@
 .participation-card .card-title,
 .participation-card .card-content {
   color: #ffffff; /* Ensure text stays white */
+}
+
+
+@media (max-width: 430px) {
+  .sticky-header {
+    padding: 10px 15px; /* Adjust padding for smaller screens */
+  }
+}
+
+@media (max-width: 430px) {
+  .overview-container {
+    padding: 20px;
+    flex-grow: 1;
+    max-width: 430px; /* Set max-width to match the phone's screen size */
+    width: 100%; /* Make it responsive */
+    margin: 0 auto;
+    background-color: #f9f9f9;
+    min-height: 100vh;
+    box-sizing: border-box; /* Ensure padding is included in width calculations */
+  }
+}
+
+
+@media (max-width: 430px) {
+  .overview-container {
+    padding: 15px;
+  }
+
+  .sticky-header {
+    padding: 10px 10px; /* Reduce padding for smaller screens */
+  }
+
+  .card {
+    padding: 15px;
+    font-size: 16px; /* Adjust text size for readability */
+  }
+
+  .participation-card {
+    font-size: 14px; /* Smaller font size for mobile */
+    padding: 10px;
+  }
+}
+
+.child-component {
+  max-width: 100%; /* Ensure child components respect parent width */
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box; /* Prevent overflow due to padding */
+}
+
+
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden; 
 }

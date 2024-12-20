@@ -18,7 +18,7 @@ const Recommendation = ({ user }) => {
           title: item.title,
           details: item.snippet,
           link: item.link,
-          image: `https://via.placeholder.com/150/${Math.floor(Math.random() * 16777215).toString(16)}`, // Random color
+          image: `https://via.placeholder.com/150/${Math.floor(Math.random() * 16777215).toString(16)}`,
         }));
         setRecommendations(recommendationData);
       } catch (err) {
@@ -43,7 +43,7 @@ const Recommendation = ({ user }) => {
   };
 
   return (
-    <div>
+    <div className="recommendation-container">
       <h3 className="recommendation-title">🤝 Rekomendasi Bacaan</h3>
       <div className="recommendation-slider-wrapper">
         <button className="arrow-button left-arrow" onClick={() => scroll('left')}>

@@ -1,11 +1,20 @@
-/* Title */
+/* Container for Participation component */
+.participation-container {
+  margin: 0 auto;
+  padding: 16px;
+  max-width: 90%;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
 h3.title {
   font-size: 20px;
   font-weight: bold;
   color: #333;
   margin-bottom: 10px;
   display: flex;
-  align-items: center;
   gap: 10px; /* Space between emoji and text */
 }
 
@@ -20,9 +29,8 @@ h3.title {
   background-color: #f9f9f9;
   color: #333;
   cursor: pointer;
-  margin-bottom: 30px; /* Increased spacing */
+  margin-bottom: 30px;
 }
-
 
 /* Participation cards container */
 .participation-cards {
@@ -46,7 +54,7 @@ h3.title {
 }
 
 .card h4 {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
   margin: 8px 0;
 }
@@ -56,25 +64,14 @@ h3.title {
   margin: 0;
 }
 
-.card-title {
-  font-size: 12px;
-  font-weight: bold;
-  opacity: 0.8;
-  margin-bottom: 4px;
-}
 
 /* Responsive adjustments */
-@media (max-width: 412px) {
-  .participation-cards {
-    grid-template-columns: repeat(2, 1fr);
-    width: 390px;
+@media (max-width: 430px) {
+  .participation-container {
+    padding: 12px;
   }
 
-  .card h4 {
-    font-size: 20px;
-  }
-
-  .card p {
-    font-size: 12px;
+  .title {
+    font-size: 18px;
   }
 }
