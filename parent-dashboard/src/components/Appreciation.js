@@ -28,41 +28,46 @@ const Appreciation = () => {
   };
 
   return (
-    <div className="appreciation-container">
-      <h3 className="appreciation-title">Apresiasi</h3>
-      <p className="appreciation-description">
-        Berikut adalah pesan dari tutor yang membantu pembelajaran anak anda.
-      </p>
-      <div className="appreciation-list">
-        {mockAppreciations.map((item, index) => (
-          <div
-            key={index}
-            className={`appreciation-card ${
-              expandedIndex === index ? 'expanded' : ''
-            }`}
-            onClick={() => toggleExpand(index)}
-          >
-            <Avatar
-              alt={item.teacherName}
-              src={item.avatar}
-              className="appreciation-avatar"
-            />
-            <div className="appreciation-details">
-              <h4 className="appreciation-teacher">{item.teacherName}</h4>
-              <p className="appreciation-message">
-                {expandedIndex === index
-                  ? item.message // Show full message if expanded
-                  : `${item.message.slice(0, 20)}...`} {/* Truncate message if collapsed */}
-              </p>
-              <p className="appreciation-date">{item.date}</p>
+    <div className="appreciation-outer-container">
+      <div className="appreciation-container">
+        <div className="appreciation-header">
+          <span className="thumb-emoji">👍</span>
+          <h3 className="appreciation-title">Apresiasi</h3>
+        </div>
+        <p className="appreciation-description">
+          Berikut adalah pesan dari tutor yang membantu pembelajaran anak anda.
+        </p>
+        <div className="appreciation-list">
+          {mockAppreciations.map((item, index) => (
+            <div
+              key={index}
+              className={`appreciation-card ${
+                expandedIndex === index ? 'expanded' : ''
+              }`}
+              onClick={() => toggleExpand(index)}
+            >
+              <Avatar
+                alt={item.teacherName}
+                src={item.avatar}
+                className="appreciation-avatar"
+              />
+              <div className="appreciation-details">
+                <h4 className="appreciation-teacher">{item.teacherName}</h4>
+                <p className="appreciation-message">
+                  {expandedIndex === index
+                    ? item.message // Show full message if expanded
+                    : `${item.message.slice(0, 20)}...`} {/* Truncate message if collapsed */}
+                </p>
+                <p className="appreciation-date">{item.date}</p>
+              </div>
+              {expandedIndex === index ? (
+                <ExpandLessIcon className="expand-icon" />
+              ) : (
+                <ExpandMoreIcon className="expand-icon" />
+              )}
             </div>
-            {expandedIndex === index ? (
-              <ExpandLessIcon className="expand-icon" />
-            ) : (
-              <ExpandMoreIcon className="expand-icon" />
-            )}
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

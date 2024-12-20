@@ -1,92 +1,116 @@
-/* Container styling */
+/* Outer container */
+.appreciation-outer-container {
+  padding: 20px;
+  background-color: #ffffff; /* White background to match design */
+  border-radius: 12px; /* Rounded corners for the outer container */
+  margin: 20px 0; /* Add spacing between this and other sections */
+  box-shadow: none; /* Removed shadow for a clean look */
+}
+
+/* Inner container styling */
 .appreciation-container {
-    padding: 20px;
-  }
-  
-  /* Title styling */
-  .appreciation-title {
-    font-size: 20px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 8px;
-  }
-  
-  /* Subtitle description */
-  .appreciation-description {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 16px;
-  }
-  
-  /* List container */
-  .appreciation-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-  
-  /* Individual appreciation card */
-  .appreciation-card {
-    display: flex;
-    align-items: flex-start;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease;
-    cursor: pointer;
-  }
-  
-  .appreciation-card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  }
-  
-  /* Expanded state styling */
-  .appreciation-card.expanded {
-    background-color: #f9f9f9;
-    border-color: #bbb;
-  }
-  
-  /* Avatar styling */
-  .appreciation-avatar {
-    width: 48px;
-    height: 48px;
-    margin-right: 12px;
-  }
-  
-  /* Details container */
-  .appreciation-details {
-    flex: 1;
-  }
-  
-  /* Teacher name */
-  .appreciation-teacher {
-    font-size: 16px;
-    font-weight: bold;
-    color: #333;
-    margin: 0;
-    margin-bottom: 4px;
-  }
-  
-  /* Message preview or full message */
-  .appreciation-message {
-    font-size: 14px;
-    color: #555;
-    margin: 0;
-    margin-bottom: 4px;
-    line-height: 1.5;
-  }
-  
-  /* Date */
-  .appreciation-date {
-    font-size: 12px;
-    color: #999;
-    font-style: italic;
-  }
-  
-  /* Expand/Collapse icon */
-  .expand-icon {
-    color: #555;
-  }
-  
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+}
+
+/* Header styling */
+.appreciation-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+/* Thumb emoji */
+.thumb-emoji {
+  font-size: 20px; /* Adjust size of the emoji */
+  line-height: 1; /* Ensure it aligns vertically */
+}
+
+/* Title styling */
+.appreciation-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  margin: 0;
+}
+
+/* Subtitle description */
+.appreciation-description {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 16px;
+}
+
+/* List container */
+.appreciation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Individual appreciation card */
+.appreciation-card {
+  display: flex;
+  align-items: flex-start;
+  padding: 12px;
+  border: 1px solid #ddd; /* Card border remains */
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.appreciation-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Expanded state styling */
+.appreciation-card.expanded {
+  background-color: #f9f9f9;
+  border-color: #bbb;
+}
+
+/* Avatar styling */
+.appreciation-avatar {
+  width: 48px;
+  height: 48px;
+  margin-right: 12px;
+}
+
+/* Details container */
+.appreciation-details {
+  flex: 1;
+}
+
+/* Teacher name */
+.appreciation-teacher {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  margin: 0;
+  margin-bottom: 4px;
+}
+
+/* Message preview or full message */
+.appreciation-message {
+  font-size: 14px;
+  color: #555;
+  margin: 0;
+  margin-bottom: 4px;
+  line-height: 1.5;
+}
+
+/* Date */
+.appreciation-date {
+  font-size: 12px;
+  color: #999;
+  font-style: italic;
+}
+
+/* Expand/Collapse icon */
+.expand-icon {
+  color: #555;
+}
