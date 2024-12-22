@@ -10,8 +10,6 @@ const Appreciation = ({ user }) => {
   const [expandedIndex, setExpandedIndex] = useState(null);
 
   useEffect(() => {
-    console.log("User object:", user); // Debug `user`
-
     const fetchAppreciations = async () => {
       if (!user?.uid) {
         console.error("User UID is undefined!");
@@ -22,15 +20,10 @@ const Appreciation = ({ user }) => {
         const response = await axios.get(
           `http://localhost:8000/appreciations/${user.uid}`
         );
-        console.log("API Response:", response.data); // Debug API response
-        if (response.data.message) {
-          setAppreciations([]); // No data
-        } else {
-          setAppreciations(response.data);
-        }
+        setAppreciations(response.data);
       } catch (error) {
         console.error("Error fetching appreciations:", error);
-        setAppreciations([]); // Clear on error
+        setAppreciations([]); // Clear the list on error
       }
     };
 
@@ -38,7 +31,7 @@ const Appreciation = ({ user }) => {
   }, [user]);
 
   const toggleExpand = (index) => {
-    setExpandedIndex(index === expandedIndex ? null : index);
+    setExpandedIndex(index === expandedIndex ? null : index); // Toggle the accordion
   };
 
   return (
@@ -49,7 +42,7 @@ const Appreciation = ({ user }) => {
           <h3 className="appreciation-title">Apresiasi</h3>
         </div>
         <p className="appreciation-description">
-          Berikut adalah pesan dari tutor yang membantu pembelajaran anak anda.
+          Berikut adalah pesan dari tutor dan AI tentang pembelajaran anak anda.
         </p>
         <div className="appreciation-list">
           {appreciations.length > 0 ? (
@@ -58,16 +51,28 @@ const Appreciation = ({ user }) => {
                 key={index}
                 className={`appreciation-card ${
                   expandedIndex === index ? "expanded" : ""
+                } ${
+                  item.teacher_name === "AI Feedback" ? "ai-feedback-card" : ""
                 }`}
                 onClick={() => toggleExpand(index)}
               >
                 <Avatar
                   alt={item.teacher_name}
-                  src={"https://via.placeholder.com/50"}
+                  src={
+                    item.teacher_name === "AI Feedback"
+                      ? "/ai-icon.png" // Custom AI avatar
+                      : "https://via.placeholder.com/50"
+                  }
                   className="appreciation-avatar"
                 />
                 <div className="appreciation-details">
-                  <h4 className="appreciation-teacher">{item.teacher_name}</h4>
+                  <h4
+                    className={`appreciation-teacher ${
+                      item.teacher_name === "AI Feedback" ? "ai-feedback" : ""
+                    }`}
+                  >
+                    {item.teacher_name}
+                  </h4>
                   <p className="appreciation-message">
                     {expandedIndex === index
                       ? item.message

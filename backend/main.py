@@ -181,22 +181,80 @@ def get_courses(db: Session = Depends(get_db)):
 
 @app.get("/appreciations/{firebase_uid}")
 def get_appreciations(firebase_uid: str, db: Session = Depends(get_db)):
-    print(f"Fetching appreciations for Firebase UID: {firebase_uid}")
     user_id = crud.get_user_id_by_firebase_uid(db, firebase_uid)
     if not user_id:
         raise HTTPException(status_code=404, detail="User not found.")
-    appreciations = crud.get_appreciations(db, user_id)
-    if not appreciations:
-        return {"message": "No appreciation data found for this user."}
-    print(f"Appreciations found: {len(appreciations)}")
-    return [
+
+    # Fetch teacher appreciations
+    teacher_appreciations = crud.get_appreciations(db, user_id)
+
+    teacher_feedback = [
         {
             "teacher_name": appreciation.teacher_name,
             "message": appreciation.message,
             "date": appreciation.date.strftime("%Y-%m-%d"),
         }
-        for appreciation in appreciations
+        for appreciation in teacher_appreciations
     ]
+
+    # Fetch progress data
+    progress_entries = crud.get_progress_by_user(db, user_id)
+    ai_appreciations = []
+
+    # Generate AI suggestions per course or subtopic
+    for progress in progress_entries:
+        course = crud.get_course(db, progress.course_id)  # Get course details
+        subtopics = crud.get_subtopics_by_course(
+            db, progress.course_id
+        )  # Fetch subtopics
+
+        # Determine strengths and weaknesses
+        good_aspect = []
+        improvement_needed = []
+
+        if progress.attendance >= 80:
+            good_aspect.append("attendance")
+        else:
+            improvement_needed.append("attendance")
+
+        if progress.activity >= 70:
+            good_aspect.append("active participation")
+        else:
+            improvement_needed.append("participation")
+
+        if progress.understanding >= 75:
+            good_aspect.append("understanding of concepts")
+        else:
+            improvement_needed.append("understanding concepts better")
+
+        if progress.task_completion >= 90:
+            good_aspect.append("task completion")
+        else:
+            improvement_needed.append("task completion")
+
+        # Generate detailed AI message
+        ai_message = (
+            f"In the course '{course.name}', you excel in {', '.join(good_aspect)}. "
+            f"However, you can improve in {', '.join(improvement_needed)}. "
+        )
+
+        # Specific suggestions for subtopics
+        for subtopic in subtopics:
+            # Example: Check if participation data is below a threshold for this subtopic
+            participation = crud.get_participation_by_subtopic(db, user_id, subtopic.id)
+            if participation and participation.audio < 5:
+                ai_message += f"In the subtopic '{subtopic.name}', try engaging more in discussions to improve participation. "
+
+        ai_appreciations.append(
+            {
+                "teacher_name": "AI Feedback",
+                "message": ai_message,
+                "date": date.today().strftime("%Y-%m-%d"),
+            }
+        )
+
+    # Combine teacher and AI-generated appreciations
+    return teacher_feedback + ai_appreciations
 
 
 ### RECOMMENDATIONS ###

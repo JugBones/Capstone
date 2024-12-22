@@ -70,3 +70,20 @@ def get_appreciations(db: Session, user_id: int):
         .filter(models.Appreciation.user_id == user_id)
         .all()
     )
+
+
+def get_subtopics_by_course(db: Session, course_id: int):
+    return (
+        db.query(models.Subtopic).filter(models.Subtopic.course_id == course_id).all()
+    )
+
+
+def get_participation_by_subtopic(db: Session, user_id: int, subtopic_id: int):
+    return (
+        db.query(models.Participation)
+        .filter(
+            models.Participation.user_id == user_id,
+            models.Participation.subtopic_id == subtopic_id,
+        )
+        .first()
+    )
