@@ -179,6 +179,26 @@ def get_courses(db: Session = Depends(get_db)):
     return courses
 
 
+@app.get("/appreciations/{firebase_uid}")
+def get_appreciations(firebase_uid: str, db: Session = Depends(get_db)):
+    print(f"Fetching appreciations for Firebase UID: {firebase_uid}")
+    user_id = crud.get_user_id_by_firebase_uid(db, firebase_uid)
+    if not user_id:
+        raise HTTPException(status_code=404, detail="User not found.")
+    appreciations = crud.get_appreciations(db, user_id)
+    if not appreciations:
+        return {"message": "No appreciation data found for this user."}
+    print(f"Appreciations found: {len(appreciations)}")
+    return [
+        {
+            "teacher_name": appreciation.teacher_name,
+            "message": appreciation.message,
+            "date": appreciation.date.strftime("%Y-%m-%d"),
+        }
+        for appreciation in appreciations
+    ]
+
+
 ### RECOMMENDATIONS ###
 
 
@@ -240,7 +260,9 @@ def search_web_for_materials(query):
     Function to search the web for educational materials using SerpAPI.
     """
     if not SERPAPI_API_KEY:
-        raise RuntimeError("SerpAPI API key is not configured. Please set it in the .env file.")
+        raise RuntimeError(
+            "SerpAPI API key is not configured. Please set it in the .env file."
+        )
 
     params = {
         "q": query,

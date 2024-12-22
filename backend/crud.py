@@ -7,8 +7,11 @@ def get_user(db: Session, firebase_uid: str):
         db.query(models.User).filter(models.User.firebase_uid == firebase_uid).first()
     )
 
+
 def get_user_id_by_firebase_uid(db: Session, firebase_uid: str):
-    user = db.query(models.User).filter(models.User.firebase_uid == firebase_uid).first()
+    user = (
+        db.query(models.User).filter(models.User.firebase_uid == firebase_uid).first()
+    )
     if user:
         return user.id
     return None

@@ -93,7 +93,7 @@ class Appreciation(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey("User.id"), nullable=False)
     teacher_name = Column(String(255), nullable=False)
-    message = Column(Text, nullable=False)
+    message = Column(String(255), nullable=False)
     date = Column(Date, nullable=False)
     user = relationship("User", back_populates="appreciations")
 

@@ -91,7 +91,7 @@ const Overview = () => {
             <Recommendation user={user} />
           </Grid>
           <Grid item xs={12}>
-            <Appreciation />
+            <Appreciation user={user} />
           </Grid>
         </Grid>
       </Box>
