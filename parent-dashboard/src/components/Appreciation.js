@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
 import "../styling/Appreciation.css";
 import { Avatar } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -7,7 +10,7 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 
 const Appreciation = ({ user }) => {
   const [appreciations, setAppreciations] = useState([]);
-  const [loading, setLoading] = useState(true); // Add a loading state
+  const [loading, setLoading] = useState(true);
   const [expandedIndex, setExpandedIndex] = useState(null);
 
   useEffect(() => {
@@ -18,16 +21,16 @@ const Appreciation = ({ user }) => {
       }
 
       try {
-        setLoading(true); // Start loading
+        setLoading(true);
         const response = await axios.get(
           `http://localhost:8000/appreciations/${user.uid}`
         );
         setAppreciations(response.data);
       } catch (error) {
         console.error("Error fetching appreciations:", error);
-        setAppreciations([]); // Clear the list on error
+        setAppreciations([]);
       } finally {
-        setLoading(false); // Stop loading
+        setLoading(false);
       }
     };
 
@@ -35,7 +38,7 @@ const Appreciation = ({ user }) => {
   }, [user]);
 
   const toggleExpand = (index) => {
-    setExpandedIndex(index === expandedIndex ? null : index); // Toggle the accordion
+    setExpandedIndex(index === expandedIndex ? null : index);
   };
 
   return (
@@ -46,27 +49,25 @@ const Appreciation = ({ user }) => {
           <h3 className="appreciation-title">Apresiasi</h3>
         </div>
         <p className="appreciation-description">
-          Berikut adalah pesan dari tutor dan AI tentang pembelajaran anak anda.
+          Berikut adalah pesan dari tutor dan AI tentang pembelajaran anak Anda.
         </p>
         <div className="appreciation-list">
           {loading ? (
-            <div className="loading-spinner"></div> // Show animated spinner
+            <div className="loading-spinner"></div>
           ) : appreciations.length > 0 ? (
             appreciations.map((item, index) => (
               <div
                 key={index}
                 className={`appreciation-card ${
                   expandedIndex === index ? "expanded" : ""
-                } ${
-                  item.teacher_name === "AI Feedback" ? "ai-feedback-card" : ""
-                }`}
+                } ${item.teacher_name === "AI Feedback" ? "ai-feedback-card" : ""}`}
                 onClick={() => toggleExpand(index)}
               >
                 <Avatar
                   alt={item.teacher_name}
                   src={
                     item.teacher_name === "AI Feedback"
-                      ? "/ai-icon.png" // Custom AI avatar
+                      ? "/ai-icon.png"
                       : "https://via.placeholder.com/50"
                   }
                   className="appreciation-avatar"
@@ -79,11 +80,22 @@ const Appreciation = ({ user }) => {
                   >
                     {item.teacher_name}
                   </h4>
-                  <p className="appreciation-message">
+                  <ReactMarkdown
+                    className="appreciation-message"
+                    remarkPlugins={[remarkGfm]}
+                    rehypePlugins={[rehypeRaw]}
+                    components={{
+                      a: ({ node, ...props }) => (
+                        <a {...props} target="_blank" rel="noopener noreferrer">
+                          {props.children}
+                        </a>
+                      ),
+                    }}
+                  >
                     {expandedIndex === index
                       ? item.message
-                      : `${item.message.slice(0, 20)}...`}
-                  </p>
+                      : `${item.message.slice(0, 200)}...`}
+                  </ReactMarkdown>
                   <p className="appreciation-date">{item.date}</p>
                 </div>
                 {expandedIndex === index ? (
@@ -94,7 +106,7 @@ const Appreciation = ({ user }) => {
               </div>
             ))
           ) : (
-            <p>No data appreciation available</p>
+            <p>Tidak ada data apresiasi tersedia.</p>
           )}
         </div>
       </div>

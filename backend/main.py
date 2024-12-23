@@ -198,6 +198,10 @@ def get_appreciations(firebase_uid: str, db: Session = Depends(get_db)):
     if not user_id:
         raise HTTPException(status_code=404, detail="User tidak ditemukan.")
 
+    # Fetch user's name for personalization
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+    child_name = user.name if user else "Anak Anda"
+
     # Fetch teacher appreciations
     teacher_appreciations = crud.get_appreciations(db, user_id)
     teacher_feedback = [
@@ -258,10 +262,14 @@ def get_appreciations(firebase_uid: str, db: Session = Depends(get_db)):
                     )
 
         openai_prompt = (
-            f"Siswa menunjukkan performa baik dalam {', '.join(good_aspect)}. "
-            f"Namun, siswa perlu meningkatkan {', '.join(improvement_needed)}. "
-            f"Subtopik: {', '.join(subtopic_suggestions)}. "
-            f"Beri saran belajar dalam Bahasa Indonesia."
+            f"Halo, Orang Tua {child_name}!\n\n"
+            f"Berikut adalah evaluasi kemajuan belajar:\n"
+            f"- Performa Baik: {', '.join(good_aspect)}.\n"
+            f"- Perlu Peningkatan: {', '.join(improvement_needed)}.\n\n"
+            f"Beri saran belajar ramah dan mudah dimengerti, "
+            f"termasuk untuk subtopik berikut: {', '.join(subtopic_suggestions)}.\n"
+            f"Tambahkan materi belajar jika memungkinkan."
+            f"Jangan terlalu panjang, tapi tetap personal"
         )
 
         try:
@@ -270,11 +278,11 @@ def get_appreciations(firebase_uid: str, db: Session = Depends(get_db)):
                 messages=[
                     {
                         "role": "system",
-                        "content": "Anda adalah AI yang memberikan saran belajar.",
+                        "content": "Anda adalah AI yang memberikan saran belajar kepada orang tua siswa di CoLearn.",
                     },
                     {"role": "user", "content": openai_prompt},
                 ],
-                max_tokens=150,
+                max_tokens=400,
                 temperature=0.7,
             )
             ai_message = response.choices[0].message.content.strip()
@@ -289,7 +297,7 @@ def get_appreciations(firebase_uid: str, db: Session = Depends(get_db)):
         learning_materials = search_learning_materials(", ".join(subtopic_names))
 
         # Combine AI-generated suggestions with learning material links
-        combined_message = f"{ai_message}\n\nBerikut materi tambahan:\n" + "\n".join(
+        combined_message = f"{ai_message}\n\n**Materi Tambahan:**\n" + "\n".join(
             [f"- [{item['title']}]({item['link']})" for item in learning_materials]
         )
 
