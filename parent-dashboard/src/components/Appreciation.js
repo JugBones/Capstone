@@ -50,7 +50,7 @@ const Appreciation = ({ user }) => {
         </p>
         <div className="appreciation-list">
           {loading ? (
-            <p>Loading data...</p> // Show loading message
+            <div className="loading-spinner"></div> // Show animated spinner
           ) : appreciations.length > 0 ? (
             appreciations.map((item, index) => (
               <div
