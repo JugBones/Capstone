@@ -11,6 +11,10 @@ from schemas import UpdateProgressLevelRequest
 from serpapi import GoogleSearch
 from dotenv import load_dotenv
 import os
+from openai import Client
+from fastapi import FastAPI, Depends, HTTPException
+
+
 import requests
 import serpapi
 
@@ -179,15 +183,25 @@ def get_courses(db: Session = Depends(get_db)):
     return courses
 
 
+### APPRECIATION ###
+
+
+# Set up OpenAI Client
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+if not OPENAI_API_KEY:
+    raise RuntimeError("OpenAI API key is not set in the environment variables.")
+
+client = Client()
+
+
 @app.get("/appreciations/{firebase_uid}")
 def get_appreciations(firebase_uid: str, db: Session = Depends(get_db)):
     user_id = crud.get_user_id_by_firebase_uid(db, firebase_uid)
     if not user_id:
-        raise HTTPException(status_code=404, detail="User not found.")
+        raise HTTPException(status_code=404, detail="User tidak ditemukan.")
 
     # Fetch teacher appreciations
     teacher_appreciations = crud.get_appreciations(db, user_id)
-
     teacher_feedback = [
         {
             "teacher_name": appreciation.teacher_name,
@@ -197,64 +211,125 @@ def get_appreciations(firebase_uid: str, db: Session = Depends(get_db)):
         for appreciation in teacher_appreciations
     ]
 
-    # Fetch progress data
+    # Fetch progress and participation data
     progress_entries = crud.get_progress_by_user(db, user_id)
     ai_appreciations = []
 
-    # Generate AI suggestions per course or subtopic
     for progress in progress_entries:
-        course = crud.get_course(db, progress.course_id)  # Get course details
-        subtopics = crud.get_subtopics_by_course(
-            db, progress.course_id
-        )  # Fetch subtopics
+        course = crud.get_course(db, progress.course_id)
+        subtopics = crud.get_subtopics_by_course(db, progress.course_id)
 
-        # Determine strengths and weaknesses
         good_aspect = []
         improvement_needed = []
+        subtopic_suggestions = []
 
         if progress.attendance >= 80:
-            good_aspect.append("attendance")
+            good_aspect.append("kehadiran")
         else:
-            improvement_needed.append("attendance")
+            improvement_needed.append("kehadiran")
 
         if progress.activity >= 70:
-            good_aspect.append("active participation")
+            good_aspect.append("partisipasi aktif")
         else:
-            improvement_needed.append("participation")
+            improvement_needed.append("partisipasi aktif")
 
         if progress.understanding >= 75:
-            good_aspect.append("understanding of concepts")
+            good_aspect.append("pemahaman konsep")
         else:
-            improvement_needed.append("understanding concepts better")
+            improvement_needed.append("pemahaman konsep")
 
         if progress.task_completion >= 90:
-            good_aspect.append("task completion")
+            good_aspect.append("penyelesaian tugas")
         else:
-            improvement_needed.append("task completion")
+            improvement_needed.append("penyelesaian tugas")
 
-        # Generate detailed AI message
-        ai_message = (
-            f"In the course '{course.name}', you excel in {', '.join(good_aspect)}. "
-            f"However, you can improve in {', '.join(improvement_needed)}. "
+        for subtopic in subtopics:
+            participation = crud.get_participation_by_subtopic(db, user_id, subtopic.id)
+            if participation:
+                if participation.audio < 5:
+                    subtopic_suggestions.append(
+                        f"Subtopik '{subtopic.name}' memerlukan lebih banyak diskusi audio."
+                    )
+                if participation.chat < 5:
+                    subtopic_suggestions.append(
+                        f"Gunakan fitur chat lebih sering di subtopik '{subtopic.name}'."
+                    )
+                if participation.poll != "Completed":
+                    subtopic_suggestions.append(
+                        f"Pastikan untuk menyelesaikan polling pada subtopik '{subtopic.name}'."
+                    )
+
+        openai_prompt = (
+            f"Siswa menunjukkan performa baik dalam {', '.join(good_aspect)}. "
+            f"Namun, siswa perlu meningkatkan {', '.join(improvement_needed)}. "
+            f"Subtopik: {', '.join(subtopic_suggestions)}. "
+            f"Beri saran belajar dalam Bahasa Indonesia."
         )
 
-        # Specific suggestions for subtopics
-        for subtopic in subtopics:
-            # Example: Check if participation data is below a threshold for this subtopic
-            participation = crud.get_participation_by_subtopic(db, user_id, subtopic.id)
-            if participation and participation.audio < 5:
-                ai_message += f"In the subtopic '{subtopic.name}', try engaging more in discussions to improve participation. "
+        try:
+            response = client.chat.completions.create(
+                model="gpt-4o",
+                messages=[
+                    {
+                        "role": "system",
+                        "content": "Anda adalah AI yang memberikan saran belajar.",
+                    },
+                    {"role": "user", "content": openai_prompt},
+                ],
+                max_tokens=150,
+                temperature=0.7,
+            )
+            ai_message = response.choices[0].message.content.strip()
+        except Exception as e:
+            print(f"OpenAI API Error: {e}")
+            ai_message = "Gagal menghasilkan saran dari AI. Silakan coba lagi nanti."
+
+        # Extract subtopic names
+        subtopic_names = [subtopic.name for subtopic in subtopics]
+
+        # Search for learning materials
+        learning_materials = search_learning_materials(", ".join(subtopic_names))
+
+        # Combine AI-generated suggestions with learning material links
+        combined_message = f"{ai_message}\n\nBerikut materi tambahan:\n" + "\n".join(
+            [f"- [{item['title']}]({item['link']})" for item in learning_materials]
+        )
 
         ai_appreciations.append(
             {
                 "teacher_name": "AI Feedback",
-                "message": ai_message,
+                "message": combined_message,
                 "date": date.today().strftime("%Y-%m-%d"),
             }
         )
 
-    # Combine teacher and AI-generated appreciations
     return teacher_feedback + ai_appreciations
+
+
+def search_learning_materials(query):
+    """
+    Search for learning materials using SerpAPI.
+    """
+    params = {
+        "q": query,
+        "engine": "google",
+        "api_key": SERPAPI_API_KEY,
+    }
+    try:
+        response = requests.get("https://serpapi.com/search", params=params)
+        response.raise_for_status()
+        search_data = response.json()
+        results = [
+            {
+                "title": result.get("title", "Judul tidak tersedia"),
+                "link": result.get("link", "#"),
+            }
+            for result in search_data.get("organic_results", [])
+        ]
+        return results[:3]  # Limit to top 3 results
+    except Exception as e:
+        print(f"Error fetching learning materials: {e}")
+        return [{"title": "Tidak dapat memuat materi pembelajaran", "link": "#"}]
 
 
 ### RECOMMENDATIONS ###
