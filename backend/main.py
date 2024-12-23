@@ -13,8 +13,6 @@ from dotenv import load_dotenv
 import os
 from openai import Client
 from fastapi import FastAPI, Depends, HTTPException
-
-
 import requests
 import serpapi
 

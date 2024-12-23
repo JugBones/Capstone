@@ -7,6 +7,7 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 
 const Appreciation = ({ user }) => {
   const [appreciations, setAppreciations] = useState([]);
+  const [loading, setLoading] = useState(true); // Add a loading state
   const [expandedIndex, setExpandedIndex] = useState(null);
 
   useEffect(() => {
@@ -17,6 +18,7 @@ const Appreciation = ({ user }) => {
       }
 
       try {
+        setLoading(true); // Start loading
         const response = await axios.get(
           `http://localhost:8000/appreciations/${user.uid}`
         );
@@ -24,6 +26,8 @@ const Appreciation = ({ user }) => {
       } catch (error) {
         console.error("Error fetching appreciations:", error);
         setAppreciations([]); // Clear the list on error
+      } finally {
+        setLoading(false); // Stop loading
       }
     };
 
@@ -45,7 +49,9 @@ const Appreciation = ({ user }) => {
           Berikut adalah pesan dari tutor dan AI tentang pembelajaran anak anda.
         </p>
         <div className="appreciation-list">
-          {appreciations.length > 0 ? (
+          {loading ? (
+            <p>Loading data...</p> // Show loading message
+          ) : appreciations.length > 0 ? (
             appreciations.map((item, index) => (
               <div
                 key={index}
@@ -88,7 +94,7 @@ const Appreciation = ({ user }) => {
               </div>
             ))
           ) : (
-            <p>No appreciation data available</p>
+            <p>No data appreciation available</p>
           )}
         </div>
       </div>
