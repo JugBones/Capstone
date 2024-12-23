@@ -6,6 +6,14 @@ const ProgressChart = ({ user, selectedCourse }) => {
   const [progressData, setProgressData] = useState([]);
   const [progressLevel, setProgressLevel] = useState("Bronze");
 
+  const getBarColor = (value) => {
+    if (value <= 35) return "red";
+    if (value < 50) return "orange";
+    if (value >= 50 && value <= 60) return "yellow";
+    if (value > 60) return "#0652DD";
+    return "gray";
+  };
+
   const determineProgressLevel = (data) => {
     const averageScore = (
       (data.attendance + data.activity + data.understanding + data.task_completion) / 4
@@ -74,7 +82,7 @@ const ProgressChart = ({ user, selectedCourse }) => {
                   className="progress-bar"
                   style={{
                     width: `${item.value}%`,
-                    backgroundColor: item.color,
+                    backgroundColor: getBarColor(item.value),
                   }}
                 ></div>
               </div>
