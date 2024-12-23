@@ -8,6 +8,10 @@ import { Avatar } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 
+// Import assets directly
+import teacherAvatar from "../assets/colearn_teacher2.webp";
+import aiLogo from "../assets/colearn-logo-square.png";
+
 const Appreciation = ({ user }) => {
   const [appreciations, setAppreciations] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -67,8 +71,8 @@ const Appreciation = ({ user }) => {
                   alt={item.teacher_name}
                   src={
                     item.teacher_name === "AI Feedback"
-                      ? "/ai-icon.png"
-                      : "https://via.placeholder.com/50"
+                      ? aiLogo
+                      : teacherAvatar
                   }
                   className="appreciation-avatar"
                 />
