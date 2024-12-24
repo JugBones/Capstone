@@ -98,7 +98,7 @@ const Appreciation = ({ user }) => {
                   >
                     {expandedIndex === index
                       ? item.message
-                      : `${item.message.slice(0, 200)}...`}
+                      : `${item.message.slice(0, 100)}...`}
                   </ReactMarkdown>
                   <p className="appreciation-date">{item.date}</p>
                 </div>

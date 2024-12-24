@@ -15,14 +15,14 @@ const Achievement = () => {
       progress: 30,
     },
     {
-      icon: <AiOutlineCheckCircle size={50} color="#FFD700" />,
-      title: "Consistent Learner",
-      progress: 75,
+      icon: <AiOutlineCheckCircle size={50} color="#1E5BF6" />,
+      title: "Perfect Score",
+      progress: 55,
     },
     {
-      icon: <AiOutlineBulb size={50} color="#1E5BF6" />,
+      icon: <AiOutlineBulb size={50} color="#FFD700" />,
       title: "Creative Thinker",
-      progress: 90,
+      progress: 100,
     },
   ];
 
@@ -31,8 +31,8 @@ const Achievement = () => {
   const getBarColor = (progress) => {
     if (progress <= 35) return "red";
     if (progress < 50) return "orange";
-    if (progress >= 50 && progress <= 60) return "yellow";
-    if (progress > 60) return "blue";
+    if (progress >= 50 && progress <= 60) return "#FFD700";
+    if (progress > 60) return "#1E5BF6";
     return "gray";
   };
 

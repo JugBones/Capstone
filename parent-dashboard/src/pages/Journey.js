@@ -58,7 +58,7 @@ const Journey = () => {
           </div>
         </div>
         <div className="student-statistics">
-          <h2>Statistik Student</h2>
+          <h3>Statistik Student</h3>
           <div className="chart-section">
             <div className="chart-header">
               <p className="chart-label">Level: Student Learning Journey</p>
