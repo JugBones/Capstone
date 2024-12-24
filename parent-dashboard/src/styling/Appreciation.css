@@ -207,3 +207,65 @@
     transform: rotate(360deg);
   }
 }
+
+/* Generate AI Feedback Button */
+.generate-ai-button {
+  padding: 10px 20px;
+  margin-bottom: 16px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #0077ff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.generate-ai-button:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}
+
+
+.generate-ai-button:hover {
+  background-color: #0056b3;
+}
+
+.generate-ai-button.loading {
+  background-color: #999;
+  cursor: not-allowed;
+  position: relative;
+}
+
+.generate-ai-button.loading::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #0077ff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+}
+
+.typewriting-animation {
+  font-size: 16px;
+  color: #0077ff;
+  margin-top: 20px;
+  text-align: center;
+  font-style: italic;
+  animation: blink 1s step-end infinite;
+  margin-top: 20px; /* Add spacing from the spinner */
+  white-space: pre-line; /* Handle multi-line input gracefully */
+}
+
+/* Optional blink effect */
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}

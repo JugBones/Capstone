@@ -193,16 +193,17 @@ client = Client()
 
 
 @app.get("/appreciations/{firebase_uid}")
-def get_appreciations(firebase_uid: str, db: Session = Depends(get_db)):
+def get_appreciations(
+    firebase_uid: str, include_ai: bool = False, db: Session = Depends(get_db)
+):
+    """
+    Fetch teacher appreciations and optionally generate AI feedback dynamically.
+    """
+    # Fetch teacher appreciations from the database
     user_id = crud.get_user_id_by_firebase_uid(db, firebase_uid)
     if not user_id:
-        raise HTTPException(status_code=404, detail="User tidak ditemukan.")
+        raise HTTPException(status_code=404, detail="User not found.")
 
-    # Fetch user's name for personalization
-    user = db.query(models.User).filter(models.User.id == user_id).first()
-    child_name = user.name if user else "Anak Anda"
-
-    # Fetch teacher appreciations
     teacher_appreciations = crud.get_appreciations(db, user_id)
     teacher_feedback = [
         {
@@ -213,18 +214,22 @@ def get_appreciations(firebase_uid: str, db: Session = Depends(get_db)):
         for appreciation in teacher_appreciations
     ]
 
-    # Fetch progress and participation data
+    # Return only teacher appreciations if include_ai is False
+    if not include_ai:
+        return {"feedback": teacher_feedback}
+
+    # Fetch user's name for personalization
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+    child_name = user.name if user else "Anak Anda"
+
+    # Generate AI feedback
     progress_entries = crud.get_progress_by_user(db, user_id)
-    ai_appreciations = []
+    ai_feedback = []
 
     for progress in progress_entries:
-        course = crud.get_course(db, progress.course_id)
-        subtopics = crud.get_subtopics_by_course(db, progress.course_id)
+        good_aspect, improvement_needed, subtopic_suggestions = [], [], []
 
-        good_aspect = []
-        improvement_needed = []
-        subtopic_suggestions = []
-
+        # Analyze progress data
         if progress.attendance >= 80:
             good_aspect.append("kehadiran")
         else:
@@ -245,6 +250,8 @@ def get_appreciations(firebase_uid: str, db: Session = Depends(get_db)):
         else:
             improvement_needed.append("penyelesaian tugas")
 
+        # Get subtopic suggestions
+        subtopics = crud.get_subtopics_by_course(db, progress.course_id)
         for subtopic in subtopics:
             participation = crud.get_participation_by_subtopic(db, user_id, subtopic.id)
             if participation:
@@ -261,6 +268,7 @@ def get_appreciations(firebase_uid: str, db: Session = Depends(get_db)):
                         f"Pastikan untuk menyelesaikan polling pada subtopik '{subtopic.name}'."
                     )
 
+        # Create AI prompt
         openai_prompt = (
             f"Halo, Orang Tua {child_name}!\n\n"
             f"Berikut adalah evaluasi kemajuan belajar:\n"
@@ -269,7 +277,8 @@ def get_appreciations(firebase_uid: str, db: Session = Depends(get_db)):
             f"Beri saran belajar ramah dan mudah dimengerti, "
             f"termasuk untuk subtopik berikut: {', '.join(subtopic_suggestions)}.\n"
             f"Tambahkan materi belajar jika memungkinkan."
-            f"Jangan terlalu panjang, tapi tetap personal"
+            f"Jelaskan metode belajar dan juga materi yang terkait dengan subtopik yang memerlukan pengingkatan "
+            f"Jangan terlalu panjang, tapi berikan saran-saran bermakna dan memiliki sentuhan personal"
         )
 
         try:
@@ -282,7 +291,7 @@ def get_appreciations(firebase_uid: str, db: Session = Depends(get_db)):
                     },
                     {"role": "user", "content": openai_prompt},
                 ],
-                max_tokens=400,
+                max_tokens=500,
                 temperature=0.7,
             )
             ai_message = response.choices[0].message.content.strip()
@@ -290,18 +299,16 @@ def get_appreciations(firebase_uid: str, db: Session = Depends(get_db)):
             print(f"OpenAI API Error: {e}")
             ai_message = "Gagal menghasilkan saran dari AI. Silakan coba lagi nanti."
 
-        # Extract subtopic names
+        # Fetch learning materials
         subtopic_names = [subtopic.name for subtopic in subtopics]
-
-        # Search for learning materials
         learning_materials = search_learning_materials(", ".join(subtopic_names))
 
-        # Combine AI-generated suggestions with learning material links
+        # Combine AI suggestions with learning material links
         combined_message = f"{ai_message}\n\n**Materi Tambahan:**\n" + "\n".join(
             [f"- [{item['title']}]({item['link']})" for item in learning_materials]
         )
 
-        ai_appreciations.append(
+        ai_feedback.append(
             {
                 "teacher_name": "AI Feedback",
                 "message": combined_message,
@@ -309,30 +316,31 @@ def get_appreciations(firebase_uid: str, db: Session = Depends(get_db)):
             }
         )
 
-    return teacher_feedback + ai_appreciations
+    return {"feedback": teacher_feedback + ai_feedback}
 
 
-def search_learning_materials(query):
+def search_learning_materials(query: str):
     """
     Search for learning materials using SerpAPI.
     """
     params = {
         "q": query,
         "engine": "google",
-        "api_key": SERPAPI_API_KEY,
+        "api_key": os.getenv("SERPAPI_API_KEY"),
     }
     try:
         response = requests.get("https://serpapi.com/search", params=params)
         response.raise_for_status()
-        search_data = response.json()
-        results = [
+        results = response.json().get("organic_results", [])
+        return [
             {
                 "title": result.get("title", "Judul tidak tersedia"),
                 "link": result.get("link", "#"),
             }
-            for result in search_data.get("organic_results", [])
-        ]
-        return results[:3]  # Limit to top 3 results
+            for result in results
+        ][
+            :3
+        ]  # Limit to top 3 results
     except Exception as e:
         print(f"Error fetching learning materials: {e}")
         return [{"title": "Tidak dapat memuat materi pembelajaran", "link": "#"}]
