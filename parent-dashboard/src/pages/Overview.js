@@ -16,8 +16,26 @@ const Overview = () => {
   const [user] = useAuthState(auth);
   const userName = user?.email ? user.email.split('@')[0] : user?.displayName || 'User';
   const [selectedCourse, setSelectedCourse] = useState('Matematika');
+  const [profilePicture, setProfilePicture] = useState(user?.photoURL || "/avatar.jpg");
   const [classData, setClassData] = useState(null);
   const [courses, setCourses] = useState([]);
+
+  // Fetch updated profile picture from the backend
+  useEffect(() => {
+    const fetchProfilePicture = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/users/${user.uid}/profile_picture`
+        );
+        setProfilePicture(response.data.profile_picture_url || "/avatar.jpg");
+      } catch (error) {
+        console.error("Error fetching profile picture:", error);
+      }
+    };
+
+    if (user) fetchProfilePicture();
+  }, [user]);
+
 
   useEffect(() => {
     const fetchClassData = async () => {
@@ -55,7 +73,11 @@ const Overview = () => {
       <Box className="overview-container">
         <Box className="sticky-header">
           <Box className="greeting-section">
-            <Avatar src={user?.photoURL || '/avatar.jpg'} alt="User Avatar" />
+              <img
+              src={profilePicture}
+              alt="User Avatar"
+              className="profile-avatar"
+            />
             <Box className="greeting-text">
               <Typography variant="h5" color="black">Welcome back,</Typography>
               <Typography variant="h5" color="#1E5BF6" fontWeight="bold">{userName}</Typography>
