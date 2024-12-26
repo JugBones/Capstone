@@ -9,6 +9,7 @@ class User(Base):
     name = Column(String(255), nullable=False)
     firebase_uid = Column(String(255), nullable=False, unique=True)
     class_id = Column(Integer, ForeignKey("Class.id"))
+    profile_picture = Column(String(255), nullable=True)
     achievements = relationship("Achievement", back_populates="user")
     progress = relationship("Progress", back_populates="user")
     appreciations = relationship("Appreciation", back_populates="user")

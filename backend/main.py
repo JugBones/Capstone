@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException, Query
+from fastapi import FastAPI, Depends, HTTPException, Query, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
@@ -50,6 +50,57 @@ def get_db():
 def get_user(firebase_uid: str, db: Session = Depends(get_db)):
     user = crud.get_user(db, firebase_uid)
     return user
+
+@app.post("/users/{firebase_uid}/profile_picture")
+async def upload_profile_picture(firebase_uid: str, file: UploadFile, db: Session = Depends(get_db)):
+    """
+    Endpoint to upload and update the user's profile picture.
+    """
+    # Save the uploaded image to imgBB
+    imgBB_api_key = os.getenv("IMGBB_API_KEY")
+    imgBB_url = "https://api.imgbb.com/1/upload"
+
+    try:
+        # Convert the uploaded file to bytes
+        file_bytes = await file.read()
+
+        # Send a POST request to imgBB
+        response = requests.post(
+            imgBB_url,
+            data={"key": imgBB_api_key},
+            files={"image": ("image", file_bytes, file.content_type)},
+        )
+
+        if response.status_code != 200:
+            raise HTTPException(status_code=500, detail="Failed to upload image to imgBB")
+
+        # Extract the image URL from the response
+        image_url = response.json().get("data", {}).get("url")
+
+        if not image_url:
+            raise HTTPException(status_code=500, detail="Failed to retrieve image URL")
+
+        # Update the user's profile picture in the database
+        updated_user = crud.update_user_profile_picture(db, firebase_uid, image_url)
+
+        if not updated_user:
+            raise HTTPException(status_code=404, detail="User not found")
+
+        return {"message": "Profile picture updated successfully", "image_url": image_url}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/users/{firebase_uid}/profile_picture")
+def get_profile_picture(firebase_uid: str, db: Session = Depends(get_db)):
+    """
+    Endpoint to retrieve the user's profile picture URL.
+    """
+    profile_picture_url = crud.get_user_profile_picture(db, firebase_uid)
+    if not profile_picture_url:
+        raise HTTPException(status_code=404, detail="Profile picture not found")
+    return {"profile_picture_url": profile_picture_url}
 
 
 @app.get("/progress/{firebase_uid}")

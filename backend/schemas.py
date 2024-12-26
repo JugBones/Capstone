@@ -6,6 +6,7 @@ class UserBase(BaseModel):
     name: str
     firebase_uid: str
     class_id: int
+    profile_picture: str 
 
 
 class User(UserBase):

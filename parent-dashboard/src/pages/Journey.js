@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar';
 import '../styling/Journey.css';
 import { Line } from 'react-chartjs-2';
 import 'chart.js/auto';
+import ProgressLevel from '../assets/progress-level.png'; 
 
 const Journey = () => {
   // Mock data for the chart
@@ -61,7 +62,7 @@ const Journey = () => {
           <h3>Statistik Student</h3>
           <div className="chart-section">
             <div className="chart-header">
-              <p className="chart-label">Level: Student Learning Journey</p>
+              <p>Level: Student Learning Journey</p>
               <a href="/full-view" className="full-view-link">Full View</a>
             </div>
             <div className="chart-container">
@@ -70,17 +71,7 @@ const Journey = () => {
           </div>
           <div className="category-level">
             <h3>Category (Level):</h3>
-            <div className="level-stairs">
-                <div className="level bronze">
-                🏃‍♂️ Bronze
-                </div>
-                <div className="level silver">
-                Silver
-                </div>
-                <div className="level gold">
-                Gold
-                </div>
-            </div>
+            <img src={ProgressLevel} alt="CoLearn Logo"/>
           </div>
         </div>
       </div>

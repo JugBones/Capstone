@@ -46,6 +46,10 @@
   .student-statistics {
     margin-top: 30px;
   }
+
+  .student-statistics h3 {
+    font-size: 25px;
+  }
   
   .chart-section {
     margin-top: 15px;
@@ -60,57 +64,30 @@
     height: 600px;
     margin: 0 auto;
   }
+
+  .chart-section p {
+    font-size: 20px;
+  }
   
   .category-level {
-    margin-top: 20px;
+    margin-top: 40px;
     text-align: center;
-  }
-  
-  .level-stairs {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    position: relative;
-  }
-  
-  .level {
-    padding: 10px 20px;
-    border-radius: 20px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #fff;
-    text-align: center;
-    position: relative;
-    min-width: 100px;
-  }
-  
-  .bronze {
-    background-color: #cd7f32;
-  }
-  
-  .silver {
-    background-color: #c0c0c0;
-  }
-  
-  .gold {
-    background-color: #ffd700;
-  }
-  
-  .runner {
-    position: absolute;
-    left: -30px;
-    top: -10px;
-    font-size: 20px;
-    animation: bounce 1s infinite alternate;
   }
 
-  @keyframes bounce {
-    0% {
-      transform: translateY(0);
-    }
-    100% {
-      transform: translateY(-10px);
+  .category-level h3 {
+    font-size: 25px;
+  }
+
+  .category-level img{
+    width: 70%;
+    height: 70%;
+  }
+
+  @media (max-width: 430px) {
+    .category-level img {
+      width: 100%;
+      height: 100%;
     }
   }
+
   

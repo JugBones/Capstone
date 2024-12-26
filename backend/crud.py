@@ -87,3 +87,19 @@ def get_participation_by_subtopic(db: Session, user_id: int, subtopic_id: int):
         )
         .first()
     )
+
+def update_user_profile_picture(db: Session, firebase_uid: str, image_url: str):
+    user = db.query(models.User).filter(models.User.firebase_uid == firebase_uid).first()
+    if user:
+        user.profile_picture = image_url
+        db.commit()
+        db.refresh(user)
+        return user
+    return None
+
+def get_user_profile_picture(db: Session, firebase_uid: str):
+    user = db.query(models.User).filter(models.User.firebase_uid == firebase_uid).first()
+    if user:
+        return user.profile_picture
+    return None
+
