@@ -51,8 +51,11 @@ def get_user(firebase_uid: str, db: Session = Depends(get_db)):
     user = crud.get_user(db, firebase_uid)
     return user
 
+
 @app.post("/users/{firebase_uid}/profile_picture")
-async def upload_profile_picture(firebase_uid: str, file: UploadFile, db: Session = Depends(get_db)):
+async def upload_profile_picture(
+    firebase_uid: str, file: UploadFile, db: Session = Depends(get_db)
+):
     """
     Endpoint to upload and update the user's profile picture.
     """
@@ -72,7 +75,9 @@ async def upload_profile_picture(firebase_uid: str, file: UploadFile, db: Sessio
         )
 
         if response.status_code != 200:
-            raise HTTPException(status_code=500, detail="Failed to upload image to imgBB")
+            raise HTTPException(
+                status_code=500, detail="Failed to upload image to imgBB"
+            )
 
         # Extract the image URL from the response
         image_url = response.json().get("data", {}).get("url")
@@ -86,7 +91,10 @@ async def upload_profile_picture(firebase_uid: str, file: UploadFile, db: Sessio
         if not updated_user:
             raise HTTPException(status_code=404, detail="User not found")
 
-        return {"message": "Profile picture updated successfully", "image_url": image_url}
+        return {
+            "message": "Profile picture updated successfully",
+            "image_url": image_url,
+        }
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -400,15 +408,26 @@ def search_learning_materials(query: str):
 ### RECOMMENDATIONS ###
 
 
+from concurrent.futures import ThreadPoolExecutor
+
+
 @app.get("/recommendations/{firebase_uid}")
 def get_recommendations(firebase_uid: str, db: Session = Depends(get_db)):
     user_id = crud.get_user_id_by_firebase_uid(db, firebase_uid)
     if not user_id:
         raise HTTPException(status_code=404, detail="User not found.")
 
-    # Fetch participation data
+    # Fetch all participation and subtopic data in a single query
     participation_data = (
-        db.query(models.Participation)
+        db.query(
+            models.Participation.audio,
+            models.Participation.chat,
+            models.Participation.poll,
+            models.Subtopic.id.label("subtopic_id"),
+            models.Subtopic.name.label("subtopic_name"),
+            models.Subtopic.course_id,
+        )
+        .join(models.Subtopic, models.Participation.subtopic_id == models.Subtopic.id)
         .filter(models.Participation.user_id == user_id)
         .all()
     )
@@ -423,34 +442,92 @@ def get_recommendations(firebase_uid: str, db: Session = Depends(get_db)):
     chat_threshold = 6
     poll_threshold = "Completed"
 
-    # Determine subtopics with low participation
-    lacking_subtopics = []
-    for participation in participation_data:
-        if (
-            participation.audio < audio_threshold
-            or participation.chat < chat_threshold
-            or participation.poll != poll_threshold
-        ):
-            subtopic = (
-                db.query(models.Subtopic)
-                .filter(models.Subtopic.id == participation.subtopic_id)
-                .first()
-            )
-            if subtopic:
-                lacking_subtopics.append(subtopic.name)
+    # Map course IDs to course names
+    course_map = {1: "Matematika", 2: "Fisika"}
 
-    # Generate recommendations
-    recommendations = []
-    for subtopic in lacking_subtopics:
-        # Use SerpAPI or similar tools to search for relevant materials
-        search_results = search_web_for_materials(subtopic)
-        recommendations.extend(search_results)
+    # Determine subtopics with low participation
+    lacking_subtopics = {"matematika": [], "fisika": []}
+
+    for record in participation_data:
+        if (
+            record.audio < audio_threshold
+            or record.chat < chat_threshold
+            or record.poll != poll_threshold
+        ):
+            course_name = course_map.get(record.course_id)
+            if course_name == "Matematika":
+                lacking_subtopics["matematika"].append(record.subtopic_name)
+            elif course_name == "Fisika":
+                lacking_subtopics["fisika"].append(record.subtopic_name)
+
+    # Generate recommendations using parallel processing
+    recommendations = {"matematika": [], "fisika": []}
+
+    def process_subtopic(subtopic, course_name):
+        enhanced_query = generate_search_query(subtopic, course_name)
+        if enhanced_query:
+            return search_web_for_materials(enhanced_query)[:3]
+        return []
+
+    with ThreadPoolExecutor() as executor:
+        # Matematika
+        matematika_futures = [
+            executor.submit(process_subtopic, subtopic, "Matematika")
+            for subtopic in lacking_subtopics["matematika"][:3]
+        ]
+        # Fisika
+        fisika_futures = [
+            executor.submit(process_subtopic, subtopic, "Fisika")
+            for subtopic in lacking_subtopics["fisika"][:3]
+        ]
+
+        # Collect results
+        for future in matematika_futures:
+            recommendations["matematika"].extend(future.result())
+        for future in fisika_futures:
+            recommendations["fisika"].extend(future.result())
 
     return {
         "message": "Recommendations generated successfully",
         "lacking_subtopics": lacking_subtopics,
         "recommendations": recommendations,
     }
+
+
+def generate_search_query(subtopic: str, course_name: str):
+    """
+    Generate enhanced search queries for lacking subtopics in Bahasa Indonesia.
+    """
+    try:
+        openai_prompt = (
+            f"Buatkan query pencarian Google yang spesifik untuk menemukan materi pembelajaran "
+            f"tentang mata pelajaran '{course_name}' dengan subtopik '{subtopic}'. "
+            "Gunakan kata kunci yang singkat dan relevan untuk menghasilkan hasil pencarian yang akurat dan sesuai dengan topik pembelajaran."
+            "Contoh query:\n\n"
+            "- Untuk subtopik 'Operasi Dasar' dalam 'Matematika':\n"
+            '"Operasi Dasar Matematika"\n\n'
+            "- Untuk subtopik 'Hukum Newton' dalam 'Fisika':\n"
+            '"Hukum Newton Fisika pembelajaran"\n\n'
+            "Buat query dengan format serupa berdasarkan subtopik dan mata pelajaran yang diberikan."
+        )
+
+        response = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "Anda adalah asisten AI yang membantu menciptakan query pencarian spesifik untuk sumber daya pendidikan.",
+                },
+                {"role": "user", "content": openai_prompt},
+            ],
+            max_tokens=100,
+            temperature=0.5,
+        )
+        return response.choices[0].message.content.strip()
+    except Exception as e:
+        print(f"OpenAI API Error: {e}")
+        # Fallback to a basic query structure
+        return f'"{subtopic}" "{course_name}" pembelajaran'
 
 
 def search_web_for_materials(query):
@@ -468,8 +545,9 @@ def search_web_for_materials(query):
         "api_key": SERPAPI_API_KEY,
     }
 
-    response = requests.get("https://serpapi.com/search", params=params)
-    if response.status_code == 200:
+    try:
+        response = requests.get("https://serpapi.com/search", params=params)
+        response.raise_for_status()
         search_data = response.json()
         results = [
             {
@@ -480,5 +558,6 @@ def search_web_for_materials(query):
             for result in search_data.get("organic_results", [])
         ]
         return results
-    else:
-        return []
+    except Exception as e:
+        print(f"Error fetching search results: {e}")
+        return [{"title": "No results found", "link": "#"}]

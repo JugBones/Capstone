@@ -112,7 +112,7 @@ const Appreciation = ({ user }) => {
       <div className="appreciation-container">
         <div className="appreciation-header">
           <span className="thumb-emoji">👍</span>
-          <h3 className="appreciation-title">Apresiasi</h3>
+          <h3 className="appreciation-title">Masukan dan Saran</h3>
         </div>
         <p className="appreciation-description">
           Berikut adalah pesan dari tutor dan AI tentang pembelajaran anak Anda.
@@ -122,7 +122,7 @@ const Appreciation = ({ user }) => {
           onClick={generateAiFeedback}
           disabled={aiLoading}
         >
-          {aiLoading ? "Generating AI Feedback..." : "Generate AI Feedback"}
+          {aiLoading ? "Tunggu sebentar AI sedang meproses penyajian kontek" : "Klik untuk Saran AI"}
         </button>
 
         {aiLoading && (
@@ -172,7 +172,7 @@ const Appreciation = ({ user }) => {
                   className={`appreciation-card ai-feedback-card ${expandedIndex === `ai-${index}` ? "expanded" : ""}`}
                   onClick={() => toggleExpand(`ai-${index}`)}
                 >
-                  <Avatar alt="AI Feedback" src={aiLogo} className="appreciation-avatar" />
+                  <Avatar alt="Saran AI" src={aiLogo} className="appreciation-avatar" />
                   <div className="appreciation-details">
                     <h4 className="appreciation-teacher ai-feedback">{item.teacher_name}</h4>
                     <ReactMarkdown
