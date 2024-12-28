@@ -112,7 +112,7 @@ const Appreciation = ({ user }) => {
       <div className="appreciation-container">
         <div className="appreciation-header">
           <span className="thumb-emoji">👍</span>
-          <h3 className="appreciation-title">Masukan dan Saran</h3>
+          <h3 className="appreciation-title">Masukan dan Saran - BETA</h3>
         </div>
         <p className="appreciation-description">
           Berikut adalah pesan dari tutor dan AI tentang pembelajaran anak Anda.

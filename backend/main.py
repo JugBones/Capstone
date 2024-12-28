@@ -408,9 +408,6 @@ def search_learning_materials(query: str):
 ### RECOMMENDATIONS ###
 
 
-from concurrent.futures import ThreadPoolExecutor
-
-
 @app.get("/recommendations/{firebase_uid}")
 def get_recommendations(firebase_uid: str, db: Session = Depends(get_db)):
     user_id = crud.get_user_id_by_firebase_uid(db, firebase_uid)
@@ -460,74 +457,24 @@ def get_recommendations(firebase_uid: str, db: Session = Depends(get_db)):
             elif course_name == "Fisika":
                 lacking_subtopics["fisika"].append(record.subtopic_name)
 
-    # Generate recommendations using parallel processing
+    # Generate recommendations using SerpAPI
     recommendations = {"matematika": [], "fisika": []}
 
     def process_subtopic(subtopic, course_name):
-        enhanced_query = generate_search_query(subtopic, course_name)
-        if enhanced_query:
-            return search_web_for_materials(enhanced_query)[:3]
-        return []
+        query = f"Materi belajar tentang {subtopic} dari {course_name}"
+        return search_web_for_materials(query)[:3]  # Limit to top 3 results
 
-    with ThreadPoolExecutor() as executor:
-        # Matematika
-        matematika_futures = [
-            executor.submit(process_subtopic, subtopic, "Matematika")
-            for subtopic in lacking_subtopics["matematika"][:3]
-        ]
-        # Fisika
-        fisika_futures = [
-            executor.submit(process_subtopic, subtopic, "Fisika")
-            for subtopic in lacking_subtopics["fisika"][:3]
-        ]
+    for subtopic in lacking_subtopics["matematika"][:3]:  # Limit to 3 subtopics
+        recommendations["matematika"].extend(process_subtopic(subtopic, "Matematika"))
 
-        # Collect results
-        for future in matematika_futures:
-            recommendations["matematika"].extend(future.result())
-        for future in fisika_futures:
-            recommendations["fisika"].extend(future.result())
+    for subtopic in lacking_subtopics["fisika"][:3]:  # Limit to 3 subtopics
+        recommendations["fisika"].extend(process_subtopic(subtopic, "Fisika"))
 
     return {
         "message": "Recommendations generated successfully",
         "lacking_subtopics": lacking_subtopics,
         "recommendations": recommendations,
     }
-
-
-def generate_search_query(subtopic: str, course_name: str):
-    """
-    Generate enhanced search queries for lacking subtopics in Bahasa Indonesia.
-    """
-    try:
-        openai_prompt = (
-            f"Buatkan query pencarian Google yang spesifik untuk menemukan materi pembelajaran "
-            f"tentang mata pelajaran '{course_name}' dengan subtopik '{subtopic}'. "
-            "Gunakan kata kunci yang singkat dan relevan untuk menghasilkan hasil pencarian yang akurat dan sesuai dengan topik pembelajaran."
-            "Contoh query:\n\n"
-            "- Untuk subtopik 'Operasi Dasar' dalam 'Matematika':\n"
-            '"Operasi Dasar Matematika"\n\n'
-            "- Untuk subtopik 'Hukum Newton' dalam 'Fisika':\n"
-            '"Hukum Newton Fisika pembelajaran"\n\n'
-            "Buat query dengan format serupa berdasarkan subtopik dan mata pelajaran yang diberikan."
-        )
-
-        response = client.chat.completions.create(
-            model="gpt-4o",
-            messages=[
-                {
-                    "role": "system",
-                    "content": "Anda adalah asisten AI yang membantu menciptakan query pencarian spesifik untuk sumber daya pendidikan.",
-                },
-                {"role": "user", "content": openai_prompt},
-            ],
-            max_tokens=100,
-            temperature=0.5,
-        )
-        return response.choices[0].message.content.strip()
-    except Exception as e:
-        print(f"OpenAI API Error: {e}")
-        # Fallback to a basic query structure
-        return f'"{subtopic}" "{course_name}" pembelajaran'
 
 
 def search_web_for_materials(query):
@@ -549,15 +496,23 @@ def search_web_for_materials(query):
         response = requests.get("https://serpapi.com/search", params=params)
         response.raise_for_status()
         search_data = response.json()
+
+        # Define the maximum snippet length
+        max_snippet_length = 100
+
         results = [
             {
                 "title": result["title"],
                 "link": result["link"],
-                "snippet": result.get("snippet", ""),
+                "snippet": (
+                    result.get("snippet", "")[:max_snippet_length] + "..."
+                    if len(result.get("snippet", "")) > max_snippet_length
+                    else result.get("snippet", "")
+                ),
             }
             for result in search_data.get("organic_results", [])
         ]
         return results
     except Exception as e:
         print(f"Error fetching search results: {e}")
-        return [{"title": "No results found", "link": "#"}]
+        return [{"title": "No results found", "link": "#", "snippet": ""}]

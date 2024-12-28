@@ -14,6 +14,12 @@
   margin: 0 auto;
   background-color: #f9f9f9;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column; /* Stack child components */
+  align-items: center; /* Center-align content */
+  gap: 20px; /* Add spacing between sections */
+  width: 100%; /* Full width */
+  margin: 0 auto; /* Center the container */
 }
 
 /* Sticky Header */

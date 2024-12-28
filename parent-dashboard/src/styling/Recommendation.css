@@ -33,7 +33,7 @@ body {
 
 /* Arrow button styling */
 .arrow-button {
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.8); /* Add transparency */
   border: none;
   padding: 8px;
   border-radius: 50%;
@@ -46,18 +46,21 @@ body {
   z-index: 10;
   top: 50%; 
   transform: translateY(-50%);
+  opacity: 0.8; /* Reduce visibility slightly */
+  transition: opacity 0.3s ease, background-color 0.3s ease;
 }
 
 .arrow-button:hover {
-  background-color: #f0f0f0;
+  background-color: rgba(240, 240, 240, 0.9); /* Slightly lighter background on hover */
+  opacity: 1; /* Full visibility on hover */
 }
 
 .left-arrow {
-  left: 10px;
+  left: 5px; /* Adjusted position for better visibility */
 }
 
 .right-arrow {
-  right: 10px;
+  right: 5px; /* Adjusted position for better visibility */
 }
 
 /* The slider itself */

@@ -106,11 +106,11 @@ const Overview = () => {
           <Grid item xs={12} md={4}>
             <Participation user={user} selectedCourse={selectedCourse} />
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12}>
             <Achievement />
           </Grid>
-          <Grid item xs={12} md={6}>
-            <Recommendation user={user} />
+          <Grid item xs={12}>
+            <Recommendation user={user} selectedCourse={selectedCourse} />
           </Grid>
           <Grid item xs={12}>
             <Appreciation user={user} />

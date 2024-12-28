@@ -1,13 +1,18 @@
 /* Progress Container Styles */
 .progress-container {
   width: 90%;
-  height: auto;
   margin: 0 auto;
   padding: 16px;
   background-color: #ffffff;
-  border: 1px solid #eaeaea;
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Progress List and Items */
+.progress-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 /* Progress Title */
@@ -18,12 +23,6 @@
   margin-bottom: 20px;
 }
 
-/* Progress List */
-.progress-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
 
 /* Progress Items */
 .progress-item {
@@ -140,4 +139,84 @@
   .progress-level-label {
     margin-bottom: 8px;
   }
+}
+
+
+.accordion {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  color: #555;
+  transition: background-color 0.3s ease;
+}
+
+.accordion:hover {
+  background-color: #f9f9f9;
+}
+
+.accordion.expanded .accordion-content {
+  display: block;
+}
+
+.accordion-content {
+  display: none;
+  font-size: 14px;
+  color: #666;
+  margin-top: 8px;
+}
+
+.expand-icon {
+  color: #555;
+}
+
+.accordion-content {
+  margin-top: 8px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Expand Icon Rotation */
+.expand-icon {
+  transition: transform 0.3s ease;
+}
+
+.expand-icon.rotated {
+  transform: rotate(180deg);
+}
+
+/* Description text */
+.description-text {
+  font-size: 14px;
+  color: #444;
+  margin: 10px 0 5px;
+  font-style: italic;
+  font-weight: 500;
+}
+
+/* Improvement tips text */
+.tips-text {
+  font-size: 14px;
+  font-weight: bold;
+  color: #1e88e5;
+  background-color: #e3f2fd;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
