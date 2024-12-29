@@ -1,96 +1,99 @@
 .journey-page {
-    font-family: Arial, sans-serif;
-    padding: 20px;
-    background-color: #f9f9f9;
-  }
-  
-  .journey-title {
-    font-size: 24px;
-    font-weight: bold;
-    color: #000;
-  }
-  
-  .journey-subtitle {
-    font-size: 24px;
-    font-weight: bold;
-    color: #000000;
-  }
-  
-  .highlight {
-    color: #007bff;
-  }
-  
-  .journey-stats {
-    display: flex;
-    gap: 20px;
-    margin-top: 20px;
-  }
-  
-  .stats-box {
-    background-color: #0652DD;
-    border-radius: 10px;
-    padding: 15px;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .stats-value {
-    font-size: 24px;
-    font-weight: bold;
-    color: #ffffff;
-  }
-  
-  .stats-label {
-    font-size: 20px;
-    color: #ffffff;
-  }
-  
-  .student-statistics {
-    margin-top: 30px;
-  }
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background-color: #f9f9f9;
+}
 
-  .student-statistics h3 {
-    font-size: 25px;
-    color: #000;
-  }
-  
-  .chart-section {
-    margin-top: 15px;
-    background-color: #e9ecef;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-  }
-  
+.journey-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #000;
+}
+
+.journey-subtitle {
+  font-size: 24px;
+  font-weight: bold;
+  color: #000000;
+}
+
+.highlight {
+  color: #007bff;
+}
+
+.journey-stats {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.stats-box {
+  background-color: #0652dd;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.stats-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.stats-label {
+  font-size: 20px;
+  color: #ffffff;
+}
+
+.student-statistics {
+  margin-top: 30px;
+}
+
+.student-statistics h3 {
+  font-size: 25px;
+  color: #000;
+}
+
+.chart-section {
+  margin-top: 15px;
+  background-color: #e9ecef;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.chart-container {
+  width: 80%;
+  height: 600px;
+  margin: 0 auto;
+}
+
+.chart-section p {
+  font-size: 20px;
+}
+
+.category-level {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.category-level h3 {
+  font-size: 25px;
+}
+
+.category-level img {
+  width: 70%;
+  height: 70%;
+}
+
+@media (max-width: 430px) {
   .chart-container {
-    width: 80%;
-    height: 600px;
-    margin: 0 auto;
+    width: 100%;
+    height: 300px; /* Adjusted height for mobile */
   }
 
-  .chart-section p {
-    font-size: 20px;
+  .category-level img {
+    width: 100%;
+    height: 100%;
   }
-  
-  .category-level {
-    margin-top: 40px;
-    text-align: center;
-  }
-
-  .category-level h3 {
-    font-size: 25px;
-  }
-
-  .category-level img{
-    width: 70%;
-    height: 70%;
-  }
-
-  @media (max-width: 430px) {
-    .category-level img {
-      width: 100%;
-      height: 100%;
-    }
-  }
-
-  
+}

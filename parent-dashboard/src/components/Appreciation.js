@@ -112,18 +112,23 @@ const Appreciation = ({ user }) => {
       <div className="appreciation-container">
         <div className="appreciation-header">
           <span className="thumb-emoji">👍</span>
-          <h3 className="appreciation-title">Masukan dan Saran - BETA</h3>
+          <h3 className="appreciation-title">Masukan dan Saran</h3>
         </div>
         <p className="appreciation-description">
           Berikut adalah pesan dari tutor dan AI tentang pembelajaran anak Anda.
         </p>
-        <button
-          className={`generate-ai-button`}
-          onClick={generateAiFeedback}
-          disabled={aiLoading}
-        >
-          {aiLoading ? "Tunggu sebentar AI sedang meproses penyajian kontek" : "Klik untuk Saran AI"}
-        </button>
+        <div className="generate-ai-container">
+          <button
+            className="generate-ai-button"
+            onClick={generateAiFeedback}
+            disabled={aiLoading}
+          >
+            {aiLoading ? "Tunggu sebentar AI sedang memproses penyajian konten" : "Klik untuk Saran AI"}
+          </button>
+
+          {/* BETA Label */}
+          <span className="beta-label">BETA</span>
+        </div>
 
         {aiLoading && (
           <div className="typewriting-container">

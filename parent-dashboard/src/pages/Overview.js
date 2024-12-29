@@ -9,7 +9,7 @@ import Recommendation from '../components/Recommendation';
 import Appreciation from '../components/Appreciation';
 import Achievement from '../components/Achievement';
 import Participation from '../components/Participation';
-import { Grid, Box, Typography, Avatar, Tabs, Tab } from '@mui/material';
+import { Grid, Box, Typography, Tabs, Tab } from '@mui/material';
 import '../styling/Overview.css';
 
 const Overview = () => {

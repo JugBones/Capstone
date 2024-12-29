@@ -3,9 +3,11 @@ import Navbar from '../components/Navbar';
 import '../styling/Journey.css';
 import { Line } from 'react-chartjs-2';
 import 'chart.js/auto';
-import ProgressLevel from '../assets/progress-level.png'; 
+import ProgressLevel from '../assets/progress-level.png';
 
 const Journey = () => {
+  const isMobile = window.innerWidth <= 430;
+
   // Mock data for the chart
   const chartData = {
     labels: ['4-1', '4-2', '5-1', '5-2', '6-1'],
@@ -18,6 +20,7 @@ const Journey = () => {
         borderWidth: 2,
         pointBackgroundColor: ['#CD7F32', '#C0C0C0', '#FFD700', '#C0C0C0', '#FFD700'],
         pointRadius: 6,
+        tension: 0.4, // Adds curve to the line
       },
     ],
   };
@@ -36,6 +39,7 @@ const Journey = () => {
       },
       y: {
         grid: { drawBorder: false },
+        max: isMobile ? 3 : undefined, // Adjust max value for y-axis in mobile view
       },
     },
   };
@@ -63,7 +67,7 @@ const Journey = () => {
           <div className="chart-section">
             <div className="chart-header">
               <p>Level: Student Learning Journey</p>
-              <a href="/full-view" className="full-view-link">Full View</a>
+              <a href="/journey" className="full-view-link">Full View</a>
             </div>
             <div className="chart-container">
               <Line data={chartData} options={chartOptions} />
@@ -71,7 +75,7 @@ const Journey = () => {
           </div>
           <div className="category-level">
             <h3>Category (Level):</h3>
-            <img src={ProgressLevel} alt="CoLearn Logo"/>
+            <img src={ProgressLevel} alt="CoLearn Logo" />
           </div>
         </div>
       </div>

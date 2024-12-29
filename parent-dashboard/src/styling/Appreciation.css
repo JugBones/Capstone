@@ -208,6 +208,25 @@
   }
 }
 
+/* Container for button and label */
+.generate-ai-container {
+  display: flex;
+  align-items: center;
+  gap: 8px; 
+}
+
+/* BETA Label Styling */
+.beta-label {
+  background-color: #4CAF50; 
+  color: white;
+  font-size: 12px; 
+  font-weight: bold; 
+  padding: 4px 8px; 
+  border-radius: 4px; 
+  text-transform: uppercase; 
+}
+
+
 /* Generate AI Feedback Button */
 .generate-ai-button {
   padding: 10px 20px;
