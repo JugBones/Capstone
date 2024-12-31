@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../styling/Recommendation.css';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -11,6 +12,7 @@ import PhysicsImage from '../assets/PhysicsImage.png';
 const Recommendation = ({ user, selectedCourse }) => {
   const [recommendations, setRecommendations] = useState([]);
   const sliderRef = React.useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRecommendations = async () => {
@@ -46,6 +48,10 @@ const Recommendation = ({ user, selectedCourse }) => {
   // Determine the default image based on the course
   const defaultImage = selectedCourse === 'Matematika' ? MathImage : PhysicsImage;
 
+  const handleOpenPictureInPicture = (link) => {
+    navigate('/picture-in-picture', { state: { link } });
+  };
+  
   return (
     <div className="recommendation-container">
       <h3 className="recommendation-title">🤝 Rekomendasi Bacaan untuk {selectedCourse}</h3>
@@ -56,14 +62,17 @@ const Recommendation = ({ user, selectedCourse }) => {
         <div className="recommendation-slider" ref={sliderRef}>
           {recommendations.length > 0 ? (
             recommendations.map((rec, index) => (
-              <div key={index} className="recommendation-card">
-                <a href={rec.link} target="_blank" rel="noopener noreferrer">
-                  <img
-                    src={rec.image || defaultImage} // Use recommendation's image if available, else use default
-                    alt={rec.title}
-                    className="recommendation-image"
-                  />
-                </a>
+              <div
+                key={index}
+                className="recommendation-card"
+                onClick={() => handleOpenPictureInPicture(rec.link)}
+                style={{ cursor: 'pointer' }}
+              >
+                <img
+                  src={rec.image || defaultImage} // Use recommendation's image if available, else use default
+                  alt={rec.title}
+                  className="recommendation-image"
+                />
                 <div className="recommendation-content">
                   <h4 className="recommendation-card-title">{rec.title}</h4>
                   <p className="recommendation-card-details">{rec.details}</p>

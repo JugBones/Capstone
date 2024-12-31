@@ -1,0 +1,63 @@
+/* PictureInPicture.css */
+
+.picture-in-picture-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Full viewport height */
+    background-color: #f9f9f9;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #1E5BF6; /* CoLearn's primary blue */
+    color: #ffffff;
+    position: sticky;
+    top: 0;
+    z-index: 1000; /* Ensure it stays on top */
+  }
+  
+  .back-button {
+    background-color: #ffffff;
+    color: #1E5BF6;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .back-button:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .header-logo {
+    height: 40px; /* Adjust to fit nicely */
+  }
+  
+  .iframe-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+  }
+  
+  .website-preview-iframe {
+    width: 95%;
+    height: 95%;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .no-url {
+    font-size: 16px;
+    color: #757575;
+    text-align: center;
+  }
+  

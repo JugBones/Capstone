@@ -516,3 +516,33 @@ def search_web_for_materials(query):
     except Exception as e:
         print(f"Error fetching search results: {e}")
         return [{"title": "No results found", "link": "#", "snippet": ""}]
+
+
+from fastapi.responses import StreamingResponse
+
+
+# Proxy route to fetch and serve the requested URL
+@app.get("/proxy")
+async def proxy_url(url: str = Query(...)):
+    if not url:
+        raise HTTPException(status_code=400, detail="URL parameter is required.")
+
+    try:
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+        }
+        response = requests.get(url, headers=headers, stream=True)
+        response.raise_for_status()
+
+        return StreamingResponse(
+            response.iter_content(chunk_size=1024),
+            headers={
+                "Content-Type": response.headers.get("Content-Type", "text/html"),
+                "Cache-Control": "no-cache",
+            },
+        )
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching URL: {e}")
+        raise HTTPException(
+            status_code=500, detail=f"Failed to fetch the URL: {str(e)}"
+        )
