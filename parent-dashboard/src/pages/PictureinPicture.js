@@ -1,14 +1,41 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import '../styling/PictureInPicture.css';
-import CoLearnLogo from '../assets/colearn-white.png'; // Import CoLearn logo
+import CoLearnLogo from '../assets/colearn-white.png';
 
 const PictureInPicture = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Retrieve the link from the state
+  const [markdownContent, setMarkdownContent] = useState('');
+  const [error, setError] = useState(null);
+
+  // Retrieve the downloadUrl from the state
   const targetUrl = location.state?.link;
+
+  useEffect(() => {
+    const fetchMarkdown = async () => {
+      if (!targetUrl) {
+        setError('No URL provided');
+        return;
+      }
+
+      try {
+        const response = await fetch(targetUrl);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch markdown content: ${response.statusText}`);
+        }
+        const text = await response.text();
+        setMarkdownContent(text);
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+
+    fetchMarkdown();
+  }, [targetUrl]);
 
   return (
     <div className="picture-in-picture-container">
@@ -18,15 +45,17 @@ const PictureInPicture = () => {
         </button>
         <img src={CoLearnLogo} alt="CoLearn Logo" className="header-logo" />
       </div>
-      <div className="iframe-wrapper">
-        {targetUrl ? (
-          <iframe
-            src={`http://localhost:8000/proxy?url=${encodeURIComponent(targetUrl)}`}
-            title="Website Preview"
-            className="website-preview-iframe"
-          ></iframe>
+      <div className="markdown-wrapper">
+        {error ? (
+          <p className="error-message">{error}</p>
         ) : (
-          <p className="no-url">No URL provided</p>
+          <div className="article-container">
+            <ReactMarkdown
+              className="markdown-content"
+              children={markdownContent}
+              remarkPlugins={[remarkGfm]}
+            />
+          </div>
         )}
       </div>
     </div>

@@ -1,6 +1,5 @@
 from fastapi import FastAPI, Depends, HTTPException, Query, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 from datetime import date, timedelta
 import crud, models, schemas
@@ -12,15 +11,17 @@ from serpapi import GoogleSearch
 from dotenv import load_dotenv
 import os
 from openai import Client
-from fastapi import FastAPI, Depends, HTTPException
 import requests
 import serpapi
 
 # Load environment variables
 load_dotenv()
 
-# Get the API key from environment variables
+# Get the SerpAPI Key 
 SERPAPI_API_KEY = os.getenv("SERPAPI_API_KEY")
+
+# Get the API key from environment variables
+GITHUB_ACCESS_TOKEN = os.getenv("GITHUB_ACCESS_TOKEN")
 
 app = FastAPI()
 
@@ -410,6 +411,9 @@ def search_learning_materials(query: str):
 
 @app.get("/recommendations/{firebase_uid}")
 def get_recommendations(firebase_uid: str, db: Session = Depends(get_db)):
+    """
+    Fetch recommendations based on the user's participation and articles from GitHub.
+    """
     user_id = crud.get_user_id_by_firebase_uid(db, firebase_uid)
     if not user_id:
         raise HTTPException(status_code=404, detail="User not found.")
@@ -457,18 +461,13 @@ def get_recommendations(firebase_uid: str, db: Session = Depends(get_db)):
             elif course_name == "Fisika":
                 lacking_subtopics["fisika"].append(record.subtopic_name)
 
-    # Generate recommendations using SerpAPI
+    # Generate recommendations using GitHub API
     recommendations = {"matematika": [], "fisika": []}
 
-    def process_subtopic(subtopic, course_name):
-        query = f"Materi belajar tentang {subtopic} dari {course_name}"
-        return search_web_for_materials(query)[:3]  # Limit to top 3 results
-
-    for subtopic in lacking_subtopics["matematika"][:3]:  # Limit to 3 subtopics
-        recommendations["matematika"].extend(process_subtopic(subtopic, "Matematika"))
-
-    for subtopic in lacking_subtopics["fisika"][:3]:  # Limit to 3 subtopics
-        recommendations["fisika"].extend(process_subtopic(subtopic, "Fisika"))
+    for course_name, subtopics in lacking_subtopics.items():
+        for subtopic in subtopics[:3]:  # Limit to top 3 subtopics
+            articles = fetch_articles_from_github(subtopic, course_name.capitalize())
+            recommendations[course_name].extend(articles)
 
     return {
         "message": "Recommendations generated successfully",
@@ -477,50 +476,56 @@ def get_recommendations(firebase_uid: str, db: Session = Depends(get_db)):
     }
 
 
-def search_web_for_materials(query):
+def fetch_articles_from_github(subtopic, course_name):
     """
-    Function to search the web for educational materials using SerpAPI.
+    Fetch articles from GitHub for a specific subtopic and course.
     """
-    if not SERPAPI_API_KEY:
-        raise RuntimeError(
-            "SerpAPI API key is not configured. Please set it in the .env file."
-        )
+    # Map course names to GitHub directory names
+    course_directory_map = {
+        "Matematika": "Matematika",
+        "Fisika": "Fisika",
+    }
 
-    params = {
-        "q": query,
-        "engine": "google",
-        "api_key": SERPAPI_API_KEY,
+    directory = course_directory_map.get(course_name)
+    if not directory:
+        raise HTTPException(status_code=404, detail="Invalid course name.")
+
+    # GitHub API URL for the directory
+    url = f"https://api.github.com/repos/joshualxndrs/MateriBacaan_Parents/contents/{directory}"
+
+    headers = {
+        "Authorization": f"Bearer {GITHUB_ACCESS_TOKEN}",
+        "Accept": "application/vnd.github.v3+json",
     }
 
     try:
-        response = requests.get("https://serpapi.com/search", params=params)
+        response = requests.get(url, headers=headers)
         response.raise_for_status()
-        search_data = response.json()
 
-        # Define the maximum snippet length
-        max_snippet_length = 100
-
-        results = [
+        # Filter files matching the subtopic
+        articles = [
             {
-                "title": result["title"],
-                "link": result["link"],
-                "snippet": (
-                    result.get("snippet", "")[:max_snippet_length] + "..."
-                    if len(result.get("snippet", "")) > max_snippet_length
-                    else result.get("snippet", "")
-                ),
+                "title": item["name"],
+                "link": item["download_url"],  # Use download_url to fetch raw content
+                "snippet": f"Artikel tentang {subtopic} dari kursus {course_name}",
             }
-            for result in search_data.get("organic_results", [])
+            for item in response.json()
+            if subtopic.lower().replace(" ", "_") in item["name"].lower()
         ]
-        return results
-    except Exception as e:
-        print(f"Error fetching search results: {e}")
-        return [{"title": "No results found", "link": "#", "snippet": ""}]
+
+        if not articles:
+            return [{"title": f"No articles found for subtopic '{subtopic}'"}]
+
+        return articles
+
+    except requests.RequestException as e:
+        print(f"Error fetching articles from GitHub: {e}")
+        raise HTTPException(
+            status_code=500, detail="Failed to fetch articles from GitHub."
+        )
 
 
 from fastapi.responses import StreamingResponse
-
-
 # Proxy route to fetch and serve the requested URL
 @app.get("/proxy")
 async def proxy_url(url: str = Query(...)):
