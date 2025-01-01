@@ -17,7 +17,7 @@ import serpapi
 # Load environment variables
 load_dotenv()
 
-# Get the SerpAPI Key 
+# Get the SerpAPI Key
 SERPAPI_API_KEY = os.getenv("SERPAPI_API_KEY")
 
 # Get the API key from environment variables
@@ -502,19 +502,32 @@ def fetch_articles_from_github(subtopic, course_name):
         response = requests.get(url, headers=headers)
         response.raise_for_status()
 
-        # Filter files matching the subtopic
-        articles = [
-            {
-                "title": item["name"],
-                "link": item["download_url"],  # Use download_url to fetch raw content
-                "snippet": f"Artikel tentang {subtopic} dari kursus {course_name}",
-            }
-            for item in response.json()
-            if subtopic.lower().replace(" ", "_") in item["name"].lower()
-        ]
+        # Filter files based on subtopic matching
+        articles = []
+        for item in response.json():
+            # Match if the subtopic name appears in the file name, ignoring case
+            if subtopic.lower() in item["name"].lower():
+                articles.append(
+                    {
+                        "title": item["name"]
+                        .replace(".md", "")
+                        .replace("_", " ")
+                        .capitalize(),
+                        "link": item[
+                            "download_url"
+                        ],  # Use download_url to fetch raw content
+                        "snippet": f"Artikel tentang {subtopic} dari kursus {course_name}",
+                    }
+                )
 
         if not articles:
-            return [{"title": f"No articles found for subtopic '{subtopic}'"}]
+            return [
+                {
+                    "title": f"No articles found for subtopic '{subtopic}'",
+                    "link": "#",
+                    "snippet": "",
+                }
+            ]
 
         return articles
 
@@ -526,6 +539,8 @@ def fetch_articles_from_github(subtopic, course_name):
 
 
 from fastapi.responses import StreamingResponse
+
+
 # Proxy route to fetch and serve the requested URL
 @app.get("/proxy")
 async def proxy_url(url: str = Query(...)):

@@ -9,6 +9,19 @@ const ProgressChart = ({ user, selectedCourse }) => {
   const [progressLevel, setProgressLevel] = useState("Bronze");
   const [expandedIndex, setExpandedIndex] = useState(null);
 
+
+  const updateProgressLevel = async (level) => {
+    try {
+      await axios.put(`http://localhost:8000/progress/${user.uid}`, {
+        course_name: selectedCourse,
+        level: level,
+      });
+      console.log("Progress level updated successfully");
+    } catch (err) {
+      console.error("Error updating progress level:", err);
+    }
+  };
+
   const progressDescriptions = {
     Kehadiran: "Menunjukkan seberapa konsisten siswa menghadiri kelas.",
     Keaktifan: "Menilai keaktifan siswa dalam diskusi dan aktivitas kelas.",
@@ -65,6 +78,10 @@ const ProgressChart = ({ user, selectedCourse }) => {
 
         const level = determineProgressLevel(progress);
         setProgressLevel(level);
+
+        // Update progress level in the database
+        await updateProgressLevel(level);
+        
       } catch (err) {
         console.error("Error fetching progress data:", err);
         setProgressData([]);
