@@ -15,11 +15,13 @@ const Recommendation = ({ user, selectedCourse }) => {
   const [otherRecommendations, setOtherRecommendations] = useState([]); // For "Lainnya"
   const [filteredRecommendations, setFilteredRecommendations] = useState([]); // For filtered content
   const [activeFilter, setActiveFilter] = useState('course'); // Default filter
+  const [isLoading, setIsLoading] = useState(false); // Loading state
   const sliderRef = React.useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRecommendations = async () => {
+      setIsLoading(true); // Start loading
       try {
         const response = await axios.get(
           `http://localhost:8000/recommendations/${user.uid}`
@@ -37,6 +39,8 @@ const Recommendation = ({ user, selectedCourse }) => {
         setFilteredRecommendations(courseArticles);
       } catch (err) {
         console.error('Error fetching recommendations:', err);
+      } finally {
+        setIsLoading(false); // Stop loading
       }
     };
 
@@ -94,41 +98,49 @@ const Recommendation = ({ user, selectedCourse }) => {
         </button>
       </div>
 
-      <div className="recommendation-slider-wrapper">
-        <button className="arrow-button left-arrow" onClick={() => scroll('left')}>
-          <ArrowBackIosIcon />
-        </button>
-        <div className="recommendation-slider" ref={sliderRef}>
-          {filteredRecommendations.length > 0 ? (
-            filteredRecommendations.map((rec, index) => (
-              <div
-                key={index}
-                className="recommendation-card"
-                onClick={() => handleOpenPictureInPicture(rec.link)}
-                style={{ cursor: 'pointer' }}
-              >
-                <img
-                  src={
-                    rec.image ||
-                    (recommendations.includes(rec) ? defaultImage : OtherImage)
-                  } // Use course-specific or OtherImage based on the source
-                  alt={rec.title}
-                  className="recommendation-image"
-                />
-                <div className="recommendation-content">
-                  <h4 className="recommendation-card-title">{rec.title}</h4>
-                  <p className="recommendation-card-details">{rec.snippet}</p>
-                </div>
-              </div>
-            ))
-          ) : (
-            <p className="no-recommendations">Tidak ada rekomendasi untuk {activeFilter}.</p>
-          )}
+      {/* Loading Animation */}
+      {isLoading ? (
+        <div className="loading-container">
+          <div className="spinner"></div>
+          <p className="loading-text">Memuat rekomendasi...</p>
         </div>
-        <button className="arrow-button right-arrow" onClick={() => scroll('right')}>
-          <ArrowForwardIosIcon />
-        </button>
-      </div>
+      ) : (
+        <div className="recommendation-slider-wrapper">
+          <button className="arrow-button left-arrow" onClick={() => scroll('left')}>
+            <ArrowBackIosIcon />
+          </button>
+          <div className="recommendation-slider" ref={sliderRef}>
+            {filteredRecommendations.length > 0 ? (
+              filteredRecommendations.map((rec, index) => (
+                <div
+                  key={index}
+                  className="recommendation-card"
+                  onClick={() => handleOpenPictureInPicture(rec.link)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <img
+                    src={
+                      rec.image ||
+                      (recommendations.includes(rec) ? defaultImage : OtherImage)
+                    } // Use course-specific or OtherImage based on the source
+                    alt={rec.title}
+                    className="recommendation-image"
+                  />
+                  <div className="recommendation-content">
+                    <h4 className="recommendation-card-title">{rec.title}</h4>
+                    <p className="recommendation-card-details">{rec.snippet}</p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="no-recommendations">Tidak ada rekomendasi untuk {activeFilter}.</p>
+            )}
+          </div>
+          <button className="arrow-button right-arrow" onClick={() => scroll('right')}>
+            <ArrowForwardIosIcon />
+          </button>
+        </div>
+      )}
     </div>
   );
 };

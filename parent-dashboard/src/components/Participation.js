@@ -46,7 +46,7 @@ const Participation = ({ user, selectedCourse }) => {
 
   return (
     <div className="participation-container">
-      <h3 className="title">🙋‍♂️ Participation in Class</h3>
+      <h3 className="title">🙋‍♂️ Partisipasi Dalam Kelas</h3>
       <select
         value={selectedSubtopic || ""}
         onChange={(e) => setSelectedSubtopic(e.target.value)}
@@ -64,15 +64,15 @@ const Participation = ({ user, selectedCourse }) => {
         <div className="participation-cards">
           <div className="card">
             <h4>Total</h4>
-            <p>Audio: {participationData.audio || 0} times</p>
+            <p>Audio: {participationData.audio || 0} kali</p>
           </div>
           <div className="card">
             <h4>Total</h4>
-            <p>Video: {participationData.video || 0} times</p>
+            <p>Video: {participationData.video || 0} kali</p>
           </div>
           <div className="card">
             <h4>Total</h4>
-            <p>Chat: {participationData.chat || 0} times</p>
+            <p>Chat: {participationData.chat || 0} kali</p>
           </div>
           <div className="card">
             <h4>Total</h4>

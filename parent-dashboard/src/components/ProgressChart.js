@@ -99,7 +99,7 @@ const ProgressChart = ({ user, selectedCourse }) => {
 
   return (
     <div className="progress-container">
-      <h3 className="progress-title">🏆 Progres Student (Keseluruhan)</h3>
+      <h3 className="progress-title">🏆 Progres Murid (Keseluruhan)</h3>
       <div className="progress-list">
         {progressData.map((item, index) => (
           <div key={index} className="progress-item">
