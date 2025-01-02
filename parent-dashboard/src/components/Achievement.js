@@ -1,4 +1,6 @@
 import React from "react";
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../firebase';
 import { useNavigate } from "react-router-dom";
 import {
   AiOutlineStar,
@@ -26,6 +28,9 @@ const Achievement = () => {
     },
   ];
 
+  const [user] = useAuthState(auth);
+  const userName = user?.email ? user.email.split('@')[0] : user?.displayName || 'User';
+
   const navigate = useNavigate();
 
   const getBarColor = (progress) => {
@@ -43,7 +48,7 @@ const Achievement = () => {
   return (
     <div className="achievement-container">
       <h3 className="achievement-title">
-        🏅 Cek Pencapaian <span className="highlight">Adi</span> disini!
+        🏅 Cek Pencapaian <span className="highlight">{userName}</span> disini!
       </h3>
       <div className="achievement-list">
         {achievements.map((achievement, index) => (

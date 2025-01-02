@@ -145,3 +145,29 @@ body {
   }
 
 }
+
+
+.filter-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.filter-button {
+  background-color: #f0f0f0;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.filter-button.active {
+  background-color: #0652DD;
+  color: white;
+}
+
+.filter-button:hover {
+  background-color: #e0e0e0;
+}

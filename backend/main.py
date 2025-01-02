@@ -433,11 +433,6 @@ def get_recommendations(firebase_uid: str, db: Session = Depends(get_db)):
         .all()
     )
 
-    if not participation_data:
-        raise HTTPException(
-            status_code=404, detail="No participation data found for this user."
-        )
-
     # Thresholds
     audio_threshold = 5
     chat_threshold = 6
@@ -461,13 +456,19 @@ def get_recommendations(firebase_uid: str, db: Session = Depends(get_db)):
             elif course_name == "Fisika":
                 lacking_subtopics["fisika"].append(record.subtopic_name)
 
-    # Generate recommendations using GitHub API
+    # Fetch articles for the recommended subtopics
     recommendations = {"matematika": [], "fisika": []}
 
     for course_name, subtopics in lacking_subtopics.items():
         for subtopic in subtopics[:3]:  # Limit to top 3 subtopics
             articles = fetch_articles_from_github(subtopic, course_name.capitalize())
             recommendations[course_name].extend(articles)
+
+    # Fetch all articles from the "Lainnya" folder
+    lainnya_articles = fetch_articles_from_github("all", "Lainnya")
+
+    # Add "Lainnya" articles to the recommendations
+    recommendations["lainnya"] = lainnya_articles
 
     return {
         "message": "Recommendations generated successfully",
@@ -484,6 +485,7 @@ def fetch_articles_from_github(subtopic, course_name):
     course_directory_map = {
         "Matematika": "Matematika",
         "Fisika": "Fisika",
+        "Lainnya": "Lainnya",
     }
 
     directory = course_directory_map.get(course_name)
@@ -502,11 +504,10 @@ def fetch_articles_from_github(subtopic, course_name):
         response = requests.get(url, headers=headers)
         response.raise_for_status()
 
-        # Filter files based on subtopic matching
+        # Filter files matching the subtopic or fetch all if subtopic is "all"
         articles = []
         for item in response.json():
-            # Match if the subtopic name appears in the file name, ignoring case
-            if subtopic.lower() in item["name"].lower():
+            if subtopic == "all" or subtopic.lower() in item["name"].lower():
                 articles.append(
                     {
                         "title": item["name"]
@@ -516,14 +517,14 @@ def fetch_articles_from_github(subtopic, course_name):
                         "link": item[
                             "download_url"
                         ],  # Use download_url to fetch raw content
-                        "snippet": f"Artikel tentang {subtopic} dari kursus {course_name}",
+                        "snippet": f"Artikel dari folder {course_name}",
                     }
                 )
 
         if not articles:
             return [
                 {
-                    "title": f"No articles found for subtopic '{subtopic}'",
+                    "title": f"No articles found in '{course_name}'",
                     "link": "#",
                     "snippet": "",
                 }
