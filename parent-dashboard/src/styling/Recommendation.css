@@ -141,7 +141,7 @@ body {
 @media (max-width: 430px) {
 
   .recommendation-slider-wrapper {
-    width: 390px;
+    width: 100%;
   }
 
 }

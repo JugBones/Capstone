@@ -73,49 +73,50 @@ const Overview = () => {
       <Box className="overview-container">
         <Box className="sticky-header">
           <Box className="greeting-section">
-              <img
-              src={profilePicture}
-              alt="User Avatar"
-              className="profile-avatar"
-            />
+            <img src={profilePicture} alt="User Avatar" className="profile-avatar" />
             <Box className="greeting-text">
-              <Typography variant="h5" color="black">Welcome back,</Typography>
+              <Typography variant="h5" color="black">Selamat Datang,</Typography>
               <Typography variant="h5" color="#1E5BF6" fontWeight="bold">{userName}</Typography>
               <Typography variant="subtitle1" color="#0177FB">
                 {classData ? `${classData.name} - ${classData.level}` : 'Loading class...'}
               </Typography>
             </Box>
           </Box>
-          <Tabs
-            centered
-            value={selectedCourse}
-            onChange={(e, newValue) => setSelectedCourse(newValue)}
-            textColor="primary"
-            indicatorColor="primary"
-          >
-            {courses.map((course) => (
-              <Tab key={course.id} label={course.name} value={course.name} />
-            ))}
-          </Tabs>
+          <Box className="tabs-section">
+            <Tabs
+              centered
+              value={selectedCourse}
+              onChange={(e, newValue) => setSelectedCourse(newValue)}
+              textColor="primary"
+              indicatorColor="primary"
+            >
+              {courses.map((course) => (
+                <Tab key={course.id} label={course.name} value={course.name} />
+              ))}
+            </Tabs>
+          </Box>
         </Box>
 
-        <Grid container spacing={3} mt={2}>
-          <Grid item xs={12} md={8}>
-            <ProgressChart user={user} selectedCourse={selectedCourse} />
+        {/* Added wrapper for Grid */}
+        <Box className="grid-container">
+          <Grid container spacing={3} mt={2}>
+            <Grid item xs={12} md={8}>
+              <ProgressChart user={user} selectedCourse={selectedCourse} />
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Participation user={user} selectedCourse={selectedCourse} />
+            </Grid>
+            <Grid item xs={12}>
+              <Achievement />
+            </Grid>
+            <Grid item xs={12}>
+              <Recommendation user={user} selectedCourse={selectedCourse} />
+            </Grid>
+            <Grid item xs={12}>
+              <Appreciation user={user} />
+            </Grid>
           </Grid>
-          <Grid item xs={12} md={4}>
-            <Participation user={user} selectedCourse={selectedCourse} />
-          </Grid>
-          <Grid item xs={12}>
-            <Achievement />
-          </Grid>
-          <Grid item xs={12}>
-            <Recommendation user={user} selectedCourse={selectedCourse} />
-          </Grid>
-          <Grid item xs={12}>
-            <Appreciation user={user} />
-          </Grid>
-        </Grid>
+        </Box>
       </Box>
       <Navbar />
     </Box>
