@@ -33,12 +33,24 @@
 
 
 .badge-grid {
-  margin-top: 80px; /* Add space to avoid overlapping with the title */
+  margin-top: 30px; /* Add space to avoid overlapping with the title */
   display: grid;
   grid-template-columns: repeat(6, 1fr); /* Maximum 6 badges per row */
   gap: 15px;
   padding: 10px;
   padding-bottom: 100px;
+}
+
+@media (max-width: 768px){
+  .badge-grid {
+    margin-top: 30px; /* Add space to avoid overlapping with the title */
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); /* Maximum 6 badges per row */
+    gap: 15px;
+    padding: 10px;
+    padding-bottom: 100px;
+    
+  }
 }
 
 @media (max-width: 1200px) {
@@ -277,3 +289,73 @@
       text-align: center;
   }
 }
+
+
+.sorting-container {
+  display: flex;
+  justify-content: center;
+  gap: 15px; /* Adjust spacing between dropdowns */
+  margin: 30px 0 20px; /* Adjust overall container spacing */
+  z-index: 1;
+  padding-top: 20px;
+}
+
+.sorting-option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align label and dropdown properly */
+  margin-bottom: 0; /* Avoid affecting surrounding layout */
+}
+
+.sorting-option label {
+  display: block;
+  font-size: 0.8rem; /* Slightly smaller label text */
+  font-weight: bold;
+  color: #0049bf; /* CoLearn's blue font color */
+  margin-bottom: 3px; /* Reduce spacing between label and dropdown */
+}
+
+.sorting-option select {
+  width: 180px; /* Reduce width slightly */
+  padding: 8px 12px; /* Adjust padding for a smaller size */
+  font-size: 0.9rem; /* Reduce font size slightly */
+  font-weight: bold;
+  color: #4a4a4a; /* Dark gray text */
+  background-color: white; /* White dropdown background */
+  border: 2px solid #0049bf; /* Blue border */
+  border-radius: 6px; /* Slightly smaller border radius */
+  outline: none;
+  transition: all 0.3s ease; /* Smooth transitions */
+  text-align: left; /* Align text to the left */
+  appearance: none; /* Remove default browser styles for consistency */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="%230049bf" class="bi bi-caret-down-fill" viewBox="0 0 16 16"> <path d="M7.247 11.14a.5.5 0 0 0 .506 0l5-3.5A.5.5 0 0 0 12.5 7h-10a.5.5 0 0 0-.253.866l5 3.5z"/> </svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+  cursor: pointer; /* Indicates it's clickable */
+}
+
+.sorting-option select:hover {
+  border-color: #003a9f; /* Darker blue on hover */
+}
+
+.sorting-option select:focus {
+  border-color: #002d80; /* Even darker blue on focus */
+  box-shadow: 0 0 4px rgba(0, 77, 191, 0.3); /* Highlighted shadow */
+}
+
+/* Adjustments for Smaller Screens */
+@media (max-width: 768px) {
+  .sorting-container {
+    justify-content: center; /* Keep dropdowns centered */
+    gap: 10px; /* Reduce spacing between dropdowns */
+  }
+
+  .sorting-option select {
+    width: 90%; /* Expand to almost full width on mobile */
+    max-width: 200px; /* Keep reasonable size limit */
+  }
+}
+
+

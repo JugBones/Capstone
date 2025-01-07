@@ -76,7 +76,7 @@ const Participation = ({ user, selectedCourse }) => {
           </div>
           <div className="card">
             <h4>Total</h4>
-            <p>Polls: {participationData.poll || 0} responses</p>
+            <p>Polls: {participationData.poll || 0} terjawab</p>
           </div>
         </div>
       )}

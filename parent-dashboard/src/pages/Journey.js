@@ -74,7 +74,7 @@ const Journey = () => {
             </div>
           </div>
           <div className="category-level">
-            <h3>Category (Level):</h3>
+            <h3>Kategori (Level):</h3>
             <img src={ProgressLevel} alt="CoLearn Logo" />
           </div>
         </div>
