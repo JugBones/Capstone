@@ -9,6 +9,7 @@
   overflow: hidden;
   font-family: 'Poppins', sans-serif;
   overflow-y: auto; /* Enables vertical scrolling */
+  box-sizing: border-box;
 }
 
 .achievements-title {
@@ -19,6 +20,8 @@
   padding: 10px 0;
   position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   width: 100%;
   z-index: 10;
   display: flex;
@@ -39,6 +42,8 @@
   gap: 15px;
   padding: 10px;
   padding-bottom: 100px;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 @media (max-width: 768px){
@@ -213,6 +218,8 @@
   background-color: #ffffff;
   position: fixed;
   bottom: 50px; /* Keeps it just above the navbar */
+  left: 0;
+  right: 0;
   width: 100%;
   z-index: 10;
   box-sizing: border-box;
