@@ -86,7 +86,10 @@ const Overview = () => {
             <Tabs
               centered
               value={selectedCourse}
-              onChange={(e, newValue) => setSelectedCourse(newValue)}
+              onChange={(e, newValue) => {
+                setSelectedCourse(newValue);
+                localStorage.setItem('selectedCourse', newValue); // Save to localStorage
+              }}
               textColor="primary"
               indicatorColor="primary"
             >

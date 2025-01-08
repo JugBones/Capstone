@@ -1,20 +1,45 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import '../styling/Journey.css';
 import { Line } from 'react-chartjs-2';
 import 'chart.js/auto';
-import ProgressLevel from '../assets/progress-level.png';
+import 'chartjs-plugin-annotation'; // For annotations
 
 const Journey = () => {
-  const isMobile = window.innerWidth <= 430;
+  // Get the selected subject from localStorage, default to "Matematika" if not set
+  const [selectedSubject, setSelectedSubject] = useState(
+    localStorage.getItem('selectedSubject') || 'Matematika'
+  );
 
-  // Mock data for the chart
+  // Datasets for different subjects
+  const datasets = {
+    Matematika: [20, 40, 75, 50, 90],
+    Fisika: [15, 45, 60, 55, 80],
+  };
+
+  const breakdownData = {
+    Matematika: [
+      { Kehadiran: 60, Keaktifan: 40, Pemahaman: 70, PenyelesaianTugas: 80, Badge: 'Bronze' },
+      { Kehadiran: 70, Keaktifan: 50, Pemahaman: 75, PenyelesaianTugas: 85, Badge: 'Silver' },
+      { Kehadiran: 85, Keaktifan: 60, Pemahaman: 90, PenyelesaianTugas: 95, Badge: 'Gold' },
+      { Kehadiran: 75, Keaktifan: 55, Pemahaman: 80, PenyelesaianTugas: 88, Badge: 'Silver' },
+      { Kehadiran: 90, Keaktifan: 70, Pemahaman: 95, PenyelesaianTugas: 98, Badge: 'Gold' },
+    ],
+    Fisika: [
+      { Kehadiran: 55, Keaktifan: 45, Pemahaman: 65, PenyelesaianTugas: 75, Badge: 'Bronze' },
+      { Kehadiran: 65, Keaktifan: 55, Pemahaman: 70, PenyelesaianTugas: 80, Badge: 'Silver' },
+      { Kehadiran: 80, Keaktifan: 65, Pemahaman: 85, PenyelesaianTugas: 90, Badge: 'Gold' },
+      { Kehadiran: 70, Keaktifan: 60, Pemahaman: 75, PenyelesaianTugas: 85, Badge: 'Silver' },
+      { Kehadiran: 85, Keaktifan: 70, Pemahaman: 90, PenyelesaianTugas: 95, Badge: 'Gold' },
+    ],
+  };
+
   const chartData = {
     labels: ['4-1', '4-2', '5-1', '5-2', '6-1'],
     datasets: [
       {
-        label: 'Student Learning Journey',
-        data: [1, 2, 3, 2, 3],
+        label: `Perjalanan Belajar ${selectedSubject}`,
+        data: datasets[selectedSubject],
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         borderColor: 'rgba(75, 192, 192, 1)',
         borderWidth: 2,
@@ -32,6 +57,60 @@ const Journey = () => {
       legend: {
         display: false,
       },
+      tooltip: {
+        callbacks: {
+          title: function (tooltipItem) {
+            const index = tooltipItem[0].dataIndex;
+            const badge = breakdownData[selectedSubject][index].Badge;
+            return `Checkpoint: ${tooltipItem[0].label} (Badge: ${badge})`;
+          },
+          label: function (tooltipItem) {
+            const index = tooltipItem.dataIndex;
+            const breakdown = breakdownData[selectedSubject][index];
+            return [
+              `Kehadiran: ${breakdown.Kehadiran}%`,
+              `Keaktifan: ${breakdown.Keaktifan}%`,
+              `Pemahaman: ${breakdown.Pemahaman}%`,
+              `Penyelesaian Tugas: ${breakdown.PenyelesaianTugas}%`,
+            ];
+          },
+        },
+        displayColors: false,
+        backgroundColor: '#ffffff',
+        titleColor: '#0049bf',
+        titleFont: { size: 14, weight: 'bold' },
+        bodyColor: '#333333',
+        bodyFont: { size: 12 },
+        borderColor: '#0049bf',
+        borderWidth: 1,
+        padding: 10,
+        cornerRadius: 8,
+      },
+      annotation: {
+        annotations: [
+          {
+            type: 'box',
+            yScaleID: 'y',
+            yMin: 0,
+            yMax: 33,
+            backgroundColor: 'rgba(205, 127, 50, 0.2)', // Bronze
+          },
+          {
+            type: 'box',
+            yScaleID: 'y',
+            yMin: 33,
+            yMax: 66,
+            backgroundColor: 'rgba(192, 192, 192, 0.2)', // Silver
+          },
+          {
+            type: 'box',
+            yScaleID: 'y',
+            yMin: 66,
+            yMax: 100,
+            backgroundColor: 'rgba(255, 215, 0, 0.2)', // Gold
+          },
+        ],
+      },
     },
     scales: {
       x: {
@@ -39,10 +118,24 @@ const Journey = () => {
       },
       y: {
         grid: { drawBorder: false },
-        max: isMobile ? 3 : undefined, // Adjust max value for y-axis in mobile view
+        min: 0,
+        max: 100,
+        ticks: {
+          callback: function (value) {
+            if (value < 33) return 'Bronze';
+            if (value < 66) return 'Silver';
+            return 'Gold';
+          },
+          stepSize: 33,
+        },
       },
     },
   };
+
+  // Save the selected subject to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('selectedSubject', selectedSubject);
+  }, [selectedSubject]);
 
   return (
     <div className="journey-page">
@@ -52,6 +145,20 @@ const Journey = () => {
         <p className="journey-subtitle">
           <span className="highlight">Adi</span> selama ini!
         </p>
+        <div className="journey-tabs-section">
+          <button
+            className={`journey-tab-button ${selectedSubject === 'Matematika' ? 'active' : ''}`}
+            onClick={() => setSelectedSubject('Matematika')}
+          >
+            MATEMATIKA
+          </button>
+          <button
+            className={`journey-tab-button ${selectedSubject === 'Fisika' ? 'active' : ''}`}
+            onClick={() => setSelectedSubject('Fisika')}
+          >
+            FISIKA
+          </button>
+        </div>
         <div className="journey-stats">
           <div className="stats-box">
             <p className="stats-value">18</p>
@@ -66,16 +173,12 @@ const Journey = () => {
           <h3>Statistik Student</h3>
           <div className="chart-section">
             <div className="chart-header">
-              <p>Level: Student Learning Journey</p>
+              <p>Perjalanan Belajar Bersama CoLearn</p>
               <a href="/journey" className="full-view-link">Full View</a>
             </div>
             <div className="chart-container">
               <Line data={chartData} options={chartOptions} />
             </div>
-          </div>
-          <div className="category-level">
-            <h3>Kategori (Level):</h3>
-            <img src={ProgressLevel} alt="CoLearn Logo" />
           </div>
         </div>
       </div>
