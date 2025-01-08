@@ -18,7 +18,7 @@ const Journey = () => {
   // Datasets for different subjects
   const datasets = {
     Matematika: [20, 40, 75, 50, 90],
-    Fisika: [15, 45, 60, 55, 80],
+    Fisika: [15, 45, 52, 55, 80],
   };
 
   const breakdownData = {
@@ -32,7 +32,7 @@ const Journey = () => {
     Fisika: [
       { Kehadiran: 55, Keaktifan: 45, Pemahaman: 65, PenyelesaianTugas: 75, Badge: 'Bronze' },
       { Kehadiran: 65, Keaktifan: 55, Pemahaman: 70, PenyelesaianTugas: 80, Badge: 'Silver' },
-      { Kehadiran: 80, Keaktifan: 65, Pemahaman: 85, PenyelesaianTugas: 90, Badge: 'Gold' },
+      { Kehadiran: 75, Keaktifan: 57, Pemahaman: 73, PenyelesaianTugas: 80, Badge: 'Silver' },
       { Kehadiran: 70, Keaktifan: 60, Pemahaman: 75, PenyelesaianTugas: 85, Badge: 'Silver' },
       { Kehadiran: 85, Keaktifan: 70, Pemahaman: 90, PenyelesaianTugas: 95, Badge: 'Gold' },
     ],
@@ -42,14 +42,21 @@ const Journey = () => {
     labels: ['4-1', '4-2', '5-1', '5-2', '6-1'],
     datasets: [
       {
-        label: `Perjalanan Belajar ${selectedCourse}`,
-        data: datasets[selectedCourse],
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 2,
-        pointBackgroundColor: ['#CD7F32', '#C0C0C0', '#FFD700', '#C0C0C0', '#FFD700'],
-        pointRadius: 6,
-        tension: 0.4, // Adds curve to the line
+        
+      label: `Perjalanan Belajar ${selectedCourse}`,
+      data: datasets[selectedCourse],
+      backgroundColor: 'rgba(75, 192, 192, 0.2)',
+      borderColor: 'rgba(75, 192, 192, 1)',
+      borderWidth: 2,
+      pointBackgroundColor: datasets[selectedCourse].map((value, index) => {
+        const badge = breakdownData[selectedCourse][index].Badge;
+        if (badge === 'Bronze') return '#CD7F32'; // Bronze
+        if (badge === 'Silver') return '#C0C0C0'; // Silver
+        if (badge === 'Gold') return '#FFD700'; // Gold
+        return '#000000'; // Default 
+      }),
+      pointRadius: 6,
+      tension: 0.4, // Adds curve to the line
       },
     ],
   };
@@ -134,9 +141,9 @@ const Journey = () => {
             size: 16, weight: 'bold' 
           },
           callback: function (value) {
-            if (value < 33) return 'Bronze';
-            if (value < 66) return 'Silver';
-            return 'Gold';
+            if (value <= 49) return "Bronze";
+            if (value <= 74) return "Silver";
+            if (value >= 75) return "Gold";
           },
           stepSize: 33,
         },
