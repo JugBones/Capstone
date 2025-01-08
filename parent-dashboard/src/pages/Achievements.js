@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import {
   AiOutlineStar,
   AiOutlineCheckCircle,
-  AiOutlineBulb,
-  AiOutlineFontSize,
   AiOutlineTool,
   AiOutlineClockCircle,
 } from "react-icons/ai";
@@ -11,7 +9,6 @@ import {
   FaMountain,
   FaRegCalendarCheck,
   FaRunning,
-  FaRoad,
   FaBookOpen,
   FaPuzzlePiece,
   FaBolt,

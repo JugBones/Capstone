@@ -32,7 +32,7 @@ const ProgressChart = ({ user, selectedCourse }) => {
   const getBarColor = (value) => {
     if (value <= 35) return "red";
     if (value < 50) return "orange";
-    if (value >= 50 && value <= 60) return "yellow";
+    if (value >= 50 && value <= 60) return "#FFD700";
     if (value > 60) return "#0652DD";
     return "gray";
   };

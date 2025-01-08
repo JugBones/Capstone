@@ -15,7 +15,7 @@ import '../styling/Overview.css';
 const Overview = () => {
   const [user] = useAuthState(auth);
   const userName = user?.email ? user.email.split('@')[0] : user?.displayName || 'User';
-  const [selectedCourse, setSelectedCourse] = useState('Matematika');
+  const [selectedCourse, setSelectedCourse] = useState(localStorage.getItem('selectedCourse') || 'Matematika');
   const [profilePicture, setProfilePicture] = useState(user?.photoURL || "/avatar.jpg");
   const [classData, setClassData] = useState(null);
   const [courses, setCourses] = useState([]);
@@ -66,6 +66,10 @@ const Overview = () => {
     };
     fetchCourses();
   }, [user]);
+
+  useEffect(() => {
+      localStorage.setItem('selectedCourse', selectedCourse);
+    }, [selectedCourse]);
 
   return (
     <Box className="app">

@@ -34,11 +34,8 @@ const Achievement = () => {
   const navigate = useNavigate();
 
   const getBarColor = (progress) => {
-    if (progress <= 35) return "red";
-    if (progress < 50) return "orange";
-    if (progress >= 50 && progress <= 60) return "#FFD700";
-    if (progress > 60) return "#1E5BF6";
-    return "gray";
+    if (progress === 100) return "#1E5BF6";
+    return "#FFD700";
   };
 
   const handleAchievementClick = () => {

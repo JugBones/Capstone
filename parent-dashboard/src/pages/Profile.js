@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { useAuthState } from "react-firebase-hooks/auth"; // Firebase hook
-import { auth } from "../firebase"; // Firebase auth instance
+import { useAuthState } from "react-firebase-hooks/auth"; 
+import { auth } from "../firebase"; 
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import axios from "axios";
 import "../styling/Profile.css";
 
 const Profile = () => {
-  const [user] = useAuthState(auth); // Get the logged-in user
+  const [user] = useAuthState(auth); 
   const userName = user?.email ? user.email.split('@')[0] : user?.displayName || 'User';
   const [classData, setClassData] = useState(null);
-  const navigate = useNavigate(); // For navigation
+  const navigate = useNavigate(); 
   const [selectedFile, setSelectedFile] = useState(null);
   const [profilePicture, setProfilePicture] = useState(user?.photoURL || "/avatar.jpg");
-  const [isModalOpen, setIsModalOpen] = useState(false); // Track modal visibility
+  const [isModalOpen, setIsModalOpen] = useState(false); 
 
   // Fetch updated profile picture from the backend
   useEffect(() => {
@@ -52,7 +52,7 @@ const Profile = () => {
   const handleLogout = () => {
     auth.signOut()
       .then(() => {
-        navigate("/login"); // Redirect to the login page after logout
+        navigate("/login"); 
       })
       .catch((error) => {
         console.error("Error logging out:", error);

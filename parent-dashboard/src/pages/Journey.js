@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../firebase';
 import Navbar from '../components/Navbar';
 import '../styling/Journey.css';
 import { Line } from 'react-chartjs-2';
@@ -6,9 +8,11 @@ import 'chart.js/auto';
 import 'chartjs-plugin-annotation'; // For annotations
 
 const Journey = () => {
+  const [user] = useAuthState(auth);
+  const userName = user?.email ? user.email.split('@')[0] : user?.displayName || 'User';
   // Get the selected subject from localStorage, default to "Matematika" if not set
-  const [selectedSubject, setSelectedSubject] = useState(
-    localStorage.getItem('selectedSubject') || 'Matematika'
+  const [selectedCourse, setselectedCourse] = useState(
+    localStorage.getItem('selectedCourse') || 'Matematika'
   );
 
   // Datasets for different subjects
@@ -38,8 +42,8 @@ const Journey = () => {
     labels: ['4-1', '4-2', '5-1', '5-2', '6-1'],
     datasets: [
       {
-        label: `Perjalanan Belajar ${selectedSubject}`,
-        data: datasets[selectedSubject],
+        label: `Perjalanan Belajar ${selectedCourse}`,
+        data: datasets[selectedCourse],
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         borderColor: 'rgba(75, 192, 192, 1)',
         borderWidth: 2,
@@ -61,12 +65,12 @@ const Journey = () => {
         callbacks: {
           title: function (tooltipItem) {
             const index = tooltipItem[0].dataIndex;
-            const badge = breakdownData[selectedSubject][index].Badge;
+            const badge = breakdownData[selectedCourse][index].Badge;
             return `Checkpoint: ${tooltipItem[0].label} (Badge: ${badge})`;
           },
           label: function (tooltipItem) {
             const index = tooltipItem.dataIndex;
-            const breakdown = breakdownData[selectedSubject][index];
+            const breakdown = breakdownData[selectedCourse][index];
             return [
               `Kehadiran: ${breakdown.Kehadiran}%`,
               `Keaktifan: ${breakdown.Keaktifan}%`,
@@ -115,12 +119,20 @@ const Journey = () => {
     scales: {
       x: {
         grid: { display: false },
+        ticks: {
+          font: {
+            size: 16, weight: 'bold' 
+          },
+        },
       },
       y: {
         grid: { drawBorder: false },
         min: 0,
         max: 100,
         ticks: {
+          font: {
+            size: 16, weight: 'bold' 
+          },
           callback: function (value) {
             if (value < 33) return 'Bronze';
             if (value < 66) return 'Silver';
@@ -134,8 +146,8 @@ const Journey = () => {
 
   // Save the selected subject to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem('selectedSubject', selectedSubject);
-  }, [selectedSubject]);
+    localStorage.setItem('selectedCourse', selectedCourse);
+  }, [selectedCourse]);
 
   return (
     <div className="journey-page">
@@ -143,18 +155,18 @@ const Journey = () => {
       <div className="journey-content">
         <h1 className="journey-title">Mari Lihat Journey</h1>
         <p className="journey-subtitle">
-          <span className="highlight">Adi</span> selama ini!
+          <span className="highlight">{userName}</span> selama ini!
         </p>
         <div className="journey-tabs-section">
           <button
-            className={`journey-tab-button ${selectedSubject === 'Matematika' ? 'active' : ''}`}
-            onClick={() => setSelectedSubject('Matematika')}
+            className={`journey-tab-button ${selectedCourse === 'Matematika' ? 'active' : ''}`}
+            onClick={() => setselectedCourse('Matematika')}
           >
             MATEMATIKA
           </button>
           <button
-            className={`journey-tab-button ${selectedSubject === 'Fisika' ? 'active' : ''}`}
-            onClick={() => setSelectedSubject('Fisika')}
+            className={`journey-tab-button ${selectedCourse === 'Fisika' ? 'active' : ''}`}
+            onClick={() => setselectedCourse('Fisika')}
           >
             FISIKA
           </button>

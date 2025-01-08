@@ -28,10 +28,10 @@ app = FastAPI()
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Frontend URL
+    allow_origins=["http://localhost:3000"],  
     allow_credentials=True,
-    allow_methods=["*"],  # Allow all HTTP methods (GET, POST, PUT, DELETE, etc.)
-    allow_headers=["*"],  # Allow all headers
+    allow_methods=["*"],  
+    allow_headers=["*"],  
 )
 
 # Create the tables in the database
@@ -436,7 +436,7 @@ def get_recommendations(firebase_uid: str, db: Session = Depends(get_db)):
     # Thresholds
     audio_threshold = 5
     chat_threshold = 6
-    poll_threshold = "Completed"
+    poll_threshold = "Lengkap"
 
     # Map course IDs to course names
     course_map = {1: "Matematika", 2: "Fisika"}
