@@ -9,6 +9,7 @@ import Recommendation from '../components/Recommendation';
 import Appreciation from '../components/Appreciation';
 import Achievement from '../components/Achievement';
 import Participation from '../components/Participation';
+import CoLearnKid from '../assets/CoLearnKid.webp';
 import { Grid, Box, Typography, Tabs, Tab } from '@mui/material';
 import '../styling/Overview.css';
 
@@ -16,7 +17,7 @@ const Overview = () => {
   const [user] = useAuthState(auth);
   const userName = user?.email ? user.email.split('@')[0] : user?.displayName || 'User';
   const [selectedCourse, setSelectedCourse] = useState(localStorage.getItem('selectedCourse') || 'Matematika');
-  const [profilePicture, setProfilePicture] = useState(user?.photoURL || "/avatar.jpg");
+  const [profilePicture, setProfilePicture] = useState(user?.photoURL || CoLearnKid);
   const [classData, setClassData] = useState(null);
   const [courses, setCourses] = useState([]);
 
@@ -27,7 +28,7 @@ const Overview = () => {
         const response = await axios.get(
           `http://localhost:8000/users/${user.uid}/profile_picture`
         );
-        setProfilePicture(response.data.profile_picture_url || "/avatar.jpg");
+        setProfilePicture(response.data.profile_picture_url || CoLearnKid);
       } catch (error) {
         console.error("Error fetching profile picture:", error);
       }

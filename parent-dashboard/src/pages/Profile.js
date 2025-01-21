@@ -3,6 +3,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebase"; 
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import CoLearnKid from '../assets/CoLearnKid.webp';
 import axios from "axios";
 import "../styling/Profile.css";
 
@@ -12,7 +13,7 @@ const Profile = () => {
   const [classData, setClassData] = useState(null);
   const navigate = useNavigate(); 
   const [selectedFile, setSelectedFile] = useState(null);
-  const [profilePicture, setProfilePicture] = useState(user?.photoURL || "/avatar.jpg");
+  const [profilePicture, setProfilePicture] = useState(user?.photoURL || CoLearnKid);
   const [isModalOpen, setIsModalOpen] = useState(false); 
 
   // Fetch updated profile picture from the backend
@@ -22,7 +23,7 @@ const Profile = () => {
         const response = await axios.get(
           `http://localhost:8000/users/${user.uid}/profile_picture`
         );
-        setProfilePicture(response.data.profile_picture_url || "/avatar.jpg");
+        setProfilePicture(response.data.profile_picture_url || CoLearnKid);
       } catch (error) {
         console.error("Error fetching profile picture:", error);
       }

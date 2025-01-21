@@ -218,3 +218,16 @@
 .upload-button:hover {
   background-color: #003eb3;
 }
+
+
+@media (max-width: 430px) {
+  .modal {
+    width: 80%; 
+  }
+}
+
+@media (max-width: 390px) {
+  .modal {
+    width: 80%; 
+  }
+}

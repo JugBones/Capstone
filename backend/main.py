@@ -4,8 +4,6 @@ from sqlalchemy.orm import Session
 from datetime import date, timedelta
 import crud, models, schemas
 from database import SessionLocal, engine
-import crud, schemas
-from database import SessionLocal
 from schemas import UpdateProgressLevelRequest
 from serpapi import GoogleSearch
 from dotenv import load_dotenv
@@ -28,10 +26,10 @@ app = FastAPI()
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],  
-    allow_headers=["*"],  
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Create the tables in the database

@@ -366,3 +366,24 @@
 }
 
 
+.truncate-option {
+  max-width: 130px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.truncate-option2 {
+  max-width: 70px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.select-option-label {
+  display: block;
+  max-width: 70px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

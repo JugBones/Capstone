@@ -84,7 +84,7 @@ const Achievements = () => {
   return (
     <div className="achievements-container">
       <h1 className="achievements-title">Lencana Pencapaian</h1>
-
+  
       {/* Sorting Options */}
       <div className="sorting-container">
         <div className="sorting-option">
@@ -93,6 +93,7 @@ const Achievements = () => {
             id="completion"
             value={filterCompletion}
             onChange={(e) => setFilterCompletion(e.target.value)}
+            className="truncate-option"
           >
             <option value="Semua">Semua</option>
             <option value="In-Progress">Dalam Proses</option>
@@ -105,6 +106,7 @@ const Achievements = () => {
             id="subject"
             value={filterSubject}
             onChange={(e) => setFilterSubject(e.target.value)}
+            className="truncate-option2"
           >
             <option value="Semua">Semua</option>
             <option value="Matematika">Matematika</option>
