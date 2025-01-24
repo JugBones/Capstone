@@ -434,7 +434,7 @@ def get_recommendations(firebase_uid: str, db: Session = Depends(get_db)):
     # Thresholds
     audio_threshold = 5
     chat_threshold = 6
-    poll_threshold = "Lengkap"
+    poll_threshold = ["lengkap", "Lengkap"]
 
     # Map course IDs to course names
     course_map = {1: "Matematika", 2: "Fisika"}
@@ -446,7 +446,7 @@ def get_recommendations(firebase_uid: str, db: Session = Depends(get_db)):
         if (
             record.audio < audio_threshold
             or record.chat < chat_threshold
-            or record.poll != poll_threshold
+            or record.poll.lower() not in poll_threshold
         ):
             course_name = course_map.get(record.course_id)
             if course_name == "Matematika":
