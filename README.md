@@ -5,7 +5,15 @@
 - Shared Repository: https://github.com/JugBones/Capstone.git 
 
 ## Overview
-This project is a PWA built using **React**, **Lorem**, **Lorem**, and **Lorem**. It implements a system to .... 
+This project is a Progressive Web Application (PWA) developed as part of a capstone project at Binus International University, in collaboration with CoLearn. The system aims to enhance the existing reporting system by providing parents with actionable, real-time insights into their children's learning journey.
+
+### Key Features
+This project addresses the limitations of the current system by:
+- Holistic Progress Tracking: Goes beyond the correctness of answers to provide a comprehensive view of learning progress.
+- Detailed Insights: Highlights subtopics and learning gaps to identify areas for improvement.
+- Seamless Reporting: Delivers an intuitive and visually appealing reporting experience for parents.
+- Actionable Recommendations: Encourages active parent-student interactions with meaningful and practical suggestions.
+
 
 ## Technologies Used
 - React: For the front-end user interface.
