@@ -14,24 +14,8 @@ This project is a PWA built using **React**, **Lorem**, **Lorem**, and **Lorem**
 - Firebase: Authentication (NoSQL)
 - FastAPI: API connection
 
-## Database Schema
-The application contains X tables:
-1. Items
-   - `Lorem_Ipsum`: Primary Key
-   - `Lorem_Ipsum`: Lorem Ipsum
-   - `Lorem_Ipsum`: Lorem Ipsum
-
-## API Endpoints
-### Items API
-- `GET /lorem`: Fetch lorem ipsum.
-- `POST /lorem`: Create lorem ipsum.
-- `PUT /lorem/:ipsum`: Update lorem ipsum.
-- `DELETE /lorem/:ipsum`: Delete lorem ipsum.
-
-## Front-End Components
-### Loremipsum.js
-- Lorem Ipsum is a lorem ipsum.
-- Lorem Ipsum is a lorem ipsum.
+## Application Structure
+Can be seen by simply using git ingest. Just replace the 'hub' into 'ingest' in the link of this repository. 
 
 ## How to Run the Application (Frontend)
 1. **Clone the repository**:
@@ -48,6 +32,7 @@ The application contains X tables:
    ```bash
    npm install -g serve
    serve -s build
+
 
 ## How to Run the Application (Backend)
 
@@ -83,3 +68,8 @@ cd <project_directory>/backend
 ```
 uvicorn main:app --reload
 ```
+
+## Deployment
+- Database: deployed on clever cloud.
+- Backend: Soon.
+- Frontend: Soon.
