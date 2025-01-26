@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/static/css/main.80154bd8.css",
+    "main.js": "/static/js/main.71b48163.js",
+    "static/js/453.b699bc91.chunk.js": "/static/js/453.b699bc91.chunk.js",
+    "static/media/OtherImage.png": "/static/media/OtherImage.dcb19170f94c3945a144.png",
+    "static/media/PhysicsImage.png": "/static/media/PhysicsImage.0083904e7ac3dc66b266.png",
+    "static/media/MathImage.png": "/static/media/MathImage.6cbb05e0de65a42cedd0.png",
+    "static/media/CoLearnKid.webp": "/static/media/CoLearnKid.8af101000b08ff3f3910.webp",
+    "static/media/colearn_teacher2.webp": "/static/media/colearn_teacher2.ace4d6ed7a85d9bb2171.webp",
+    "static/media/colearn.png": "/static/media/colearn.5aa38523c6ff4209026a.png",
+    "service-worker.js": "/service-worker.js",
+    "static/media/colearn-white.png": "/static/media/colearn-white.6e08bb509ab1fa56c1e6.png",
+    "index.html": "/index.html",
+    "main.80154bd8.css.map": "/static/css/main.80154bd8.css.map",
+    "main.71b48163.js.map": "/static/js/main.71b48163.js.map",
+    "453.b699bc91.chunk.js.map": "/static/js/453.b699bc91.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.80154bd8.css",
+    "static/js/main.71b48163.js"
+  ]
+}
