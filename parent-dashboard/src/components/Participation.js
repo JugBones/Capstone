@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../styling/Participation.css";
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const Participation = ({ user, selectedCourse }) => {
   const [subtopics, setSubtopics] = useState([]);
   const [selectedSubtopic, setSelectedSubtopic] = useState(null);
@@ -12,7 +14,7 @@ const Participation = ({ user, selectedCourse }) => {
     const fetchSubtopics = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/subtopics/${selectedCourse}`
+          `${BACKEND_URL}/subtopics/${selectedCourse}`
         );
         setSubtopics(response.data);
         setSelectedSubtopic(response.data[0]?.id || null);
@@ -30,7 +32,7 @@ const Participation = ({ user, selectedCourse }) => {
       if (user && selectedSubtopic) {
         try {
           const response = await axios.get(
-            `http://localhost:8000/participation/${user.uid}/${selectedSubtopic}`
+            `${BACKEND_URL}/participation/${user.uid}/${selectedSubtopic}`
           );
           setParticipationData(response.data);
           setError(null);

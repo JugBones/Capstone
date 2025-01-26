@@ -10,6 +10,8 @@ import MathImage from '../assets/MathImage.png';
 import PhysicsImage from '../assets/PhysicsImage.png';
 import OtherImage from '../assets/OtherImage.png'; // Importing OtherImage for Lainnya
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const Recommendation = ({ user, selectedCourse }) => {
   const [recommendations, setRecommendations] = useState([]);
   const [otherRecommendations, setOtherRecommendations] = useState([]); // For "Lainnya"
@@ -24,7 +26,7 @@ const Recommendation = ({ user, selectedCourse }) => {
       setIsLoading(true); // Start loading
       try {
         const response = await axios.get(
-          `http://localhost:8000/recommendations/${user.uid}`
+          `${BACKEND_URL}/recommendations/${user.uid}`
         );
         const recommendationData = response.data.recommendations;
 

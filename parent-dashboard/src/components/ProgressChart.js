@@ -4,6 +4,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import axios from "axios";
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const ProgressChart = ({ user, selectedCourse }) => {
   const [progressData, setProgressData] = useState([]);
   const [progressLevel, setProgressLevel] = useState("Bronze");
@@ -12,7 +14,7 @@ const ProgressChart = ({ user, selectedCourse }) => {
 
   const updateProgressLevel = async (level) => {
     try {
-      await axios.put(`http://localhost:8000/progress/${user.uid}`, {
+      await axios.put(`${BACKEND_URL}/progress/${user.uid}`, {
         course_name: selectedCourse,
         level: level,
       });
@@ -61,7 +63,7 @@ const ProgressChart = ({ user, selectedCourse }) => {
   const fetchProgressData = async () => {
     if (user && selectedCourse) {
       try {
-        const response = await axios.get(`http://localhost:8000/progress/${user.uid}`, {
+        const response = await axios.get(`${BACKEND_URL}/progress/${user.uid}`, {
           params: { course_name: selectedCourse },
         });
         const progress = response.data[0]; // Assume the first entry for simplicity

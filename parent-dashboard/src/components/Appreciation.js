@@ -12,6 +12,9 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import teacherAvatar from "../assets/colearn_teacher2.webp";
 import aiLogo from "../assets/colearn-logo-square.png";
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
+
 const Appreciation = ({ user }) => {
   const [appreciations, setAppreciations] = useState([]);
   const [aiFeedback, setAiFeedback] = useState([]);
@@ -62,7 +65,7 @@ const Appreciation = ({ user }) => {
     }
 
     try {
-      const url = `http://localhost:8000/appreciations/${user.uid}?include_ai=${includeAi}`;
+      const url = `${BACKEND_URL}/appreciations/${user.uid}?include_ai=${includeAi}`;
       setLoading(true);
       const response = await axios.get(url);
 

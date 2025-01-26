@@ -7,6 +7,8 @@ import CoLearnKid from '../assets/CoLearnKid.webp';
 import axios from "axios";
 import "../styling/Profile.css";
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const Profile = () => {
   const [user] = useAuthState(auth); 
   const userName = user?.email ? user.email.split('@')[0] : user?.displayName || 'User';
@@ -21,7 +23,7 @@ const Profile = () => {
     const fetchProfilePicture = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/users/${user.uid}/profile_picture`
+          `${BACKEND_URL}/users/${user.uid}/profile_picture`
         );
         setProfilePicture(response.data.profile_picture_url || CoLearnKid);
       } catch (error) {
@@ -37,8 +39,8 @@ const Profile = () => {
     const fetchClassData = async () => {
       if (user) {
         try {
-          const response = await axios.get(`http://localhost:8000/users/${user.uid}`);
-          const classResponse = await axios.get(`http://localhost:8000/classes/${response.data.class_id}`);
+          const response = await axios.get(`${BACKEND_URL}/users/${user.uid}`);
+          const classResponse = await axios.get(`${BACKEND_URL}/classes/${response.data.class_id}`);
           setClassData(classResponse.data);
         } catch (err) {
           console.error('Error fetching class data:', err);
@@ -78,7 +80,7 @@ const Profile = () => {
 
     try {
       const response = await axios.post(
-        `http://localhost:8000/users/${user.uid}/profile_picture`,
+        `${BACKEND_URL}/users/${user.uid}/profile_picture`,
         formData,
         {
           headers: {
